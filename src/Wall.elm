@@ -17,8 +17,8 @@ type alias Wall =
     { col : Wall_col, row : Wall_row }
 
 
-isWall : { pos : Pos, dir : MoveDirection } -> Wall -> Bool
-isWall { pos, dir } wall =
+isWall :Pos -> MoveDirection -> Wall -> Bool
+isWall pos dir wall =
     let
         x =
             pos.x

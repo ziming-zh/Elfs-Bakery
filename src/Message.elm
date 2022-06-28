@@ -11,7 +11,7 @@ type alias Pos =
     }
 
 
-stepTime : Int
+stepTime : Float
 stepTime =
     1000
 type alias Paint =

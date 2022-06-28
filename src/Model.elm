@@ -157,14 +157,14 @@ initModel =
             LevelSeq.getInitialLevels
     in
     ( { player = Player.init
-      , wall = []
+      , wall = {col=[],row=[]}
       , paints = []
       , valves = []
       , dots = []
       , mapSize = ( 0, 0 )
       , win = False
       , levels = levels -- important here
-      , elapse = 0.0
+      , move_timer = 0.0
       , currentLevel = ""
       , level_index = 0
       , valves_move = 0
