@@ -13,19 +13,20 @@ import Canvas exposing (shapes)
 import Html.Attributes exposing (style)
 import Canvas.Settings exposing (fill)
 import View.Valve exposing (renderValves)
+import View.Level exposing (renderLevel)
 
 view : Model -> Html Msg
 view model =
     let
-        wall = model.wall
-        valves = model.valves
+        level = List.head model.levels
+        
     in
     div
         [ ]
         [ toHtml (800 ,600)
             []
-            ((drawWall wall) ++
-            (renderValves valves))
+            (renderLevel model.wall [] [])
+
         ]
 
 -- view : Model -> Html msg
