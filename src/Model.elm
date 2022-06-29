@@ -157,7 +157,7 @@ initModel =
             LevelSeq.getInitialLevels
     in
     ( { player = Player.init
-      , wall = {col=[],row=[]}
+      , wall = {col=[[True,True]],row=[]}
       , paints = []
       , valves = []
       , dots = []
