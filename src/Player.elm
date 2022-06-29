@@ -9,8 +9,9 @@ type alias Model =
     , state : State
     }
 
-type State = Move
-            |Stopped
+type State
+    = Move
+    | Stopped
 
 init : Model
 init =
