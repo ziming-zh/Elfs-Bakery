@@ -2,26 +2,28 @@ module Model exposing (..)
 
 import Array exposing (Array)
 import Color exposing (Color)
-import LevelSeq exposing (LevelSeq)
-import Levels exposing (EncodeLevel, Level)
-import Message exposing (MoveDirection(..), Msg(..), Page(..), Paint, Paints, Pos)
+
+import Levels exposing (Level)
+import Message exposing (MoveDirection(..), Msg(..), Page(..), Paint, Pos)
 import Player
 import Random
 import Valve exposing (Valve)
 import Wall exposing (Wall)
+import Valve exposing (initValve,VState(..))
+import Browser.Dom exposing (getViewport)
+import Task
 
 
 type alias Model =
     Mapset
         { win : Bool
         , move_timer : Float
-        , levels : LevelSeq
-        , currentLevel : EncodeLevel
+        , levels : List Level
         , level_index : Int
         , valves_move : Int
         , history : List GameState
         , currentPage : Page
-
+        , state : State
         --, lastMoveDirection : MoveDirection  --merge the direction of the player into Type Player
         --  , stringlevel : StringLevel
         , randomindex : Int
@@ -38,7 +40,7 @@ type alias Mapset a =
         | player : Player.Model
         , wall : Wall
         , valves : List Valve
-        , paints : List Paints
+        , paints : List Paint
         , dots : List Pos --what is dots
         , mapSize : ( Int, Int )
     }
@@ -55,13 +57,18 @@ type alias GameState =
 type alias CurState =
     { player : Player.Model
     , valves : List Valve
-    , paints : List Paints
+    , paints : List Paint
     }
 
+type State 
+    = Begin
+    | Playing
 
 {-| load level, new or existing
 set level\_index in each case
 -}
+
+{-
 checkAndLoadGameWithLevel : EncodeLevel -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 checkAndLoadGameWithLevel encodedLevel ( model, cmd ) =
     let
@@ -146,34 +153,33 @@ loadGameWithNewLevel level ( model, cmd ) =
 loadGameWithLevel : EncodeLevel -> Model -> Model
 loadGameWithLevel encodedLevel model =
     model
-
-
-{-| only when init the app
 -}
+
 initModel : ( Model, Cmd Msg )
 initModel =
     let
         levels =
-            LevelSeq.getInitialLevels
+            Levels.getInitialLevels
     in
     ( { player = Player.init
-      , wall = {col=[],row=[]}
+      , wall = {col=[[True,True]],row=[]}
       , paints = []
-      , valves = []
+      , valves = [initValve 3 3 Valve.Up, initValve 8 8 Valve.Down, initValve 4 7 Valve.Left]
       , dots = []
       , mapSize = ( 0, 0 )
       , win = False
       , levels = levels -- important here
       , move_timer = 0.0
-      , currentLevel = ""
       , level_index = 0
       , valves_move = 0
       , history = []
       , currentPage = HomePage
+      , state = Begin
       , windowsize = ( 800, 800 )
       , randomindex = 0
       }
     , Cmd.batch
         [ Random.generate RandomLevel (Random.int 0 39)
+        , Task.perform GetViewport getViewport
         ]
     )

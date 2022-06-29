@@ -23,6 +23,21 @@ update msg model =
             }, Cmd.none
             )
 
+        GetViewport { viewport } ->
+            ( { model
+                | windowsize =
+                    ( viewport.width
+                    , viewport.height
+                    )
+              }
+            , Cmd.none ) 
+
+        Resize width height ->
+            ( { model | windowsize = ( toFloat width, toFloat height ) }
+            , Cmd.none
+            )
+
+
         _ ->
             ( model, Cmd.none )
 
