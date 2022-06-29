@@ -1,15 +1,10 @@
 module View.Wall exposing (..)
-import View.Basic exposing (rectRender)
+import View.Basic exposing (rectRender,setLength,setWidth)
 import Wall exposing (Wall)
 import Canvas exposing (Renderable)
 import Color exposing (Color)
 import List exposing (indexedMap)
 
-setLength : Float
-setLength = 50.0
-
-setWidth : Float 
-setWidth = 3.0
 
 
 allignRow : Int -> Int -> Bool -> Renderable

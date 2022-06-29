@@ -12,11 +12,14 @@ type alias Valve =
     }
 
 type VState 
-    = UpRight
-    | UpLeft
-    | DownLeft
-    | DownRight
+    = Up
+    | Down
+    | Left
+    | Right
 
+initValve : Int -> Int -> VState -> Valve 
+initValve x y state =
+    {state = state, pos = {x=x, y=y}}
 
 {-
 isValve: {pos:Pos,dir:MoveDirection}->List Valve -> Bool
@@ -30,6 +33,8 @@ isValve {pos,dir} valves =
             Right -> 
                 List.any (isEqual valves
 -}
+
+
 isEqual: Valve->Pos-> Bool
 isEqual valve pos =
     valve.pos==pos

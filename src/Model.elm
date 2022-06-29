@@ -9,6 +9,7 @@ import Player
 import Random
 import Valve exposing (Valve)
 import Wall exposing (Wall)
+import Valve exposing (initValve,VState(..))
 
 
 type alias Model =
@@ -159,7 +160,7 @@ initModel =
     ( { player = Player.init
       , wall = {col=[[True,True]],row=[]}
       , paints = []
-      , valves = []
+      , valves = [initValve 3 3 Valve.Up, initValve 8 8 Valve.Down, initValve 4 7 Valve.Left]
       , dots = []
       , mapSize = ( 0, 0 )
       , win = False

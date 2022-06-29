@@ -12,18 +12,20 @@ import Canvas exposing (rect)
 import Canvas exposing (shapes)
 import Html.Attributes exposing (style)
 import Canvas.Settings exposing (fill)
+import View.Valve exposing (renderValves)
 
 view : Model -> Html Msg
 view model =
     let
         wall = model.wall
-        
+        valves = model.valves
     in
     div
         [ ]
         [ toHtml (800 ,600)
             []
-            (drawWall wall)
+            ((drawWall wall) ++
+            (renderValves valves))
         ]
 
 -- view : Model -> Html msg
