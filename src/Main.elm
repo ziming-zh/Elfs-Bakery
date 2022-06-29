@@ -1,7 +1,7 @@
 module Main exposing (main)
 
 import Browser
-import LevelSeq exposing (LevelSeq)
+
 --import Levels exposing (Level, ViewLevel)
 import Message exposing (Msg(..), key)
 import Model exposing (..)
