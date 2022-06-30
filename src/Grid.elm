@@ -4,9 +4,11 @@ import Color exposing (Color)
 import Levels exposing (Level)
 import Array exposing (Array)
 import Message exposing (Paint)
+import Wall exposing (Wall)
 
 type IsOpen 
     = Open
+    | FakeClose
     | Close
 
     
@@ -38,12 +40,11 @@ sendPainttoGrids  paint grids =
         gridline = case (Array.get posx grids) of
             Nothing -> Array.fromList []
             Just gl ->gl
-        
-
     in
         case (Array.get posy gridline) of
             Nothing -> grids
             Just grid -> Array.set posx (Array.set posy {grid|paint=Just paint} gridline) grids
+
 
 
 banbottom : Grid -> Grid
@@ -142,11 +143,16 @@ initGridsfromLevel level=
         col = level.wall.col
         paints = level.paints
         initialgrids = Array.fromList (List.map (\x -> Array.fromList (List.map (initGrid x) (List.range 1 level.width))) (List.range 1 level.height))   
+        gridswithPaints = List.foldl sendPainttoGrids initialgrids paints
     in
-        List.foldl sendPainttoGrids initialgrids paints
+        gridswithPaints
         -- find out grid
         
         -- List.append
         --     (List.foldl List.append [] (List.indexedMap (\a -> List.indexedMap (initGrid a)) row))
         --     (List.foldl List.append [] (List.indexedMap (\a -> List.indexedMap (initGrid a)) col))
-        
+
+loadWall : Grids -> Wall -> Grids
+loadWall grids wall = grids
+
+    
