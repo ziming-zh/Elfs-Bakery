@@ -10,6 +10,8 @@ import Random
 import Valve exposing (Valve)
 import Wall exposing (Wall)
 import Valve exposing (initValve,VState(..))
+import Grid exposing (Grids)
+import Grid exposing (initGridsfromLevel)
 
 
 type alias Model =
@@ -38,7 +40,7 @@ type alias Mapset a =
         | player : Player.Model
         , wall : Wall
         , valves : List Valve
-        , paints : List Paint
+        , grids :Grids
         , dots : List Pos --what is dots
         , mapSize : ( Int, Int )
     }
@@ -155,11 +157,15 @@ initModel =
     let
         levels =
             Levels.getInitialLevels
+        (wall,valves,grids) = 
+            case List.head levels of
+                Just lv-> (lv.wall,lv.valves,initGridsfromLevel lv)
+                Nothing ->({col=[],row=[]},[],Array.fromList [])
     in
     ( { player = Player.init
-      , wall = {col=[[True,True]],row=[]}
-      , paints = []
-      , valves = [initValve 3 3 Valve.Up, initValve 8 8 Valve.Down, initValve 4 7 Valve.Left]
+      , wall = wall
+      , valves = valves
+      , grids = grids
       , dots = []
       , mapSize = ( 0, 0 )
       , win = False

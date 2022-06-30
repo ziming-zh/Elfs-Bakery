@@ -3,6 +3,7 @@ import Color exposing (..)
 import Wall exposing (Wall)
 import Valve exposing (Valve)
 import Message exposing (Paint)
+import Valve exposing (VState(..))
 type alias Level =
     { width : Int
     , height : Int
@@ -31,25 +32,52 @@ initLevel1 =
     {
         row =  mapInt2Bool
         [[1,1,1,0,1,1,1,1]
-        ,[0,0,1,1,1,0,1,0]
+        ,[0,0,0,1,1,0,1,0]
         ,[1,0,0,0,1,0,1,0]
         ,[0,0,1,0,1,0,1,0]
-        ,[0,1,1,0,1,1,1,0]
+        ,[0,1,1,0,1,0,1,0]
         ,[0,1,0,0,0,0,1,0]
         ,[1,1,1,1,1,1,0,1]]
         , col = mapInt2Bool
         [[1,1,0,1,1,1]
-        ,[0,1,1,1,1,0]
+        ,[0,1,1,0,1,0]
         ,[1,0,1,1,1,0]
-        ,[1,0,1,1,1,1]
-        ,[1,1,1,0,0,0]
+        ,[1,0,0,1,1,1]
+        ,[1,1,0,0,0,0]
         ,[0,1,0,0,0,0]
-        ,[1,1,0,1,0,1]
-        ,[1,1,0,1,1,1]
+        ,[1,1,0,0,0,1]
+        ,[0,1,0,1,1,1]
         ,[1,1,1,1,1,1]]
     }
-    ,valves = []
-    ,paints = []
+    ,valves = [
+         {state = Up, pos = {x=3,y=1}}
+        ,{state = Left, pos = {x=3,y=1}}
+        ,{state = Left, pos = {x=3,y=2}}
+        ,{state = Down, pos = {x=3,y=2}}
+        ,{state = Up, pos = {x=4,y=3}}
+        ,{state = Left, pos = {x=4,y=3}}
+        ,{state = Up, pos = {x=6,y=4}}
+        ,{state = Left, pos = {x=6,y=4}}
+        ,{state = Down, pos = {x=1,y=3}}
+        ,{state = Left, pos = {x=1,y=3}}
+        ,{state = Down, pos = {x=7,y=0}}
+
+
+    ]
+    ,paints = [
+         {pos = {x=2,y=0},color=Color.lightYellow}
+        ,{pos = {x=2,y=2},color=Color.lightYellow}
+        ,{pos = {x=3,y=0},color=Color.blue}
+        ,{pos = {x=4,y=0},color=Color.blue}
+        ,{pos = {x=5,y=0},color=Color.blue}
+        ,{pos = {x=5,y=1},color=Color.blue}
+        ,{pos = {x=5,y=2},color=Color.blue}
+        ,{pos = {x=4,y=2},color=Color.blue}
+        ,{pos = {x=0,y=2},color=Color.lightRed}
+        ,{pos = {x=0,y=4},color=Color.lightRed}
+        ,{pos = {x=0,y=6},color=Color.lightRed}
+        ,{pos = {x=4,y=6},color=Color.lightRed}
+    ]
     ,id = 1
     }
 

@@ -25,7 +25,7 @@ view model =
         [ ]
         [ toHtml (800 ,600)
             []
-            (renderLevel model.wall [] [])
+            (renderLevel model.wall model.valves model.grids)
 
         ]
 

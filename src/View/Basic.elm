@@ -24,6 +24,6 @@ rectRender x y width height color=
 circleRender : Float -> Float -> Float -> Color.Color -> Renderable
 circleRender x y radius color =
     shapes
-        [ stroke color]
+        [ fill color]
         [ circle ( x, y) radius ]
 

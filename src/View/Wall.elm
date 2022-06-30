@@ -17,7 +17,7 @@ allignRow idy idx exists =
 allignCol : Int -> Int -> Bool -> Renderable
 allignCol idy idx exists =
     if exists == True then
-        rectRender ((toFloat idx)*setLength) ((toFloat idy)*setLength) setWidth setLength Color.black
+        rectRender ((toFloat idy)*setLength) ((toFloat idx)*setLength) setWidth setLength Color.black
     else 
         rectRender 0 0 0 0 Color.black
 

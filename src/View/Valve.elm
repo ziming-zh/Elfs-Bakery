@@ -21,7 +21,7 @@ drawValve valve =
     in
         [circleRender posx posy setWidth Color.lightPurple] ++
         case state of 
-            Up -> [rectRender (posx-setWidth/2) (posy-setLength) setWidth setLength Color.lightPurple]
-            Down -> [rectRender (posx-setWidth/2) posy setWidth setLength Color.lightPurple] 
-            Left -> [rectRender (posx-setLength) (posy-setWidth/2) setLength setWidth Color.lightPurple]
-            Right -> [rectRender posx (posy-setWidth/2) setLength setWidth Color.lightPurple]
+            Up -> [rectRender (posx-setWidth/4) (posy-setLength) setWidth setLength Color.lightPurple]
+            Down -> [rectRender (posx-setWidth/4) posy setWidth setLength Color.lightPurple] 
+            Left -> [rectRender (posx-setLength) (posy-setWidth/4) setLength setWidth Color.lightPurple]
+            Right -> [rectRender posx (posy-setWidth/4) setLength setWidth Color.lightPurple]

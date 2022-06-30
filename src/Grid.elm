@@ -3,6 +3,7 @@ import Message exposing (Pos)
 import Color exposing (Color)
 import Levels exposing (Level)
 import Array exposing (Array)
+import Message exposing (Paint)
 
 type IsOpen 
     = Open
@@ -19,14 +20,31 @@ type alias GState =
   
 type alias Grid = 
     { pos : Pos
-    , color : Color -- set white default for blockes holes
+    , paint : Maybe Paint -- set white default for blockes holes
     , gstate : GState
-
+    , distance : Maybe Int
+    , renewed : Bool
     }
 
 initGrid : Int -> Int  -> Grid
 initGrid y x = 
-    { pos = {x=x,y=y}, color = Color.white , gstate = {up=Open, down=Open, left=Open,right= Open} }
+    { pos = {x=x,y=y}, paint = Nothing , gstate = {up=Open, down=Open, left=Open,right= Open} , distance = Just 1, renewed = True}
+
+sendPainttoGrids :  Paint -> Grids -> Grids
+sendPainttoGrids  paint grids = 
+    let 
+        posx = paint.pos.x
+        posy = paint.pos.y
+        gridline = case (Array.get posx grids) of
+            Nothing -> Array.fromList []
+            Just gl ->gl
+        
+
+    in
+        case (Array.get posy gridline) of
+            Nothing -> grids
+            Just grid -> Array.set posx (Array.set posy {grid|paint=Just paint} gridline) grids
+
 
 banbottom : Grid -> Grid
 banbottom grid = 
@@ -80,10 +98,10 @@ refreshRowGrids x y grids =
                 (Just ugl, Just dgl, Just db) -> 
                     case upperblock of 
                         Nothing -> 
-                            Array.set x ( Array.set y (banbottom db) dgl)grids
+                            Array.set x ( Array.set y (banTop db) dgl)grids
                         Just bb ->
-                            Array.set x ( Array.set y (banbottom db) dgl) grids
-                            |>  Array.set (x-1) ( Array.set y (banTop bb) ugl)
+                            Array.set x ( Array.set y (banTop db) dgl) grids
+                            |>  Array.set (x-1) ( Array.set y (banbottom bb) ugl)
 
                 _ -> grids
     in
@@ -113,17 +131,19 @@ refreshColumnGrids x y grids =
     in
         newgrid
 
+unrenewGrids : Grids -> Grids
+unrenewGrids grids = 
+    Array.map (Array.map (\x -> {x| renewed = False})) grids
+
 initGridsfromLevel : Level -> Grids
 initGridsfromLevel level= 
     let
         row = level.wall.row
         col = level.wall.col
-        initialgrids = Array.fromList (List.map (\x -> Array.fromList (List.map (initGrid x) (List.range 1 level.width))) (List.range 1 level.height))
-        
-        
+        paints = level.paints
+        initialgrids = Array.fromList (List.map (\x -> Array.fromList (List.map (initGrid x) (List.range 1 level.width))) (List.range 1 level.height))   
     in
-        initialgrids
-        
+        List.foldl sendPainttoGrids initialgrids paints
         -- find out grid
         
         -- List.append
