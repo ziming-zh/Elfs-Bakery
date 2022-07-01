@@ -1,17 +1,18 @@
 module Grid exposing (..)
-import Message exposing (Pos)
-import Color exposing (Color)
-import Levels exposing (Level)
+
 import Array exposing (Array)
+import Color exposing (Color)
+import Html.Attributes exposing (rows)
+import Levels exposing (Level)
+import Message exposing (Direction(..), Pos)
 import Valve exposing (VState(..))
+import Wall exposing (Wall, Wall_col, Wall_row, getWall)
 
-import Message exposing (Direction(..))
 
-type IsOpen 
+type IsOpen
     = Open
     | Close
 
-    
 
 type alias GState =
     { up : IsOpen
@@ -19,139 +20,241 @@ type alias GState =
     , left : IsOpen
     , right : IsOpen
     }
-  
-type alias Grid = 
+
+
+type alias Grid =
     { pos : Pos
     , color : Color -- set white default for blockes holes
     , gstate : GState
-
     }
-type alias Grids = Array (Array Grid)
 
-initGrid : Int -> Int  -> Grid
-initGrid y x = 
-    { pos = {x=x,y=y}, color = Color.white , gstate = {up=Open, down=Open, left=Open,right= Open} }
+
+type alias Grids =
+    Array (Array Grid)
+
+
+initGrid : Int -> Int -> Grid
+initGrid y x =
+    { pos = { x = x, y = y }, color = Color.white, gstate = { up = Open, down = Open, left = Open, right = Open } }
+
 
 ban : Direction -> Grid -> Grid
-ban dir grid = 
-    let 
-        gstate = grid.gstate
-        newstate = 
+ban dir grid =
+    let
+        gstate =
+            grid.gstate
+
+        newstate =
             case dir of
-                Message.Down ->  {gstate | down = Close}
-                Message.Up -> {gstate | up = Close}
-                Message.Left ->  {gstate | left = Close}
-                Message.Right -> {gstate | right = Close}
-                _ -> gstate
+                Message.Down ->
+                    { gstate | down = Close }
 
+                Message.Up ->
+                    { gstate | up = Close }
+
+                Message.Left ->
+                    { gstate | left = Close }
+
+                Message.Right ->
+                    { gstate | right = Close }
+
+                _ ->
+                    gstate
     in
-        {grid | gstate = newstate}
-
+    { grid | gstate = newstate }
 
 
 getGrid : Int -> Int -> Grids -> Maybe Grid
-getGrid x y grids = 
+getGrid x y grids =
     let
-        gridline = (Array.get x grids)
+        gridline =
+            Array.get x grids
     in
-        case gridline of 
-            Nothing -> Nothing
-            Just gl -> Array.get y gl
+    case gridline of
+        Nothing ->
+            Nothing
+
+        Just gl ->
+            Array.get y gl
+
 
 setGrid : Int -> Int -> Grid -> Grids -> Grids
-setGrid x y newgrid grids = 
+setGrid x y newgrid grids =
     let
-        gridline = (Array.get x grids)
+        gridline =
+            Array.get x grids
     in
-        case gridline of 
-            Nothing -> grids
-            Just gl -> 
-                Array.set x (Array.set y newgrid gl) grids
+    case gridline of
+        Nothing ->
+            grids
+
+        Just gl ->
+            Array.set x (Array.set y newgrid gl) grids
+
 
 refreshRowGrids : Int -> Int -> Grids -> Grids
-refreshRowGrids x y grids = 
+refreshRowGrids x y grids =
     let
-        upperblock = getGrid (x-1) y grids
-        downblock = getGrid x y grids
-    in
-        case (upperblock,downblock) of
-            (Just ub,Just db) ->
-                grids 
-                |> setGrid (x-1) y (ban Message.Down ub)
-                |> setGrid x y (ban Message.Up db) 
-            _ -> grids
-    -- let 
-    --     uppergridline = (Array.get (x-1) grids)
-    --     downgridline = (Array.get x grids)
-    --     upperblock = case (uppergridline,downgridline) of
-    --         (Just a,_) -> Array.get y a
-    --         _ -> Nothing
-    --     downblock = case (uppergridline,downgridline) of
-    --         (_, Just b) -> Array.get y b
-    --         _ -> Nothing
+        upperblock =
+            getGrid (x - 1) y grids
 
-    --     newgrid = 
-    --         case (uppergridline, downgridline, downblock) of
-                
-    --             (Just ugl, Just dgl, Just db) -> 
-    --                 case upperblock of 
-    --                     Nothing -> 
-    --                         Array.set x ( Array.set y (banbottom db) dgl)grids
-    --                     Just bb ->
-    --                         Array.set x ( Array.set y (banbottom db) dgl) grids
-    --                         |>  Array.set (x-1) ( Array.set y (banTop bb) ugl)
-    --             _ -> grids
-    -- in
-    --     newgrid
+        downblock =
+            getGrid x y grids
+    in
+    case ( upperblock, downblock ) of
+        ( Just ub, Just db ) ->
+            grids
+                |> setGrid (x - 1) y (ban Message.Down ub)
+                |> setGrid x y (ban Message.Up ub)
+
+        _ ->
+            grids
+
+
+
+-- let
+--     uppergridline = (Array.get (x-1) grids)
+--     downgridline = (Array.get x grids)
+--     upperblock = case (uppergridline,downgridline) of
+--         (Just a,_) -> Array.get y a
+--         _ -> Nothing
+--     downblock = case (uppergridline,downgridline) of
+--         (_, Just b) -> Array.get y b
+--         _ -> Nothing
+--     newgrid =
+--         case (uppergridline, downgridline, downblock) of
+--             (Just ugl, Just dgl, Just db) ->
+--                 case upperblock of
+--                     Nothing ->
+--                         Array.set x ( Array.set y (banbottom db) dgl)grids
+--                     Just bb ->
+--                         Array.set x ( Array.set y (banbottom db) dgl) grids
+--                         |>  Array.set (x-1) ( Array.set y (banTop bb) ugl)
+--             _ -> grids
+-- in
+--     newgrid
+
 
 refreshColumnGrids : Int -> Int -> Grids -> Grids
-refreshColumnGrids x y grids = 
+refreshColumnGrids x y grids =
     let
-        leftblock = getGrid x (y-1) grids
-        rightblock = getGrid x y grids
-    in
-        case (leftblock,rightblock) of
-            (Just lb,Just rb) ->
-                grids 
-                |> setGrid x (y-1) (ban Message.Right lb)
-                |> setGrid x y (ban Message.Left rb)
-            _ -> grids
-    -- let 
-    --     gridline = case (Array.get x grids) of
-    --         Nothing -> (Array.fromList [])
-    --         Just gl -> gl
-        
-    --     leftblock = Array.get (y-1) gridline
-    --     rightblock = Array.get (y) gridline
+        leftblock =
+            getGrid x (y - 1) grids
 
-    --     newgrid = 
-    --         case (leftblock,rightblock) of
-                
-    --             (Just a, Just b) ->
-    --                 Array.set x ( Array.set (y-1) (banRight a) gridline) grids
-    --                 |>  Array.set x ( Array.set y (banLeft b) gridline)
-    --             (Just a, Nothing) ->
-    --                 Array.set x ( Array.set (y-1) (banRight a) gridline) grids
-    --             (Nothing, Just b) ->
-    --                 Array.set x ( Array.set y (banLeft b) gridline) grids
-    --             _ -> grids
-    -- in
-    --     newgrid
+        rightblock =
+            getGrid x y grids
+    in
+    case ( leftblock, rightblock ) of
+        ( Just lb, Just rb ) ->
+            grids
+                |> setGrid x (y - 1) (ban Message.Right lb)
+                |> setGrid x y (ban Message.Left rb)
+
+        _ ->
+            grids
+
+
+
+-- let
+--     gridline = case (Array.get x grids) of
+--         Nothing -> (Array.fromList [])
+--         Just gl -> gl
+--     leftblock = Array.get (y-1) gridline
+--     rightblock = Array.get (y) gridline
+--     newgrid =
+--         case (leftblock,rightblock) of
+--             (Just a, Just b) ->
+--                 Array.set x ( Array.set (y-1) (banRight a) gridline) grids
+--                 |>  Array.set x ( Array.set y (banLeft b) gridline)
+--             (Just a, Nothing) ->
+--                 Array.set x ( Array.set (y-1) (banRight a) gridline) grids
+--             (Nothing, Just b) ->
+--                 Array.set x ( Array.set y (banLeft b) gridline) grids
+--             _ -> grids
+-- in
+--     newgrid
+
 
 initGridsfromLevel : Level -> Grids
-initGridsfromLevel level= 
+initGridsfromLevel level =
     let
-        row = level.wall.row
-        col = level.wall.col
-        initialgrids = Array.fromList (List.map (\x -> Array.fromList (List.map (initGrid x) (List.range 1 level.width))) (List.range 1 level.height))
-        
-        
+        row =
+            level.wall.row
+
+        col =
+            level.wall.col
+
+        initialgrids =
+            Array.fromList (List.map (\x -> Array.fromList (List.map (initGrid x) (List.range 1 level.width))) (List.range 1 level.height))
+            |> loadWall level
     in
-        initialgrids
-        
-        -- find out grid
-        
-        -- List.append
-        --     (List.foldl List.append [] (List.indexedMap (\a -> List.indexedMap (initGrid a)) row))
-        --     (List.foldl List.append [] (List.indexedMap (\a -> List.indexedMap (initGrid a)) col))
-        
+    initialgrids
+
+
+
+-- find out grid
+-- List.append
+--     (List.foldl List.append [] (List.indexedMap (\a -> List.indexedMap (initGrid a)) row))
+--     (List.foldl List.append [] (List.indexedMap (\a -> List.indexedMap (initGrid a)) col))
+
+
+loadWall : Level -> Grids -> Grids
+loadWall level grids =
+    let
+        wall=level.wall
+        row =
+            wall.row
+
+        col =
+            wall.col
+
+        w =
+            level.width
+
+        h =
+            level.height
+
+        newGrids =
+            close (Row row) 0 0 h w grids
+
+        newnewGrids =
+            close (Col col) 0 0 h w newGrids
+    in
+        newnewGrids
+
+
+close : WallType -> Int -> Int -> Int -> Int -> Grids -> Grids
+close wall x y xlim ylim grids =
+    if y < ylim then
+        isWall grids wall x y
+            |> close wall x (y + 1) xlim ylim
+
+    else if x < (xlim - 1) then
+        isWall grids wall x 0
+            |> close wall (x + 1) 0 xlim ylim
+
+    else
+        grids
+
+
+isWall : Grids -> WallType -> Int -> Int -> Grids
+isWall grids wall x y =
+    case wall of
+        Row row ->
+            if getWall row x y then
+                refreshRowGrids x y grids
+
+            else
+                grids
+
+        Col col ->
+            if getWall col x y then
+                refreshColumnGrids x y grids
+
+            else
+                grids
+
+
+type WallType
+    = Row Wall_row
+    | Col Wall_col
