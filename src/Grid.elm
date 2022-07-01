@@ -3,6 +3,9 @@ import Message exposing (Pos)
 import Color exposing (Color)
 import Levels exposing (Level)
 import Array exposing (Array)
+import Valve exposing (VState(..))
+
+import Message exposing (Direction(..))
 
 type IsOpen 
     = Open
@@ -29,38 +32,20 @@ initGrid : Int -> Int  -> Grid
 initGrid y x = 
     { pos = {x=x,y=y}, color = Color.white , gstate = {up=Open, down=Open, left=Open,right= Open} }
 
-banbottom : Grid -> Grid
-banbottom grid = 
+ban : Direction -> Grid -> Grid
+ban dir grid = 
     let 
         gstate = grid.gstate
-        newstate = {gstate | down = Close}
+        newstate = 
+            case dir of
+                Message.Down ->  {gstate | down = Close}
+                Message.Up -> {gstate | up = Close}
+                Message.Left ->  {gstate | left = Close}
+                Message.Right -> {gstate | right = Close}
+                _ -> gstate
 
     in
-    {grid | gstate = newstate}
-banTop : Grid -> Grid
-banTop grid = 
-    let 
-        gstate = grid.gstate
-        newstate = {gstate | up = Close}
-
-    in
-    {grid | gstate = newstate}
-banLeft : Grid -> Grid
-banLeft grid = 
-    let 
-        gstate = grid.gstate
-        newstate = {gstate | left = Close}
-
-    in
-    {grid | gstate = newstate}
-banRight : Grid -> Grid
-banRight grid = 
-    let 
-        gstate = grid.gstate
-        newstate = {gstate | right = Close}
-
-    in
-    {grid | gstate = newstate}
+        {grid | gstate = newstate}
 
 
 
@@ -92,8 +77,8 @@ refreshRowGrids x y grids =
         case (upperblock,downblock) of
             (Just ub,Just db) ->
                 grids 
-                |> setGrid (x-1) y (banbottom ub)
-                |> setGrid x y (banTop ub) 
+                |> setGrid (x-1) y (ban Message.Down ub)
+                |> setGrid x y (ban Message.Up ub) 
             _ -> grids
     -- let 
     --     uppergridline = (Array.get (x-1) grids)
@@ -128,8 +113,8 @@ refreshColumnGrids x y grids =
         case (leftblock,rightblock) of
             (Just lb,Just rb) ->
                 grids 
-                |> setGrid x (y-1) (banRight lb)
-                |> setGrid x y (banLeft rb)
+                |> setGrid x (y-1) (ban Message.Right lb)
+                |> setGrid x y (ban Message.Left rb)
             _ -> grids
     -- let 
     --     gridline = case (Array.get x grids) of

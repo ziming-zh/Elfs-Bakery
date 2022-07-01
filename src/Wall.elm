@@ -2,7 +2,7 @@ module Wall exposing (Wall, isWall)
 
 import Array exposing (fromList, get)
 import Maybe exposing (withDefault)
-import Message exposing (MoveDirection(..), Pos)
+import Message exposing (Direction(..), Pos)
 
 
 type alias Wall_row =
@@ -17,7 +17,7 @@ type alias Wall =
     { col : Wall_col, row : Wall_row }
 
 
-isWall :Pos -> MoveDirection -> Wall -> Bool
+isWall :Pos -> Direction -> Wall -> Bool
 isWall pos dir wall =
     let
         x =

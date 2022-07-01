@@ -1,11 +1,11 @@
 module Player exposing (..)
 
-import Message exposing (MoveDirection(..), Pos)
+import Message exposing (Direction(..), Pos)
 
 
 type alias Model =
     { pos : Pos
-    , dir : MoveDirection
+    , dir : Direction
     , state : State
     }
 
@@ -16,7 +16,7 @@ type State
 init : Model
 init =
     { pos = { x = 1, y = 1 }, dir = Up,state = Stopped }
-changeDir: Model->MoveDirection -> Model
+changeDir : Model-> Direction -> Model
 changeDir model dir =
     case dir of
         Stop -> model

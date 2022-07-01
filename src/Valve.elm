@@ -4,7 +4,7 @@ Valve is the control gadgets that deals with the flows of the stream
 
 module Valve exposing (..)
 import Message exposing (Pos)
-import Message exposing (MoveDirection(..))
+import Message exposing (Direction(..))
 
 type alias Valve = 
     { state : VState
