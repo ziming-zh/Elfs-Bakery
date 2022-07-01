@@ -6,6 +6,7 @@ import Canvas exposing (Renderable)
 import View.Basic exposing (setWidth)
 import Color
 import Array
+import Grid exposing (GridType(..))
 
 
 renderGrids : Grids -> List Renderable
@@ -22,9 +23,10 @@ drawGrid grid =
         posy = (toFloat grid.pos.y-1) * setLength +setWidth
         
         color = 
-            case grid.paint of
-                Nothing -> Color.white
-                Just paint -> paint.color
+            case grid.gridtype of
+                Vacant -> Color.white
+                Exit -> Color.lightGray
+                Paint paint -> paint.color
     in
         rectRender posx posy (setLength-setWidth) (setLength-setWidth) color
 

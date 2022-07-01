@@ -19,10 +19,15 @@ type alias GState =
     , left : IsOpen
     , right : IsOpen
     }
-  
+
+type GridType a = 
+    Paint a
+    | Exit
+    | Vacant
+
 type alias Grid = 
     { pos : Pos
-    , paint : Maybe Paint -- set white default for blockes holes
+    , gridtype : GridType Paint -- set white default for blockes holes
     , gstate : GState
     , distance : Maybe Int
     , renewed : Bool
@@ -30,7 +35,7 @@ type alias Grid =
 
 initGrid : Int -> Int  -> Grid
 initGrid y x = 
-    { pos = {x=x,y=y}, paint = Nothing , gstate = {up=Open, down=Open, left=Open,right= Open} , distance = Just 1, renewed = True}
+    { pos = {x=x,y=y}, gridtype = Vacant , gstate = {up=Open, down=Open, left=Open,right= Open} , distance = Just 1, renewed = True}
 
 sendPainttoGrids :  Paint -> Grids -> Grids
 sendPainttoGrids  paint grids = 
@@ -43,7 +48,7 @@ sendPainttoGrids  paint grids =
     in
         case (Array.get posy gridline) of
             Nothing -> grids
-            Just grid -> Array.set posx (Array.set posy {grid|paint=Just paint} gridline) grids
+            Just grid -> Array.set posx (Array.set posy {grid|gridtype=Paint paint} gridline) grids
 
 
 
