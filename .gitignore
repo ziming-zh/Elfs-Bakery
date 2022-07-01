@@ -8,6 +8,7 @@
 *.nav
 *.out
 *.snm
+*.vscode
 *.toc
 *.swp
 *.vrb
