@@ -1,4 +1,4 @@
-module Wall exposing (Wall, isWall)
+module Wall exposing (Wall, isWall,Wall_col,Wall_row,getWall)
 
 import Array exposing (fromList, get)
 import Maybe exposing (withDefault)

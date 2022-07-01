@@ -7,6 +7,7 @@ import Levels exposing (Level)
 import Message exposing (Direction(..), Pos)
 import Valve exposing (VState(..))
 import Wall exposing (Wall, Wall_col, Wall_row, getWall)
+import String exposing (lines)
 
 
 type IsOpen
@@ -185,7 +186,7 @@ initGridsfromLevel level =
             level.wall.col
 
         initialgrids =
-            Array.fromList (List.map (\x -> Array.fromList (List.map (initGrid x) (List.range 1 level.width))) (List.range 1 level.height))
+            Array.fromList (List.map (\x -> Array.fromList (List.map (initGrid x) (List.range 0 (level.width-1)))) (List.range 0 (level.height-1)))
             |> loadWall level
     in
     initialgrids
@@ -196,63 +197,109 @@ initGridsfromLevel level =
 -- List.append
 --     (List.foldl List.append [] (List.indexedMap (\a -> List.indexedMap (initGrid a)) row))
 --     (List.foldl List.append [] (List.indexedMap (\a -> List.indexedMap (initGrid a)) col))
+sendPos : Int -> Int -> Bool -> Maybe (Int, Int)
+sendPos x y iswall = 
+    case iswall of
+        True -> Just (x,y)
+        False -> Nothing
 
+zip : List a -> List b -> List (a,b)
+zip u1 u2 = List.map2 Tuple.pair u1 u2
+
+drawWallIndex : List Bool -> List Int
+drawWallIndex wallline = 
+    let
+        deleteblank = (\ x-> List.filter filtwall x)
+        
+        filtwall = (\x -> case x of
+            (False,_) -> False 
+            _ -> True)
+    in
+        List.indexedMap (\x y -> (y, x)) wallline
+        |> deleteblank
+        |> List.filter filtwall
+        |> List.unzip
+        |> Tuple.second
+
+sendWallLine : (List Bool, Int) -> Grids -> Grids
+sendWallLine (liney,x) grids = 
+        List.foldl (refreshRowGrids x) grids (drawWallIndex liney)
+
+sendWallColumn : (List Bool, Int) -> Grids -> Grids
+sendWallColumn (liney,x) grids = 
+        List.foldl (refreshRowGrids x) grids (drawWallIndex liney)
 
 loadWall : Level -> Grids -> Grids
 loadWall level grids =
     let
-        wall=level.wall
-        row =
-            wall.row
+        wall = level.wall
+        row = wall.row
+        col =wall.col
+        indexedrow = List.indexedMap (\x y -> (y, x)) row
+        indexedcol = List.indexedMap (\x y -> (y, x)) col
+        -- List.foldl (List.foldl refreshColumnGrids) grids (List.indexedMap (List.indexedMap sendPos) row)
+        -- (List.indexedMap (\a -> List.indexedMap (initGrid a)) row)
 
-        col =
-            wall.col
-
-        w =
-            level.width
-
-        h =
-            level.height
-
-        newGrids =
-            close (Row row) 0 0 h w grids
-
-        newnewGrids =
-            close (Col col) 0 0 h w newGrids
+        loadrow = List.foldl (sendWallLine) grids indexedrow
+        loadcolumn = List.foldl (sendWallColumn) loadrow indexedcol
     in
-        newnewGrids
+        loadcolumn
+
+-- loadWall : Level -> Grids -> Grids
+-- loadWall level grids =
+--     let
+--         wall=level.wall
+--         row =
+--             wall.row
+
+--         col =
+--             wall.col
+
+--         w =
+--             level.width
+
+--         h =
+--             level.height
+
+--         newGrids =
+--             close (Row row) 0 0 h w grids
+
+--         newnewGrids =
+--             close (Col col) 0 0 h w newGrids
+--     in
+--         newnewGrids
 
 
-close : WallType -> Int -> Int -> Int -> Int -> Grids -> Grids
-close wall x y xlim ylim grids =
-    if y < ylim then
-        isWall grids wall x y
-            |> close wall x (y + 1) xlim ylim
+-- close : WallType -> Int -> Int -> Int -> Int -> Grids -> Grids
+-- close wall x y xlim ylim grids =
+--     if y < ylim then
+--         isWall grids wall x y
+--             |> close wall x (y + 1) xlim ylim
 
-    else if x < (xlim - 1) then
-        isWall grids wall x 0
-            |> close wall (x + 1) 0 xlim ylim
+--     else if x < (xlim - 1) then
+--         isWall grids wall x 0
+--             |> close wall (x + 1) 0 xlim ylim
 
-    else
-        grids
+--     else
+--         grids
 
 
-isWall : Grids -> WallType -> Int -> Int -> Grids
-isWall grids wall x y =
-    case wall of
-        Row row ->
-            if getWall row x y then
-                refreshRowGrids x y grids
+-- isWall : Grids -> WallType -> Int -> Int -> Grids
+-- isWall grids wall x y =
+--     case wall of
+--         Row row ->
+--             if getWall row x y then
+--                 refreshRowGrids x y grids
 
-            else
-                grids
+--             else
+--                 grids
 
-        Col col ->
-            if getWall col x y then
-                refreshColumnGrids x y grids
+--         Col col ->
+--             if getWall col x y then
+--                 refreshColumnGrids x y grids
 
-            else
-                grids
+--             else
+--                 grids
 
 
 type WallType
