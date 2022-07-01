@@ -197,11 +197,11 @@ initGridsfromLevel level =
 -- List.append
 --     (List.foldl List.append [] (List.indexedMap (\a -> List.indexedMap (initGrid a)) row))
 --     (List.foldl List.append [] (List.indexedMap (\a -> List.indexedMap (initGrid a)) col))
-sendPos : Int -> Int -> Bool -> Maybe (Int, Int)
-sendPos x y iswall = 
-    case iswall of
-        True -> Just (x,y)
-        False -> Nothing
+-- sendPos : Int -> Int -> Bool -> Maybe (Int, Int)
+-- sendPos x y iswall = 
+--     case iswall of
+--         True -> Just (x,y)
+--         False -> Nothing
 
 zip : List a -> List b -> List (a,b)
 zip u1 u2 = List.map2 Tuple.pair u1 u2
