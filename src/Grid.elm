@@ -5,7 +5,7 @@ import Color exposing (Color)
 import Html.Attributes exposing (rows)
 import Levels exposing (Level)
 import Message exposing (Direction(..), Pos)
-import Valve exposing (VState(..))
+import Valve exposing (VState(..),Valve)
 import Wall exposing (Wall, Wall_col, Wall_row, getWall)
 import String exposing (lines)
 import Message exposing (Paint)
@@ -50,8 +50,8 @@ initGrid y x =
     { pos = { x = x, y = y }, gridtype=Vacant, gstate = { up = Open, down = Open, left = Open, right = Open },distance = Just 0, renewed = True }
 
 
-ban : Direction -> Grid -> Grid
-ban dir grid =
+ban : IsOpen -> Direction -> Grid -> Grid
+ban isopen dir grid =
     let
         gstate =
             grid.gstate
@@ -59,16 +59,16 @@ ban dir grid =
         newstate =
             case dir of
                 Message.Down ->
-                    { gstate | down = Close }
+                    { gstate | down = isopen }
 
                 Message.Up ->
-                    { gstate | up = Close }
+                    { gstate | up = isopen }
 
                 Message.Left ->
-                    { gstate | left = Close }
+                    { gstate | left = isopen }
 
                 Message.Right ->
-                    { gstate | right = Close }
+                    { gstate | right = isopen }
 
                 _ ->
                     gstate
@@ -104,8 +104,8 @@ setGrid x y newgrid grids =
             Array.set x (Array.set y newgrid gl) grids
 
 
-refreshRowGrids : Int -> Int -> Grids -> Grids
-refreshRowGrids x y grids =
+refreshRowGrids : IsOpen -> Int -> Int -> Grids -> Grids
+refreshRowGrids isopen x y grids =
     let
         upperblock =
             getGrid (x - 1) y grids
@@ -116,8 +116,8 @@ refreshRowGrids x y grids =
     case ( upperblock, downblock ) of
         ( Just ub, Just db ) ->
             grids
-                |> setGrid (x - 1) y (ban Message.Down ub)
-                |> setGrid x y (ban Message.Up db)
+                |> setGrid (x - 1) y (ban isopen Message.Down ub)
+                |> setGrid x y (ban isopen Message.Up db)
 
         _ ->
             grids 
@@ -147,8 +147,8 @@ refreshRowGrids x y grids =
 --     newgrid
 
 
-refreshColumnGrids : Int -> Int -> Grids -> Grids
-refreshColumnGrids y x grids =
+refreshColumnGrids : IsOpen -> Int -> Int -> Grids -> Grids
+refreshColumnGrids isopen y x grids =
     let
         leftblock =
             getGrid x (y - 1) grids
@@ -159,9 +159,8 @@ refreshColumnGrids y x grids =
     case ( leftblock, rightblock ) of
         ( Just lb, Just rb ) ->
             grids
-                |> setGrid x (y - 1) (ban Message.Right lb)
-                |> setGrid x y (ban Message.Left rb)
-
+                |> setGrid x (y - 1) (ban isopen Message.Right lb)
+                |> setGrid x y (ban isopen Message.Left rb)
         _ ->
             grids
 
@@ -190,18 +189,12 @@ refreshColumnGrids y x grids =
 initGridsfromLevel : Level -> Grids
 initGridsfromLevel level =
     let
-        row =
-            level.wall.row
-
-        col =
-            level.wall.col
-        paints = level.paints
-
         initialgrids =
             Array.fromList (List.map (\x -> Array.fromList (List.map (initGrid x) (List.range 0 (level.width-1)))) (List.range 0 (level.height-1)))
-            |> loadWall level
+            |> loadWall level            -- |> loadValves level.valves
     in
-        List.foldl sendPainttoGrids initialgrids paints
+        initialgrids
+        -- List.foldl sendPainttoGrids initialgrids paints
 
 
 
@@ -235,11 +228,11 @@ drawWallIndex wallline =
 
 sendWallLine : (List Bool, Int) -> Grids -> Grids
 sendWallLine (liney,x) grids = 
-        List.foldl (refreshRowGrids x) grids (drawWallIndex liney)
+        List.foldl (refreshRowGrids Close x) grids (drawWallIndex liney)
 
 sendWallColumn : (List Bool, Int) -> Grids -> Grids
 sendWallColumn (liney,x) grids = 
-        List.foldl (refreshColumnGrids x) grids (drawWallIndex liney)
+        List.foldl (refreshColumnGrids Close x) grids (drawWallIndex liney)
 
 loadWall : Level -> Grids -> Grids
 loadWall level grids =
@@ -251,6 +244,24 @@ loadWall level grids =
         loadcolumn = List.foldl (sendWallColumn) loadrow indexedcol
     in
         loadcolumn
+
+
+
+loadValve : Valve -> Grids -> Grids
+loadValve  valve grids = 
+    let
+        posx = valve.pos.x
+        posy = valve.pos.y
+    in    -- (x,y,dir)
+        case valve.state of
+            Valve.Left -> refreshRowGrids FakeClose posx (posy-1) grids
+            Valve.Right ->  refreshRowGrids FakeClose posx posy grids
+            Valve.Up ->refreshColumnGrids FakeClose posy (posx-1) grids
+            Valve.Down -> refreshColumnGrids FakeClose posy posx grids
+
+loadValves : List Valve -> Grids -> Grids
+loadValves valves grids = 
+    List.foldl loadValve grids valves
 
 -- loadWall : Level -> Grids -> Grids
 -- loadWall level grids =
