@@ -106,7 +106,7 @@ refreshRowGrids x y grids =
         ( Just ub, Just db ) ->
             grids
                 |> setGrid (x - 1) y (ban Message.Down ub)
-                |> setGrid x y (ban Message.Up ub)
+                |> setGrid x y (ban Message.Up db)
 
         _ ->
             grids
