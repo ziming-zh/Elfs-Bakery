@@ -137,7 +137,7 @@ refreshRowGrids x y grids =
 
 
 refreshColumnGrids : Int -> Int -> Grids -> Grids
-refreshColumnGrids x y grids =
+refreshColumnGrids y x grids =
     let
         leftblock =
             getGrid x (y - 1) grids
@@ -227,19 +227,14 @@ sendWallLine (liney,x) grids =
 
 sendWallColumn : (List Bool, Int) -> Grids -> Grids
 sendWallColumn (liney,x) grids = 
-        List.foldl (refreshRowGrids x) grids (drawWallIndex liney)
+        List.foldl (refreshColumnGrids x) grids (drawWallIndex liney)
 
 loadWall : Level -> Grids -> Grids
 loadWall level grids =
     let
         wall = level.wall
-        row = wall.row
-        col =wall.col
-        indexedrow = List.indexedMap (\x y -> (y, x)) row
-        indexedcol = List.indexedMap (\x y -> (y, x)) col
-        -- List.foldl (List.foldl refreshColumnGrids) grids (List.indexedMap (List.indexedMap sendPos) row)
-        -- (List.indexedMap (\a -> List.indexedMap (initGrid a)) row)
-
+        indexedrow = List.indexedMap (\x y -> (y, x)) wall.row
+        indexedcol = List.indexedMap (\x y -> (y, x)) wall.col
         loadrow = List.foldl (sendWallLine) grids indexedrow
         loadcolumn = List.foldl (sendWallColumn) loadrow indexedcol
     in
