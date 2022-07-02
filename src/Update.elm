@@ -1,10 +1,11 @@
 module Update exposing (update)
 
-import Message exposing (Msg(..), stepTime)
+import Message exposing (Msg(..), stepTime,Direction)
 import Model exposing (Model)
 import Player
 import Wall exposing (Wall, isWall)
 import Player exposing (State(..))
+import Valve exposing (pushDown,pushLeft,pushUp,pushRight,Valve)
 --import Valve exposing(push,isValve)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -55,3 +56,36 @@ timedForward model =
 
     else
         model
+pushValve : Player.Model -> List Valve -> List Valve
+pushValve player valves =
+    let
+        x =
+            player.pos.x
+
+        y =
+            player.pos.y
+
+        dir =
+            player.dir
+
+        pos =
+            player.pos
+
+        newvalves =
+            case dir of
+                Message.Up ->
+                    pushUp valves pos
+
+                Message.Down ->
+                    pushDown valves pos
+
+                Message.Left ->
+                    pushLeft valves pos
+
+                Message.Right ->
+                    pushRight valves pos
+
+                Message.Stop ->
+                    valves
+    in
+    newvalves
