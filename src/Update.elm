@@ -44,7 +44,7 @@ move model =
                     (model.player,model.valves)
         newmodel={ model | player = { player | state = Stopped }, valves = valves }
     in
-    { newmodel | grids=updateGridsfromModel newmodel }
+    { newmodel | grids=updateGridsfromModel newmodel newmodel.grids}
 
 
 timedForward : Model -> Model

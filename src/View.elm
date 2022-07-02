@@ -1,5 +1,5 @@
 module View exposing (view)
-import Model exposing (Model)
+import Model exposing (Model,updateGridsfromModel)
 import Message exposing (Msg(..))
 import Html exposing (Html, button, div, text)
 import Canvas exposing (toHtml)

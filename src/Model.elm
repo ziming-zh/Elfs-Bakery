@@ -189,10 +189,9 @@ initModel =
         ]
     )
 
-updateGridsfromModel : Model -> Grids
-updateGridsfromModel model = 
+updateGridsfromModel : Model -> Grids -> Grids
+updateGridsfromModel model initialgrids= 
     let
-        initialgrids = model.grids
         paints = model.paints
         valves = model.valves
     in
