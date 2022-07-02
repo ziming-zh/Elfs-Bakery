@@ -4,7 +4,7 @@ import Array exposing (Array)
 import Color exposing (Color)
 
 import Levels exposing (Level)
-import Message exposing (MoveDirection(..), Msg(..), Page(..), Paint, Pos)
+import Message exposing (Direction(..), Msg(..), Page(..), Paint, Pos)
 import Player
 import Random
 import Valve exposing (Valve)

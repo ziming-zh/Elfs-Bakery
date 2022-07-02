@@ -8,10 +8,12 @@ import Message exposing (Direction(..), Pos)
 import Valve exposing (VState(..))
 import Wall exposing (Wall, Wall_col, Wall_row, getWall)
 import String exposing (lines)
+import Message exposing (Paint)
 
 
 type IsOpen
     = Open
+    | FakeClose
     | Close
 
 
@@ -23,12 +25,21 @@ type alias GState =
     }
 
 
-type alias Grid =
-    { pos : Pos
-    , color : Color -- set white default for blockes holes
-    , gstate : GState
-    }
+type GridType a = 
+    Paint a
+    | Exit
+    | Vacant
 
+  
+type alias Grid = 
+    { pos : Pos
+    , gridtype : GridType Paint -- set white default for blockes holes
+    -- , color : Color -- set white default for blockes holes
+    , gstate : GState
+    , distance : Maybe Int
+    , renewed : Bool
+
+    }
 
 type alias Grids =
     Array (Array Grid)
@@ -36,7 +47,7 @@ type alias Grids =
 
 initGrid : Int -> Int -> Grid
 initGrid y x =
-    { pos = { x = x, y = y }, color = Color.white, gstate = { up = Open, down = Open, left = Open, right = Open } }
+    { pos = { x = x, y = y }, gridtype=Vacant, gstate = { up = Open, down = Open, left = Open, right = Open },distance = Just 0, renewed = True }
 
 
 ban : Direction -> Grid -> Grid
@@ -295,6 +306,19 @@ loadWall level grids =
 
 --             else
 --                 grids
+sendPainttoGrids :  Paint -> Grids -> Grids
+sendPainttoGrids  paint grids = 
+    let 
+        posx = paint.pos.x
+        posy = paint.pos.y
+        gridline = case (Array.get posx grids) of
+            Nothing -> Array.fromList []
+            Just gl ->gl
+    in
+        case (Array.get posy gridline) of
+            Nothing -> grids
+            Just grid -> Array.set posx (Array.set posy {grid|gridtype=Paint paint} gridline) grids
+
 
 
 type WallType
