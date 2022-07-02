@@ -120,7 +120,7 @@ refreshRowGrids x y grids =
                 |> setGrid x y (ban Message.Up db)
 
         _ ->
-            grids
+            grids 
 
 
 
@@ -195,12 +195,13 @@ initGridsfromLevel level =
 
         col =
             level.wall.col
+        paints = level.paints
 
         initialgrids =
             Array.fromList (List.map (\x -> Array.fromList (List.map (initGrid x) (List.range 0 (level.width-1)))) (List.range 0 (level.height-1)))
             |> loadWall level
     in
-    initialgrids
+        List.foldl sendPainttoGrids initialgrids paints
 
 
 
