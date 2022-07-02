@@ -4,7 +4,7 @@ import Message exposing (Msg(..))
 import Html exposing (Html, button, div, text)
 import Canvas exposing (toHtml)
 import View.Wall exposing (drawWall)
-import Model exposing (Mapset)
+import Model exposing (Mapset,updateGridsfromModel)
 import View.Basic exposing (rectRender)
 import Color exposing (Color)
 import Canvas exposing (clear)
@@ -25,7 +25,7 @@ view model =
         [ ]
         [ toHtml (800 ,600)
             []
-            (renderLevel model.wall model.valves model.grids)
+            (renderLevel model.wall model.valves (updateGridsfromModel model model.grids))
 
         ]
 

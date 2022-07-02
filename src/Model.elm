@@ -11,7 +11,7 @@ import Valve exposing (Valve)
 import Wall exposing (Wall)
 import Valve exposing (initValve,VState(..))
 import Grid exposing (Grids)
-import Grid exposing (initGridsfromLevel)
+import Grid exposing (initGridsfromLevel,sendPainttoGrids,loadValves)
 
 
 type alias Model =
@@ -40,6 +40,7 @@ type alias Mapset a =
         | player : Player.Model
         , wall : Wall
         , valves : List Valve
+        , paints : List Paint
         , grids :Grids
         , dots : List Pos --what is dots
         , mapSize : ( Int, Int )
@@ -157,17 +158,22 @@ initModel =
     let
         levels =
             Levels.getInitialLevels
-        (wall,valves,grids) = 
+        initialgrids = 
             case List.head levels of
-                Just lv-> (lv.wall,lv.valves,initGridsfromLevel lv)
-                Nothing ->({col=[],row=[]},[],Array.fromList [])
+                Just lv-> initGridsfromLevel lv
+                Nothing -> Array.fromList []
+        (wall,valves,paints) = 
+            case List.head levels of
+                Just lv-> (lv.wall,lv.valves,lv.paints)
+                Nothing ->({col=[],row=[]},[], [])
     in
     ( { player = Player.init
       , wall = wall
       , valves = valves
-      , grids = grids
+      , paints = paints
+      , grids = initialgrids
       , dots = []
-      , mapSize = ( 0, 0 )
+      , mapSize = (0,0)
       , win = False
       , levels = levels -- important here
       , move_timer = 0.0
@@ -182,3 +188,11 @@ initModel =
         [ Random.generate RandomLevel (Random.int 0 39)
         ]
     )
+
+updateGridsfromModel : Model -> Grids -> Grids
+updateGridsfromModel model initialgrids = 
+    let
+        paints = model.paints
+        valves = model.valves
+    in
+        List.foldl sendPainttoGrids (loadValves valves initialgrids) paints
