@@ -5,6 +5,7 @@
 
 module Valve exposing (..)
 
+import Char exposing (toCode)
 import Message exposing (Direction(..), Pos)
 
 
@@ -12,6 +13,10 @@ type alias Valve =
     { state : VState
     , pos : Pos
     }
+
+
+type alias Valves =
+    List Valve
 
 
 type VState
@@ -48,19 +53,20 @@ isEqual valve pos =
 
 
 {-
-   pushValve: {pos:Pos,dir:MoveDirection}->List Valve -> Valve
-   pushValve {pos,dir} valves =
-       case dir of
-           Right ->
+      pushValve: {pos:Pos,dir:MoveDirection}->List Valve -> Valve
+      pushValve {pos,dir} valves =
+          case dir of
+              Right ->
 
 
-        pushValve: {pos:Pos,dir:MoveDirection}->List Valve -> Valve
-   pushValve {pos,dir} valves =
-       case dir of
-           Right ->
+           pushValve: {pos:Pos,dir:MoveDirection}->List Valve -> Valve
+      pushValve {pos,dir} valves =
+          case dir of
+              Right ->
 
-push
+   push
 -}
+
 
 clockRotate : Valve -> Valve
 clockRotate valve =
@@ -77,6 +83,7 @@ clockRotate valve =
         Left ->
             { valve | state = Up }
 
+
 counterRotate : Valve -> Valve
 counterRotate valve =
     case valve.state of
@@ -91,19 +98,6 @@ counterRotate valve =
 
         Left ->
             { valve | state = Down }
-
-
-
-
-
-updateRotate : Maybe Valve -> List Valve -> List Valve
-updateRotate valve valves =
-    case valve of
-        Nothing ->
-            valves
-
-        Just v ->
-            v :: valves
 
 
 pushUp : List Valve -> Pos -> List Valve
@@ -122,50 +116,21 @@ pushUp valves pos =
             List.partition (\valve -> valve.pos.x == x && valve.pos.y == (y + 1)) leftall
 
         lu =
-            let
-                valvelu =
-                    List.head leftUp
+            if List.any (\valve -> valve.state == Right) leftUp then
+                List.map counterRotate leftUp
 
-                updatedlu =
-                    case valvelu of
-                        Nothing ->
-                            valvelu
-
-                        Just v ->
-                            case v.state of
-                                Right ->
-                                    Just (counterRotate v)
-
-                                _ ->
-                                    Just v
-            in
-            updatedlu
+            else
+                leftUp
 
         ru =
-            let
-                valveru =
-                    List.head rightUp
+            if List.any (\valve -> valve.state == Left) rightUp then
+                List.map clockRotate rightUp
 
-                updatedru =
-                    case valveru of
-                        Nothing ->
-                            valveru
-
-                        Just v ->
-                            case v.state of
-                                Left ->
-                                    Just (clockRotate v)
-
-                                _ ->
-                                    Just v
-            in
-            updatedru
-
-        newValves =
-            updateRotate lu left
-                |> updateRotate ru
+            else
+                rightUp
     in
-    newValves
+    List.append lu left
+        |> List.append ru
 
 
 pushRight : List Valve -> Pos -> List Valve
@@ -183,51 +148,22 @@ pushRight valves pos =
         ( rightDown, left ) =
             List.partition (\valve -> valve.pos.x == (x + 1) && valve.pos.y == (y + 1)) leftall
 
-        ru =
-            let
-                valveru =
-                    List.head rightUp
-
-                updatedru =
-                    case valveru of
-                        Nothing ->
-                            valveru
-
-                        Just v ->
-                            case v.state of
-                                Down ->
-                                    Just (counterRotate v)
-
-                                _ ->
-                                    Just v
-            in
-            updatedru
-
         rd =
-            let
-                valverd =
-                    List.head rightDown
+            if List.any (\valve -> valve.state == Up) rightDown then
+                List.map clockRotate rightDown
 
-                updatedrd =
-                    case valverd of
-                        Nothing ->
-                            valverd
+            else
+                rightDown
 
-                        Just v ->
-                            case v.state of
-                                Up ->
-                                    Just (clockRotate v)
+        ru =
+            if List.any (\valve -> valve.state == Down) rightUp then
+                List.map counterRotate rightUp
 
-                                _ ->
-                                    Just v
-            in
-            updatedrd
-
-        newValves =
-            updateRotate rd left
-                |> updateRotate ru
+            else
+                rightUp
     in
-    newValves
+    List.append rd left
+        |> List.append ru
 
 
 pushLeft : List Valve -> Pos -> List Valve
@@ -245,51 +181,22 @@ pushLeft valves pos =
         ( leftDown, left ) =
             List.partition (\valve -> valve.pos.x == (x + 1) && valve.pos.y == y) leftall
 
-        lu =
-            let
-                valvelu =
-                    List.head leftUp
-
-                updatedlu =
-                    case valvelu of
-                        Nothing ->
-                            valvelu
-
-                        Just v ->
-                            case v.state of
-                                Down ->
-                                    Just (clockRotate v)
-
-                                _ ->
-                                    Just v
-            in
-            updatedlu
-
         ld =
-            let
-                valveld =
-                    List.head leftDown
+            if List.any (\valve -> valve.state == Up) leftDown then
+                List.map counterRotate leftDown
 
-                updatedld =
-                    case valveld of
-                        Nothing ->
-                            valveld
+            else
+                leftDown
 
-                        Just v ->
-                            case v.state of
-                                Up ->
-                                    Just (counterRotate v)
+        lu =
+            if List.any (\valve -> valve.state == Down) leftUp then
+                List.map clockRotate leftUp
 
-                                _ ->
-                                    Just v
-            in
-            updatedld
-
-        newValves =
-            updateRotate lu left
-                |> updateRotate ld
+            else
+                leftUp
     in
-    newValves
+    List.append ld left
+        |> List.append lu
 
 
 pushDown : List Valve -> Pos -> List Valve
@@ -308,47 +215,18 @@ pushDown valves pos =
             List.partition (\valve -> valve.pos.x == (x + 1) && valve.pos.y == (y + 1)) leftall
 
         ld =
-            let
-                valveld =
-                    List.head leftDown
+            if List.any (\valve -> valve.state == Right) leftDown then
+                List.map clockRotate leftDown
 
-                updatedld =
-                    case valveld of
-                        Nothing ->
-                            valveld
-
-                        Just v ->
-                            case v.state of
-                                Right ->
-                                    Just (clockRotate v)
-
-                                _ ->
-                                    Just v
-            in
-            updatedld
+            else
+                leftDown
 
         rd =
-            let
-                valverd =
-                    List.head rightDown
+            if List.any (\valve -> valve.state == Left) rightDown then
+                List.map counterRotate rightDown
 
-                updatedrd =
-                    case valverd of
-                        Nothing ->
-                            valverd
-
-                        Just v ->
-                            case v.state of
-                                Left ->
-                                    Just (counterRotate v)
-
-                                _ ->
-                                    Just v
-            in
-            updatedrd
-
-        newValves =
-            updateRotate rd left
-                |> updateRotate ld
+            else
+                rightDown
     in
-    newValves
+    List.append ld left
+        |> List.append rd
