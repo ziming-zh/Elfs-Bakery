@@ -1,11 +1,14 @@
 module Update exposing (update)
 
 import Message exposing (Msg(..), stepTime,Direction)
-import Model exposing (Model)
+import Model exposing (Model,updateGridsfromModel)
 import Player
 import Wall exposing (Wall, isWall)
 import Player exposing (State(..))
 import Valve exposing (pushDown,pushLeft,pushUp,pushRight,Valve)
+import Grid exposing (getGstate)
+import Grid exposing (IsOpen)
+import Grid exposing (IsOpen(..))
 --import Valve exposing(push,isValve)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -32,17 +35,16 @@ move : Model -> Model
 move model =
     let
         (player,valves) =
-            if isWall model.player.pos model.player.dir model.wall == False then
-                (Player.move model.player,model.valves)
-
-            --else if isValve model.player model.valves then
-                
-            --    (Player.move model.player,push model.player model.valves)
-
-            else
-                (model.player,model.valves)
+            case getGstate model.player.pos model.grids model.player.dir of 
+                Open ->
+                    (Player.move model.player,model.valves)
+                FakeClose ->
+                    (model.player,pushValve model.player model.valves )
+                Close ->
+                    (model.player,model.valves)
+        newmodel={ model | player = { player | state = Stopped }, valves = valves }
     in
-    { model | player = { player | state = Stopped }, valves = valves }
+    { newmodel | grids=updateGridsfromModel newmodel }
 
 
 timedForward : Model -> Model
