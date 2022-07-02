@@ -24,6 +24,24 @@ type alias GState =
     , right : IsOpen
     }
 
+getGstate: Pos -> Grids -> Direction -> IsOpen
+getGstate pos grids dir =
+    let
+        x=pos.x
+        y=pos.y
+        grid = getGrid x y grids
+        isopen = 
+            case grid of
+                Nothing -> 
+                    Close
+                Just g -> 
+                    case dir of
+                        Message.Up -> g.gstate.up
+                        Message.Down -> g.gstate.down
+                        Message.Right -> g.gstate.right
+                        Message.Left -> g.gstate.left
+                        Message.Stop -> Close
+    in isopen
 
 type GridType a = 
     Paint a
