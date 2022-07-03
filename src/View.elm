@@ -15,6 +15,7 @@ import Canvas.Settings exposing (fill)
 import View.Valve exposing (renderValves)
 import View.Level exposing (renderLevel)
 import View.Txt exposing(renderTxt)
+import View.Begin exposing(renderBegin)
 import Html.Attributes as HtmlAttr exposing (..)
 
 view : Model -> Html Msg
@@ -39,27 +40,7 @@ view model =
 
         ]
     else 
-    div
-        [ HtmlAttr.style "width" (String.fromFloat 1200 ++ "px")
-        , HtmlAttr.style "height"  (String.fromFloat 800 ++ "px")
-        , HtmlAttr.style "left" (String.fromFloat ((w - 1200 * r) / 2) ++ "px")
-        , HtmlAttr.style "top" (String.fromFloat ((h - 800 * r) / 2) ++ "px")
-        , HtmlAttr.style "position" "absolute"
-        , HtmlAttr.style "transform-origin" "0 0"
-        , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat r ++ ")")
-        ]
-        [ Html.img
-            [ HtmlAttr.src "./assets/game_beginning_1.png"
-            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
-            , HtmlAttr.style "position" "absolute"
-            , HtmlAttr.style "left" (String.fromFloat 260 ++ "px")
-            , HtmlAttr.style "top" (String.fromFloat 210 ++ "px")
-            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 2 ++ ")")
-            ][]
-      --  , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat w)
-      --  , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat h)
-      --  , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat r)
-        ]
+    renderBegin model
 
 -- view : Model -> Html msg
 -- view  model =
