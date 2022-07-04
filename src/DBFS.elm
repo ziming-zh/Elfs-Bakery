@@ -2,7 +2,6 @@ module DBFS exposing (bfs)
 import Html exposing (a)
 import Array exposing (Array)
 import Grid exposing (Grids,Grid,IsOpen(..),initGrid)
-import Message exposing (MoveDirection)
 
 -- all the grids, can update others
 
@@ -32,6 +31,9 @@ checkSurround grids n m grid =
     let
         x = grid.pos.x
         y = grid.pos.y
+        distance = case grid.distance of
+            Just a -> a+1
+            Nothing -> 0
         nqueue = 
             (List.concat
                 [   if x>0 && grid.gstate.up == Open then [get grids (x-1) y]
@@ -43,7 +45,7 @@ checkSurround grids n m grid =
                 ,   if y<(m-1) && grid.gstate.right == Open then [get grids x (y+1)]
                     else []
                 ])
-        nnqueue = List.map (\xx -> (Grid xx.pos xx.color xx.gstate (grid.dis+1))) nqueue
+        nnqueue = List.map (\xx -> (Grid xx.pos xx.gridtype xx.gstate (Just distance) xx.renewed)) nqueue
     in
         nnqueue
 
@@ -78,7 +80,9 @@ bfs grids exit =
         gridline = getrow 0 grids
         n = Array.length grids
         m = Array.length (getrow 0 grids)
-        ngrids = Array.map ( \x -> ( Array.map ( \y -> (Grid y.pos y.color y.gstate 1000) ) x )  ) grids
+        ngrids = Array.map ( \x -> ( Array.map ( \y -> ( if y.pos == exit.pos then (Grid y.pos y.gridtype y.gstate (Just 0) y.renewed) 
+                                                                              else (Grid y.pos y.gridtype y.gstate Nothing y.renewed) )
+                                                ) x )  ) grids
         nngrids = bfsdirect ngrids (Array.fromList [exit]) n m
     in
         ngrids
