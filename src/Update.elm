@@ -8,7 +8,9 @@ import Player exposing (State(..))
 import Valve exposing (pushDown,pushLeft,pushUp,pushRight,Valve)
 import Grid exposing (getGstate)
 import Grid exposing (IsOpen)
-import Grid exposing (IsOpen(..))
+import Grid exposing (IsOpen(..),Grids,movePaint)
+import DBFS exposing (bfs)
+import Message exposing (Paint)
 --import Valve exposing(push,isValve)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -42,9 +44,13 @@ move model =
                     (model.player,pushValve model.player model.valves )
                 Close ->
                     (model.player,model.valves)
-        newmodel={ model | player = { player | state = Stopped }, valves = valves }
+        newmodel={ model | player = { player | state = Stopped }, valves = valves ,paints=List.map (movePaint model.grids) model.paints}
     in
-    { newmodel | grids=updateGridsfromModel newmodel newmodel.grids}
+    { newmodel | grids
+        =updateGridsfromModel newmodel newmodel.grids
+        |> bfs model.exit
+    }
+
 
 
 timedForward : Model -> Model

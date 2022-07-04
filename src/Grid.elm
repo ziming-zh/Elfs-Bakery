@@ -4,11 +4,10 @@ import Array exposing (Array)
 import Color exposing (Color)
 import Html.Attributes exposing (rows)
 import Levels exposing (Level)
-import Message exposing (Direction(..), Pos)
-import Valve exposing (VState(..),Valve)
-import Wall exposing (Wall, Wall_col, Wall_row, getWall)
+import Message exposing (Direction(..), Paint, Pos)
 import String exposing (lines)
-import Message exposing (Paint)
+import Valve exposing (VState(..), Valve)
+import Wall exposing (Wall, Wall_col, Wall_row, getWall)
 
 
 type IsOpen
@@ -24,40 +23,83 @@ type alias GState =
     , right : IsOpen
     }
 
-getGstate: Pos -> Grids -> Direction -> IsOpen
+
+getGstate : Pos -> Grids -> Direction -> IsOpen
 getGstate pos grids dir =
     let
-        x=pos.x
-        y=pos.y
-        grid = getGrid x y grids
-        isopen = 
-            case grid of
-                Nothing -> 
-                    Close
-                Just g -> 
-                    case dir of
-                        Message.Up -> g.gstate.up
-                        Message.Down -> g.gstate.down
-                        Message.Right -> g.gstate.right
-                        Message.Left -> g.gstate.left
-                        Message.Stop -> Close
-    in isopen
+        x =
+            pos.x
 
-type GridType a = 
-    Paint a
+        y =
+            pos.y
+
+        grid =
+            getGrid x y grids
+
+        isopen =
+            case grid of
+                Nothing ->
+                    Close
+
+                Just g ->
+                    case dir of
+                        Message.Up ->
+                            g.gstate.up
+
+                        Message.Down ->
+                            g.gstate.down
+
+                        Message.Right ->
+                            g.gstate.right
+
+                        Message.Left ->
+                            g.gstate.left
+
+                        Message.Stop ->
+                            Close
+    in
+    isopen
+
+
+getDistance : Pos -> Grids -> Int
+getDistance pos grids =
+    let
+        x =
+            pos.x
+
+        y =
+            pos.y
+
+        grid =
+            getGrid x y grids
+
+        distance =
+            case grid of
+                Nothing ->
+                    -1
+
+                Just g ->
+                    Maybe.withDefault -1 g.distance
+    in
+    distance
+
+
+type GridType a
+    = Paint a
     | Exit
     | Vacant
 
-  
-type alias Grid = 
+
+type alias Grid =
     { pos : Pos
     , gridtype : GridType Paint -- set white default for blockes holes
+
     -- , color : Color -- set white default for blockes holes
     , gstate : GState
     , distance : Maybe Int
     , renewed : Bool
-
     }
+
 
 type alias Grids =
     Array (Array Grid)
@@ -65,7 +107,7 @@ type alias Grids =
 
 initGrid : Int -> Int -> Grid
 initGrid y x =
-    { pos = { x = x, y = y }, gridtype=Vacant, gstate = { up = Open, down = Open, left = Open, right = Open },distance = Just 0, renewed = True }
+    { pos = { x = x, y = y }, gridtype = Vacant, gstate = { up = Open, down = Open, left = Open, right = Open }, distance = Just 0, renewed = True }
 
 
 ban : IsOpen -> Direction -> Grid -> Grid
@@ -138,7 +180,7 @@ refreshRowGrids isopen x y grids =
                 |> setGrid x y (ban isopen Message.Up db)
 
         _ ->
-            grids 
+            grids
 
 
 
@@ -179,6 +221,7 @@ refreshColumnGrids isopen y x grids =
             grids
                 |> setGrid x (y - 1) (ban isopen Message.Right lb)
                 |> setGrid x y (ban isopen Message.Left rb)
+
         _ ->
             grids
 
@@ -208,149 +251,168 @@ initGridsfromLevel : Level -> Grids
 initGridsfromLevel level =
     let
         initialgrids =
-            Array.fromList (List.map (\x -> Array.fromList (List.map (initGrid x) (List.range 0 (level.width-1)))) (List.range 0 (level.height-1)))
-            |> loadWall level            -- |> loadValves level.valves
+            Array.fromList (List.map (\x -> Array.fromList (List.map (initGrid x) (List.range 0 (level.width - 1)))) (List.range 0 (level.height - 1)))
+                |> loadWall level
+
+        -- |> loadValves level.valves
     in
-        initialgrids
-        -- List.foldl sendPainttoGrids initialgrids paints
+    initialgrids
 
 
 
+-- List.foldl sendPainttoGrids initialgrids paints
 -- find out grid
 -- List.append
 --     (List.foldl List.append [] (List.indexedMap (\a -> List.indexedMap (initGrid a)) row))
 --     (List.foldl List.append [] (List.indexedMap (\a -> List.indexedMap (initGrid a)) col))
 -- sendPos : Int -> Int -> Bool -> Maybe (Int, Int)
--- sendPos x y iswall = 
+-- sendPos x y iswall =
 --     case iswall of
 --         True -> Just (x,y)
 --         False -> Nothing
 
-zip : List a -> List b -> List (a,b)
-zip u1 u2 = List.map2 Tuple.pair u1 u2
+
+zip : List a -> List b -> List ( a, b )
+zip u1 u2 =
+    List.map2 Tuple.pair u1 u2
+
 
 drawWallIndex : List Bool -> List Int
-drawWallIndex wallline = 
+drawWallIndex wallline =
     let
-        deleteblank = (\ x-> List.filter filtwall x)
-        
-        filtwall = (\x -> case x of
-            (False,_) -> False 
-            _ -> True)
+        deleteblank =
+            \x -> List.filter filtwall x
+
+        filtwall =
+            \x ->
+                case x of
+                    ( False, _ ) ->
+                        False
+
+                    _ ->
+                        True
     in
-        List.indexedMap (\x y -> (y, x)) wallline
+    List.indexedMap (\x y -> ( y, x )) wallline
         |> deleteblank
         |> List.filter filtwall
         |> List.unzip
         |> Tuple.second
 
-sendWallLine : (List Bool, Int) -> Grids -> Grids
-sendWallLine (liney,x) grids = 
-        List.foldl (refreshRowGrids Close x) grids (drawWallIndex liney)
 
-sendWallColumn : (List Bool, Int) -> Grids -> Grids
-sendWallColumn (liney,x) grids = 
-        List.foldl (refreshColumnGrids Close x) grids (drawWallIndex liney)
+sendWallLine : ( List Bool, Int ) -> Grids -> Grids
+sendWallLine ( liney, x ) grids =
+    List.foldl (refreshRowGrids Close x) grids (drawWallIndex liney)
+
+
+sendWallColumn : ( List Bool, Int ) -> Grids -> Grids
+sendWallColumn ( liney, x ) grids =
+    List.foldl (refreshColumnGrids Close x) grids (drawWallIndex liney)
+
 
 loadWall : Level -> Grids -> Grids
 loadWall level grids =
     let
-        wall = level.wall
-        indexedrow = List.indexedMap (\x y -> (y, x)) wall.row
-        indexedcol = List.indexedMap (\x y -> (y, x)) wall.col
-        loadrow = List.foldl (sendWallLine) grids indexedrow
-        loadcolumn = List.foldl (sendWallColumn) loadrow indexedcol
-    in
-        loadcolumn
+        wall =
+            level.wall
 
+        indexedrow =
+            List.indexedMap (\x y -> ( y, x )) wall.row
+
+        indexedcol =
+            List.indexedMap (\x y -> ( y, x )) wall.col
+
+        loadrow =
+            List.foldl sendWallLine grids indexedrow
+
+        loadcolumn =
+            List.foldl sendWallColumn loadrow indexedcol
+    in
+    loadcolumn
 
 
 loadValve : Valve -> Grids -> Grids
-loadValve  valve grids = 
+loadValve valve grids =
     let
-        posx = valve.pos.x
-        posy = valve.pos.y
-    in    -- (x,y,dir)
-        case valve.state of
-            Valve.Left -> refreshRowGrids FakeClose posx (posy-1) grids
-            Valve.Right ->  refreshRowGrids FakeClose posx posy grids
-            Valve.Up ->refreshColumnGrids FakeClose posy (posx-1) grids
-            Valve.Down -> refreshColumnGrids FakeClose posy posx grids
+        posx =
+            valve.pos.x
+
+        posy =
+            valve.pos.y
+    in
+    -- (x,y,dir)
+    case valve.state of
+        Valve.Left ->
+            refreshRowGrids FakeClose posx (posy - 1) grids
+
+        Valve.Right ->
+            refreshRowGrids FakeClose posx posy grids
+
+        Valve.Up ->
+            refreshColumnGrids FakeClose posy (posx - 1) grids
+
+        Valve.Down ->
+            refreshColumnGrids FakeClose posy posx grids
+
 
 loadValves : List Valve -> Grids -> Grids
-loadValves valves grids = 
+loadValves valves grids =
     List.foldl loadValve grids valves
 
--- loadWall : Level -> Grids -> Grids
--- loadWall level grids =
---     let
---         wall=level.wall
---         row =
---             wall.row
 
---         col =
---             wall.col
+sendPainttoGrids : Paint -> Grids -> Grids
+sendPainttoGrids paint grids =
+    let
+        posx =
+            paint.pos.x
 
---         w =
---             level.width
+        posy =
+            paint.pos.y
 
---         h =
---             level.height
+        gridline =
+            case Array.get posx grids of
+                Nothing ->
+                    Array.fromList []
 
---         newGrids =
---             close (Row row) 0 0 h w grids
-
---         newnewGrids =
---             close (Col col) 0 0 h w newGrids
---     in
---         newnewGrids
-
-
--- close : WallType -> Int -> Int -> Int -> Int -> Grids -> Grids
--- close wall x y xlim ylim grids =
---     if y < ylim then
---         isWall grids wall x y
---             |> close wall x (y + 1) xlim ylim
-
---     else if x < (xlim - 1) then
---         isWall grids wall x 0
---             |> close wall (x + 1) 0 xlim ylim
-
---     else
---         grids
-
-
--- isWall : Grids -> WallType -> Int -> Int -> Grids
--- isWall grids wall x y =
---     case wall of
---         Row row ->
---             if getWall row x y then
---                 refreshRowGrids x y grids
-
---             else
---                 grids
-
---         Col col ->
---             if getWall col x y then
---                 refreshColumnGrids x y grids
-
---             else
---                 grids
-sendPainttoGrids :  Paint -> Grids -> Grids
-sendPainttoGrids  paint grids = 
-    let 
-        posx = paint.pos.x
-        posy = paint.pos.y
-        gridline = case (Array.get posx grids) of
-            Nothing -> Array.fromList []
-            Just gl ->gl
+                Just gl ->
+                    gl
     in
-        case (Array.get posy gridline) of
-            Nothing -> grids
-            Just grid -> Array.set posx (Array.set posy {grid|gridtype=Paint paint} gridline) grids
+    case Array.get posy gridline of
+        Nothing ->
+            grids
+
+        Just grid ->
+            Array.set posx (Array.set posy { grid | gridtype = Paint paint } gridline) grids
 
 
+movePaint :  Grids -> Paint ->Paint
+movePaint grids paint =
+    let
+        x =
+            paint.pos.x
 
-type WallType
-    = Row Wall_row
-    | Col Wall_col
+        y =
+            paint.pos.y
+
+        grid =
+            getGrid x y grids
+
+        distance =
+            getDistance paint.pos grids
+
+        ( dx, dy ) =
+            if distance == (getDistance { x = x + 1, y = y } grids + 1) && getGstate paint.pos grids Message.Down == Open then
+                ( 1, 0 )
+
+            else if distance == (getDistance { x = x, y = y + 1 } grids + 1) && getGstate paint.pos grids Message.Right == Open then
+                ( 0, 1 )
+
+            else if distance == (getDistance { x = x, y = y - 1 } grids + 1)  && getGstate paint.pos grids Message.Left == Open then
+                ( 0, -1 )
+
+            else if distance == (getDistance { x = x - 1, y = y } grids + 1)  && getGstate paint.pos grids Message.Up == Open then
+                ( -1, 0 )
+
+            else
+                ( 0, 0 )
+    in
+    { paint | pos = { x = x + dx, y = y + dy } }

@@ -11,7 +11,8 @@ import Valve exposing (Valve)
 import Wall exposing (Wall)
 import Valve exposing (initValve,VState(..))
 import Grid exposing (Grids)
-import Grid exposing (initGridsfromLevel,sendPainttoGrids,loadValves)
+import Grid exposing (initGridsfromLevel,sendPainttoGrids,loadValves,Grid)
+import Grid exposing (initGrid)
 
 
 type alias Model =
@@ -44,6 +45,7 @@ type alias Mapset a =
         , grids :Grids
         , dots : List Pos --what is dots
         , mapSize : ( Int, Int )
+        , exit :Grid
     }
 
 
@@ -183,6 +185,7 @@ initModel =
       , currentPage = HomePage
       , windowsize = ( 800, 800 )
       , randomindex = 0
+      , exit = initGrid 3 4 -- to be imported from the level later
       }
     , Cmd.batch
         [ Random.generate RandomLevel (Random.int 0 39)
