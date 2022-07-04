@@ -1,9 +1,11 @@
 module View.Begin exposing (..)
 import Model exposing (Model)
-import Message exposing (Msg)
+import Message exposing (Msg(..))
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html, button, div, text)
 import View.Basic exposing (renderTxt)
+import View.Basic exposing (renderButton)
+import Color exposing (Color(..))
 
 
 
@@ -38,7 +40,9 @@ renderBegin model =
             , HtmlAttr.style "top" (String.fromFloat 100 ++ "px")
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.333 ++ ")")
             ][]
-        , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat w)
-        , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat h)
-        , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat r)
+        , renderButton "Play" Message.None 985 435 "#FFFFFF"
+        , renderButton "Guide" Message.None 978 545 "#FFFFFF"
+        , renderButton "Seting" Message.None 976 655 "#FFFFFF"
+    --    , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat h)
+    --    , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat r)
         ]

@@ -42,19 +42,17 @@ renderTxt x y size color txt =
         ]
         [ text txt ]
 
-renderButton : String -> Msg -> Html Msg
-renderButton txt msg =
+renderButton : String -> Msg -> Int -> Int -> String -> Html Msg
+renderButton txt msg x y color =
     button
-      [ style "background" "#B1E4F1"
+      [   style "background" "#4472C4"
         , style "border" "0"
-        , style "color" "#fff"
+        , style "color" color
         , style "font-family" "Helvetica, Arial, sans-serif"
         , style "font-size" "18px"
-        , style "height" "50px"
         , style "line-height" "45px"
-        , style "width" "100px"
-        , style "left" "830px"
-        , style "top" "130px"
+        , style "left" (String.fromInt x ++ "px")
+        , style "top" (String.fromInt y ++ "px")
         , style "position" "absolute"
         , onClick msg
         ]
