@@ -1,6 +1,6 @@
 elm.js: $(wildcard src/*.elm)
-	elm make src/Main.elm --output=elm.js
+	elm make src/Main.elm --output=main.js
 	
 .PHONY=clean
 clean:
-	rm public/elm.js
+	rm public/main.js
