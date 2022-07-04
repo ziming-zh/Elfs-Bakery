@@ -3,7 +3,7 @@ import Model exposing (Model)
 import Message exposing (Msg)
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html, button, div, text)
-import View.Txt exposing (renderTxt)
+import View.Basic exposing (renderTxt)
 
 
 

@@ -14,7 +14,6 @@ import Html.Attributes exposing (style)
 import Canvas.Settings exposing (fill)
 import View.Valve exposing (renderValves)
 import View.Level exposing (renderLevel)
-import View.Txt exposing(renderTxt)
 import View.Begin exposing(renderBegin)
 import Html.Attributes as HtmlAttr exposing (..)
 
