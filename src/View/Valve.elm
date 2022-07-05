@@ -14,9 +14,9 @@ renderValves valves =
 drawValve : Valve -> List Renderable
 drawValve valve =
     let
-        posx = (toFloat valve.pos.x) * setLength
+        posx = (toFloat valve.pos.y) * setLength
 
-        posy = (toFloat valve.pos.y) * setLength
+        posy = (toFloat valve.pos.x) * setLength
         state = valve.state
     in
         [circleRender posx posy setWidth Color.lightPurple] ++

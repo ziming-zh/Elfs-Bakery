@@ -47,7 +47,7 @@ move model =
     in
     { newmodel | grids
         =updateGridsfromModel newmodel newmodel.grids
-        |> bfs model.exit
+        -- |> bfs model.exit
     }
 
 

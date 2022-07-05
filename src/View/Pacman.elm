@@ -36,6 +36,7 @@ fromPlayertoFanShape player =
 
 
 
+renderPieSlice : Color.Color -> (Float, Float) -> Float -> Float -> Float -> Renderable
 renderPieSlice color (( x, y ) as center) radius startAngle endAngle =
     shapes [ fill color ]
         [ path center

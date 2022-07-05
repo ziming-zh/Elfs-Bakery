@@ -200,3 +200,4 @@ updateGridsfromModel model initialgrids=
         valves = model.valves
     in
         List.foldl sendPainttoGrids (loadValves valves initialgrids) paints
+        -- initialgrids

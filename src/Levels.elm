@@ -50,17 +50,17 @@ initLevel1 =
         ,[1,1,1,1,1,1]]
     }
     ,valves = [
-         {state = Up, pos = {x=3,y=1}}
-        ,{state = Left, pos = {x=3,y=1}}
-        ,{state = Left, pos = {x=3,y=2}}
-        ,{state = Down, pos = {x=3,y=2}}
-        ,{state = Up, pos = {x=4,y=3}}
-        ,{state = Left, pos = {x=4,y=3}}
-        ,{state = Up, pos = {x=6,y=4}}
-        ,{state = Left, pos = {x=6,y=4}}
-        ,{state = Down, pos = {x=1,y=3}}
-        ,{state = Left, pos = {x=1,y=3}}
-        ,{state = Down, pos = {x=7,y=0}}
+         {state = Up, pos = {y=3,x=1}}
+        ,{state = Left, pos = {y=3,x=1}}
+        ,{state = Left, pos = {y=3,x=2}}
+        ,{state = Down, pos = {y=3,x=2}}
+        ,{state = Up, pos = {y=4,x=3}}
+        ,{state = Left, pos = {y=4,x=3}}
+        ,{state = Up, pos = {y=6,x=4}}
+        ,{state = Left, pos = {y=6,x=4}}
+        ,{state = Down, pos = {y=1,x=3}}
+        ,{state = Left, pos = {y=1,x=3}}
+        ,{state = Down, pos = {y=7,x=0}}
 
 
     ]

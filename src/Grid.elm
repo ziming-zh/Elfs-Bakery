@@ -221,7 +221,6 @@ refreshColumnGrids isopen y x grids =
             grids
                 |> setGrid x (y - 1) (ban isopen Message.Right lb)
                 |> setGrid x y (ban isopen Message.Left rb)
-
         _ ->
             grids
 
@@ -288,7 +287,6 @@ drawWallIndex wallline =
                 case x of
                     ( False, _ ) ->
                         False
-
                     _ ->
                         True
     in

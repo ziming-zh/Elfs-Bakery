@@ -18,7 +18,7 @@ type State
 
 init : Player
 init =
-    { pos = { x = 0, y = 0 }, dir = Message.Up, state = Stopped }
+    { pos = { x = 5, y =5 }, dir = Message.Up, state = Stopped }
 
 
 changeDir : Player -> Direction -> Player
