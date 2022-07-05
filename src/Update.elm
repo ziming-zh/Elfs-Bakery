@@ -2,9 +2,8 @@ module Update exposing (update)
 
 import Message exposing (Msg(..), stepTime,Direction)
 import Model exposing (Model,updateGridsfromModel)
-import Player
 import Wall exposing (Wall, isWall)
-import Player exposing (State(..))
+import Player exposing (State(..),Player)
 import Valve exposing (pushDown,pushLeft,pushUp,pushRight,Valve)
 import Grid exposing (getGstate)
 import Grid exposing (IsOpen)
@@ -64,7 +63,7 @@ timedForward model =
 
     else
         model
-pushValve : Player.Model -> List Valve -> List Valve
+pushValve : Player -> List Valve -> List Valve
 pushValve player valves =
     let
         x =

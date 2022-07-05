@@ -4,7 +4,7 @@ import Message exposing (Direction(..), Pos)
 import String exposing (left)
 
 
-type alias Model =
+type alias Player =
     { pos : Pos
     , dir : Direction
     , state : State
@@ -16,49 +16,49 @@ type State
     | Stopped
 
 
-init : Model
+init : Player
 init =
-    { pos = { x = 1, y = 1 }, dir = Message.Up, state = Stopped }
+    { pos = { x = 0, y = 0 }, dir = Message.Up, state = Stopped }
 
 
-changeDir : Model -> Direction -> Model
-changeDir model dir =
+changeDir : Player -> Direction -> Player
+changeDir player dir =
     case dir of
         Stop ->
-            model
+            player
 
         _ ->
-            { model | dir = dir, state = Move }
+            { player | dir = dir, state = Move }
 
 
-move : Model -> Model
-move model =
+move : Player -> Player
+move player =
     let
         x =
-            model.pos.x
+            player.pos.x
 
         y =
-            model.pos.y
+            player.pos.y
     in
-    if model.state == Stopped then
-        model
+    if player.state == Stopped then
+        player
 
     else
-        case model.dir of
+        case player.dir of
             Up ->
-                { model | pos = { x = x, y = y - 1 } }
+                { player | pos = { x = x, y = y - 1 } }
 
             Right ->
-                { model | pos = { x = x + 1, y = y } }
+                { player | pos = { x = x + 1, y = y } }
 
             Down ->
-                { model | pos = { x = x, y = y + 1 } }
+                { player | pos = { x = x, y = y + 1 } }
 
             Left ->
-                { model | pos = { x = x - 1, y = y } }
+                { player | pos = { x = x - 1, y = y } }
 
             Stop ->
-                model
+                player
 
 
 

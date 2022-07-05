@@ -1,59 +1,54 @@
-module View.Pacman exposing (FanShape,viewFanShape)
+module View.Pacman exposing (fromPlayertoFanShape)
 
 import Debug exposing (toString)
 import Html exposing (Html)
 import Message exposing (Msg)
 import Html exposing (..)
 import Html.Attributes as HtmlAttr exposing (..)
-import Svg exposing (svg, circle)
-import Svg.Attributes exposing (width, cx, cy, r, fill, fillOpacity, stroke, strokeWidth, strokeDashoffset, strokeDasharray)
-import Svg.Attributes exposing (zoomAndPan)
-import Svg.Attributes exposing (transform)
+import Player exposing (Player)
 import Color
-type alias FanShape =
-  { offset: Float
-  , percentage: Float
-  , color: String
-  , pos: (Float, Float)
-  }
+import Message exposing (Direction(..))
+import View.Basic exposing (setLength)
+import Canvas exposing (Renderable)
+import Canvas exposing (..)
+import Canvas.Settings exposing (..)
+import Canvas.Settings.Advanced exposing (..)
+import Canvas.Settings.Line exposing (..)
+-- import Canvas.Settings.Text exposing (..)
 
-viewBall : Model -> Player -> Html Msg
-viewBall model player =
-    -- drawcir ( Tuple.first ball.pos , Tuple.second ball.pos ) 15 "#FFEC8B"
-    -- View.pacman model
-    let
-        (vx,vy) = player.vel
-        neg num = 
-            if num > 0 then 1
-            else 0
-        
-        percentage = 
-            if round (toFloat(round model.time)/2) == round (toFloat(round (model.time-1))/2)
-                then 0.75
-            else 0.9
-        -- offset = atan (vy/vx) / (2*pi)+  1/2*(neg vx)+ (1-percentage)/2 +(-1/4)
-        offset = 0
-        fanshapes = FanShape (offset*100) (percentage*100) Color.red player.pos
-    in
-       viewFanShape fanshapes
-
-viewFanShape : FanShape -> Html Msg
-viewFanShape fanShape =
+fromPlayertoFanShape : Player -> Renderable
+fromPlayertoFanShape player =
   let
-    (x,y) = fanShape.pos
-    strokeDashoffset_ = String.fromFloat <| 25.0 - fanShape.offset
-    strokeDasharray_ = String.fromFloat fanShape.percentage ++ " " ++ (String.fromFloat <| 100.0 - fanShape.percentage)
+    color = Color.gray
+    anglepair = 
+      case player.dir of
+        Right -> ((degrees 30),(degrees 330))
+        Up -> ((degrees 120),(degrees 420))
+        Left -> ((degrees 210),(degrees 510))
+        Down -> ((degrees 300),(degrees 600))
+        _ ->  ((degrees 0),(degrees 0))
+    -- anglepair = (0.0,0.1)
+
+    posx = (toFloat player.pos.x)*setLength +setLength/2
+    posy = (toFloat player.pos.y)*setLength  +setLength/2
   in
-    circle
-      [ cx (toString 0), cy (toString 0), r "15"
-      , fill "#ffffff", fillOpacity "0.0"
-      , stroke fanShape.color, strokeWidth "30", strokeDashoffset strokeDashoffset_, strokeDasharray strokeDasharray_ 
-      , transform ("translate("++(toString x)++","++(toString y)++") scale (0.6,0.6)")
-     ]
-      []
+    renderPieSlice color (posx,posy) 20 (Tuple.first anglepair) (Tuple.second anglepair)
 
-angle : Float
-angle =
-    degrees 40
 
+
+renderPieSlice color (( x, y ) as center) radius startAngle endAngle =
+    shapes [ fill color ]
+        [ path center
+            [ lineTo ( x + radius * cos startAngle, y + radius * sin startAngle )
+            , lineTo ( x + radius * cos endAngle, y + radius * sin endAngle )
+            , lineTo center
+            ]
+        , arc
+            center
+            radius
+            { startAngle = startAngle
+            , endAngle = endAngle
+            , clockwise = True
+            }
+        ]
 

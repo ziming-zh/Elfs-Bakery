@@ -7,9 +7,12 @@ import Grid exposing (Grid)
 import View.Wall exposing (drawWall)
 import View.Valve exposing (renderValves)
 import Grid exposing (Grids)
+import Player exposing (Player)
+import View.Player exposing (renderPlayer)
 
-renderLevel : Wall -> List Valve -> Grids -> List Renderable
-renderLevel wall valves grids =
+renderLevel : Wall -> List Valve -> Grids -> Player -> List Renderable
+renderLevel wall valves grids player =
     (renderGrids grids) ++
     (drawWall wall) ++
-    (renderValves valves) 
+    (renderValves valves) ++
+    [renderPlayer player]

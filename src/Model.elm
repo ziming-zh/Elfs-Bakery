@@ -13,6 +13,7 @@ import Valve exposing (initValve,VState(..))
 import Grid exposing (Grids)
 import Grid exposing (initGridsfromLevel,sendPainttoGrids,loadValves,Grid)
 import Grid exposing (initGrid)
+import Player exposing (Player)
 
 
 type alias Model =
@@ -38,7 +39,7 @@ type alias Flags =
 
 type alias Mapset a =
     { a
-        | player : Player.Model
+        | player : Player
         , wall : Wall
         , valves : List Valve
         , paints : List Paint
@@ -58,7 +59,7 @@ type alias GameState =
 
 
 type alias CurState =
-    { player : Player.Model
+    { player : Player
     , valves : List Valve
     , paints : List Paint
     }
