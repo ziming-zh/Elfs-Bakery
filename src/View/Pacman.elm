@@ -23,10 +23,10 @@ fromPlayertoFanShape player =
     anglepair = 
       case player.dir of
         Right -> ((degrees 30),(degrees 330))
-        Up -> ((degrees 120),(degrees 420))
+        Down -> ((degrees 120),(degrees 420))
         Left -> ((degrees 210),(degrees 510))
-        Down -> ((degrees 300),(degrees 600))
-        _ ->  ((degrees 0),(degrees 0))
+        Up -> ((degrees 300),(degrees 600))
+        Stop ->  ((degrees 0),(degrees 360))
     -- anglepair = (0.0,0.1)
 
     posx = (toFloat player.pos.x)*setLength +setLength/2
