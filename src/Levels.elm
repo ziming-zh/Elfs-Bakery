@@ -26,8 +26,8 @@ mapInt2Bool intlist =
 
 initLevel1 : Level
 initLevel1 = 
-    { width = 8
-    , height = 6
+    { width = 9
+    , height = 7
     , wall = 
     {
         row =  mapInt2Bool
@@ -50,19 +50,20 @@ initLevel1 =
         ,[1,1,1,1,1,1]]
     }
     ,valves = [
-         {state = Up, pos = {y=3,x=1}}
-        ,{state = Left, pos = {y=3,x=1}}
+        --  {state = Up, pos = {y=3,x=1}}
+         {state = Left, pos = {y=3,x=1}}
         ,{state = Left, pos = {y=3,x=2}}
         ,{state = Down, pos = {y=3,x=2}}
         ,{state = Up, pos = {y=4,x=3}}
         ,{state = Left, pos = {y=4,x=3}}
         ,{state = Up, pos = {y=6,x=4}}
-        ,{state = Left, pos = {y=6,x=4}}
+        -- ,{state = Left, pos = {y=6,x=4}}
+        ,{state = Down, pos = {y=6,x=4}}
+        ,{state = Down, pos = {y=5,x=4}}
+        ,{state = Down, pos = {y=4,x=4}}
         ,{state = Down, pos = {y=1,x=3}}
         ,{state = Left, pos = {y=1,x=3}}
         ,{state = Down, pos = {y=7,x=0}}
-
-
     ]
     ,paints = [
          {pos = {x=2,y=0},color=Color.lightYellow}
