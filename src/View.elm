@@ -1,6 +1,6 @@
 module View exposing (view)
 import Model exposing (Model)
-import Message exposing (Msg(..))
+import Message exposing (Msg(..),Page(..))
 import Html exposing (Html, button, div, text)
 import Canvas exposing (toHtml)
 import View.Wall exposing (drawWall)
@@ -16,6 +16,7 @@ import View.Valve exposing (renderValves)
 import View.Level exposing (renderLevel)
 import View.Begin exposing(renderBegin)
 import Html.Attributes as HtmlAttr exposing (..)
+import Array
 
 view : Model -> Html Msg
 view model =
@@ -30,16 +31,16 @@ view model =
             else
                 Basics.min 1 (w / 1200)
     in
-    if model.state == Model.Playing then
+    if model.currentPage == HomePage then
+        renderBegin model
+    else
     div
         [ ]
         [ toHtml (800 ,600)
             []
-            (renderLevel model.wall [] [])
+            (renderLevel model.wall [] (Array.fromList [Array.fromList []]))
 
         ]
-    else 
-    renderBegin model
 
 -- view : Model -> Html msg
 -- view  model =

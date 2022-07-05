@@ -24,7 +24,7 @@ grid_size =
     10
 
 
-type MoveDirection
+type Direction
     = Left
     | Right
     | Up
@@ -41,13 +41,13 @@ type Page
 
 
 type Msg
-    = ArrowPressed MoveDirection
+    = ArrowPressed Direction
     | Tick Float
     | GetViewport Viewport
     | Resize Int Int
     | Pause
     | Resume
-    | Move MoveDirection
+    | Move Direction
     | Undo
     | ShowPage Page
     | RestartLevel
