@@ -14,7 +14,8 @@ import Html.Attributes exposing (style)
 import Canvas.Settings exposing (fill)
 import View.Valve exposing (renderValves)
 import View.Level exposing (renderLevel)
-
+import Grid exposing (getbugState)
+import Wall exposing (isWall)
 view : Model -> Html Msg
 view model =
     let
@@ -26,7 +27,7 @@ view model =
         [ toHtml (800 ,600)
             []
             (renderLevel model.wall model.valves (updateGridsfromModel model model.grids) model.player)
-
+          ,text (getbugState model.player.pos model.grids)
         ]
 
 -- view : Model -> Html msg

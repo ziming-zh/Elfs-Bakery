@@ -40,7 +40,7 @@ move model =
                 Open ->
                     (Player.move model.player,model.valves)
                 FakeClose ->
-                    (model.player,pushValve model.player model.valves )
+                    (Player.move model.player,pushValve model.player model.valves )
                 Close ->
                     (model.player,model.valves)
         newmodel={ model | player = { player | state = Stopped }, valves = valves ,paints=List.map (movePaint model.grids) model.paints}

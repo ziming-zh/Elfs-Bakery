@@ -29,8 +29,8 @@ fromPlayertoFanShape player =
         Stop ->  ((degrees 0),(degrees 360))
     -- anglepair = (0.0,0.1)
 
-    posx = (toFloat player.pos.x)*setLength +setLength/2
-    posy = (toFloat player.pos.y)*setLength  +setLength/2
+    posx = (toFloat player.pos.y)*setLength +setLength/2
+    posy = (toFloat player.pos.x)*setLength  +setLength/2
   in
     renderPieSlice color (posx,posy) 20 (Tuple.first anglepair) (Tuple.second anglepair)
 

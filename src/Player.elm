@@ -18,7 +18,7 @@ type State
 
 init : Player
 init =
-    { pos = { x = 5, y =5 }, dir = Message.Up, state = Stopped }
+    { pos = { x = 5, y = 5 }, dir = Message.Up, state = Stopped }
 
 
 changeDir : Player -> Direction -> Player
@@ -46,19 +46,16 @@ move player =
     else
         case player.dir of
             Up ->
-                { player | pos = { x = x, y = y - 1 } }
+                { player | pos = { x = (x - 1), y = y } }
 
             Right ->
-                { player | pos = { x = x + 1, y = y } }
-
-            Down ->
                 { player | pos = { x = x, y = y + 1 } }
 
+            Down ->
+                { player | pos = { x = x + 1, y = y } }
+
             Left ->
-                { player | pos = { x = x - 1, y = y } }
+                { player | pos = { x = x, y = (y - 1) } }
 
             Stop ->
                 player
-
-
-

@@ -23,6 +23,28 @@ type alias GState =
     , right : IsOpen
     }
 
+isOpen2String: Pos -> Direction -> Grids -> String
+isOpen2String pos dir grids =
+    let
+            
+        dirstring =
+            case dir of 
+                Message.Up ->" Up "
+                Message.Down -> " Down "
+                Message.Left -> " Left "
+                Message.Right -> " Right "
+                _ -> " None "
+        isopen=getGstate pos grids dir
+        isopenstring =
+            case isopen of
+                Close -> " close "
+                FakeClose -> " fake "
+                Open -> " Open "
+    in
+        dirstring++isopenstring
+getbugState : Pos -> Grids -> String
+getbugState pos grids =
+    "\n"++"x: "++String.fromInt pos.x++"y: "++String.fromInt pos.y ++ isOpen2String pos Message.Up grids ++ isOpen2String pos Message.Down grids ++ isOpen2String pos Message.Left grids ++ isOpen2String pos Message.Right grids
 
 getGstate : Pos -> Grids -> Direction -> IsOpen
 getGstate pos grids dir =
@@ -119,23 +141,27 @@ ban isopen dir grid =
         newstate =
             case dir of
                 Message.Down ->
-                    { gstate | down = isopen }
+                    { gstate | down = setGstate gstate.down isopen }
 
                 Message.Up ->
-                    { gstate | up = isopen }
+                    { gstate | up = setGstate gstate.up isopen }
 
                 Message.Left ->
-                    { gstate | left = isopen }
+                    { gstate | left = setGstate gstate.left isopen  }
 
                 Message.Right ->
-                    { gstate | right = isopen }
+                    { gstate | right = setGstate gstate.right isopen }
 
                 _ ->
                     gstate
     in
     { grid | gstate = newstate }
 
-
+setGstate : IsOpen -> IsOpen -> IsOpen
+setGstate isopen change=
+    case isopen of
+        Close -> isopen
+        _ -> change
 getGrid : Int -> Int -> Grids -> Maybe Grid
 getGrid x y grids =
     let
@@ -340,22 +366,30 @@ loadValve valve grids =
     -- (x,y,dir)
     case valve.state of
         Valve.Left ->
-            refreshRowGrids FakeClose posx (posy - 1) grids
+            resetGrid posx posy grids
+            |> refreshRowGrids FakeClose posx (posy - 1)
 
         Valve.Right ->
-            refreshRowGrids FakeClose posx posy grids
+            resetGrid posx posy grids
+            |> refreshRowGrids FakeClose posx posy 
 
         Valve.Up ->
-            refreshColumnGrids FakeClose posy (posx - 1) grids
+            resetGrid posx posy grids
+            |> refreshColumnGrids FakeClose posy (posx - 1) 
 
         Valve.Down ->
-            refreshColumnGrids FakeClose posy posx grids
+            resetGrid posx posy grids
+            |> refreshColumnGrids FakeClose posy posx  
 
-
+resetGrid : Int -> Int -> Grids -> Grids
+resetGrid posx posy grids =
+    refreshRowGrids Open posx (posy - 1) grids
+    |> (refreshRowGrids Open posx posy )
+    |> (refreshColumnGrids Open posy (posx - 1)  )
+    |> (refreshColumnGrids Open posy posx  )
 loadValves : List Valve -> Grids -> Grids
 loadValves valves grids =
     List.foldl loadValve grids valves
-
 
 sendPainttoGrids : Paint -> Grids -> Grids
 sendPainttoGrids paint grids =
