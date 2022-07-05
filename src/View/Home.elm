@@ -1,17 +1,16 @@
-module View.Begin exposing (..)
+module View.Home exposing (..)
 import Model exposing (Model)
 import Message exposing (Msg(..))
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html, button, div, text)
-import View.Basic exposing (renderTxt)
-import View.Basic exposing (renderButton)
+import View.Basic exposing (renderTxt,renderButton)
 import Color exposing (Color(..))
 
 
 
 
-renderBegin : Model -> Html Msg
-renderBegin model = 
+renderHome : Model -> Html Msg
+renderHome model = 
     let
         ( w , h ) =
             model.windowsize
@@ -40,9 +39,9 @@ renderBegin model =
             , HtmlAttr.style "top" (String.fromFloat 100 ++ "px")
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.333 ++ ")")
             ][]
-        , renderButton "Play" Message.None 985 435 "#FFFFFF"
-        , renderButton "Guide" Message.None 978 545 "#FFFFFF"
-        , renderButton "Seting" Message.None 976 655 "#FFFFFF"
+        , renderButton "Play" LoadNextLevel (880,425) (260,66) "#FFFFFF"
+        , renderButton "Guide" Message.None (880,535) (260,66) "#FFFFFF"
+        , renderButton "Seting" Message.None (880,645) (260,66) "#FFFFFF"
     --    , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat h)
     --    , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat r)
         ]

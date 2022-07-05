@@ -5,6 +5,7 @@ import Model exposing (Model)
 import Player
 import Wall exposing (Wall, isWall)
 import Player exposing (State(..))
+import Message exposing (Page(..))
 --import Valve exposing(push,isValve)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -37,6 +38,16 @@ update msg model =
             , Cmd.none
             )
 
+        LoadNextLevel ->
+            case model.currentPage of
+                HomePage -> 
+                    ( { model | currentPage = LevelsPage } , Cmd.none )
+                LevelsPage ->
+                    ( { model | currentPage = GamePage } , Cmd.none )
+                GamePage -> 
+                    ( { model | level_index = model.level_index+1, currentPage = LevelsPage } , Cmd.none )
+                _ -> 
+                    ( model , Cmd.none )
 
         _ ->
             ( model, Cmd.none )

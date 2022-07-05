@@ -13,8 +13,9 @@ import Canvas exposing (shapes)
 import Html.Attributes exposing (style)
 import Canvas.Settings exposing (fill)
 import View.Valve exposing (renderValves)
-import View.Level exposing (renderLevel)
-import View.Begin exposing(renderBegin)
+import View.Level exposing (renderLevel,renderLevelPage)
+import View.Home exposing(renderHome)
+import View.Game exposing(renderGamePage)
 import Html.Attributes as HtmlAttr exposing (..)
 import Array
 
@@ -32,7 +33,14 @@ view model =
                 Basics.min 1 (w / 1200)
     in
     if model.currentPage == HomePage then
-        renderBegin model
+    --    renderHome model
+        renderLevelPage model
+    else
+    if model.currentPage == LevelsPage then
+        renderLevelPage model
+    else
+    if model.currentPage == GamePage then
+        renderGamePage model
     else
     div
         [ ]

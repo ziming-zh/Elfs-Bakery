@@ -36,14 +36,15 @@ renderTxt x y size color txt =
     div
         [ style "left" (String.fromInt x ++ "px")
         , style "top" (String.fromInt y ++ "px")
-        , style "font_size" (String.fromInt size ++ "px")
+        , style "position" "absolute"
+        , style "font-size" (String.fromInt size ++ "px")
         , style "font-family" "Helvetica, Arial, sans-serif"
         , style "color" color
         ]
         [ text txt ]
 
-renderButton : String -> Msg -> Int -> Int -> String -> Html Msg
-renderButton txt msg x y color =
+renderButton : String -> Msg -> (Int,Int) -> (Int,Int) -> String -> Html Msg
+renderButton txt msg (x,y) (w,h) color =
     button
       [   style "background" "#4472C4"
         , style "border" "0"
@@ -51,6 +52,8 @@ renderButton txt msg x y color =
         , style "font-family" "Helvetica, Arial, sans-serif"
         , style "font-size" "18px"
         , style "line-height" "45px"
+        , style "width" (String.fromInt w ++ "px")
+        , style "height" (String.fromInt h ++ "px")
         , style "left" (String.fromInt x ++ "px")
         , style "top" (String.fromInt y ++ "px")
         , style "position" "absolute"
