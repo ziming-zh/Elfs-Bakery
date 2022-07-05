@@ -366,30 +366,42 @@ loadValve valve grids =
     -- (x,y,dir)
     case valve.state of
         Valve.Left ->
-            resetGrid posx posy grids
-            |> refreshRowGrids FakeClose posx (posy - 1)
+            refreshRowGrids FakeClose posx (posy - 1) grids
 
         Valve.Right ->
-            resetGrid posx posy grids
-            |> refreshRowGrids FakeClose posx posy 
+            refreshRowGrids FakeClose posx posy grids
 
         Valve.Up ->
-            resetGrid posx posy grids
-            |> refreshColumnGrids FakeClose posy (posx - 1) 
+            refreshColumnGrids FakeClose posy (posx - 1) grids
 
         Valve.Down ->
-            resetGrid posx posy grids
-            |> refreshColumnGrids FakeClose posy posx  
+            refreshColumnGrids FakeClose posy posx grids
 
-resetGrid : Int -> Int -> Grids -> Grids
-resetGrid posx posy grids =
-    refreshRowGrids Open posx (posy - 1) grids
-    |> (refreshRowGrids Open posx posy )
-    |> (refreshColumnGrids Open posy (posx - 1)  )
-    |> (refreshColumnGrids Open posy posx  )
-loadValves : List Valve -> Grids -> Grids
-loadValves valves grids =
-    List.foldl loadValve grids valves
+resetLine :  Level -> Int -> Grids ->Grids
+resetLine level x grids =
+    List.foldl (refreshRowGrids Open x) grids (List.range 0 (level.width - 1))
+
+
+resetColumn : Level ->  Int ->Grids -> Grids
+resetColumn  level y grids =
+    List.foldl (refreshColumnGrids Open y) grids (List.range 0 (level.height - 1))
+resetGrids : Level -> Grids -> Grids
+resetGrids level grids =
+    let
+
+        loadrow =
+            List.foldl (resetLine level) grids (List.range 0 (level.height - 1))
+
+        loadcolumn =
+            List.foldl (resetColumn  level) grids (List.range 0 (level.width - 1))
+    in
+    loadcolumn
+loadValves : Level -> List Valve -> Grids -> Grids
+loadValves level valves grids =
+    let
+        newGrids = resetGrids level grids
+    
+    in List.foldl loadValve newGrids valves
 
 sendPainttoGrids : Paint -> Grids -> Grids
 sendPainttoGrids paint grids =

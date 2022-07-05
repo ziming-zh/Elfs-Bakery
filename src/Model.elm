@@ -14,7 +14,7 @@ import Grid exposing (Grids)
 import Grid exposing (initGridsfromLevel,sendPainttoGrids,loadValves,Grid)
 import Grid exposing (initGrid)
 import Player exposing (Player)
-
+import Levels exposing (initLevel1) 
 
 type alias Model =
     Mapset
@@ -199,5 +199,5 @@ updateGridsfromModel model initialgrids=
         paints = model.paints
         valves = model.valves
     in
-        List.foldl sendPainttoGrids (loadValves valves initialgrids) paints
+        List.foldl sendPainttoGrids (loadValves (Maybe.withDefault initLevel1 (List.head model.levels)) valves initialgrids) paints
         -- initialgrids
