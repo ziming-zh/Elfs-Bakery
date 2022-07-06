@@ -2,8 +2,8 @@
 
 name: "Bug Report"
 about: "This template is for bug report!"
-title: "[Bug ReportT] "
-ref: "main"
+title: "[Bug Report] "
+ref: "master"
 labels:
 
 - bug
@@ -11,7 +11,7 @@ labels:
 
 ---
 
-#### Discription
+#### Description
 
 ---
 
