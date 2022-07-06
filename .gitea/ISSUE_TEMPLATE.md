@@ -1,3 +1,16 @@
+---
+
+name: "Bug Report"
+about: "This template is for bug report!"
+title: "[Bug ReportT] "
+ref: "main"
+labels:
+
+- bug
+- "help needed"
+
+---
+
 #### Discription
 
 ---
