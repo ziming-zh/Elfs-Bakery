@@ -18,8 +18,8 @@ renderGrids grids =
 drawGrid : Grid -> Renderable
 drawGrid grid =
     let
-        posx = (toFloat grid.pos.x) * setLength
-        posy = (toFloat grid.pos.y) * setLength
+        posy = (toFloat grid.pos.x) * setLength
+        posx = (toFloat grid.pos.y) * setLength
         color = 
             case grid.gridtype of
                 Vacant -> Color.white

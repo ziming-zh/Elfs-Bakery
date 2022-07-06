@@ -204,7 +204,12 @@ refreshRowGrids isopen x y grids =
             grids
                 |> setGrid (x - 1) y (ban isopen Message.Down ub)
                 |> setGrid x y (ban isopen Message.Up db)
-
+        ( Nothing, Just db ) ->
+            grids
+                |> setGrid x y (ban isopen Message.Up db)
+        ( Just ub, Nothing) ->
+            grids
+                |> setGrid (x - 1) y (ban isopen Message.Down ub)
         _ ->
             grids
 
@@ -247,6 +252,12 @@ refreshColumnGrids isopen y x grids =
             grids
                 |> setGrid x (y - 1) (ban isopen Message.Right lb)
                 |> setGrid x y (ban isopen Message.Left rb)
+        ( Nothing, Just rb ) ->
+            grids
+                |> setGrid x y (ban isopen Message.Left rb)
+        ( Just lb, Nothing ) ->
+            grids
+                |> setGrid x (y - 1) (ban isopen Message.Right lb)
         _ ->
             grids
 
