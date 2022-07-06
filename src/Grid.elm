@@ -387,7 +387,7 @@ loadValve valve grids =
 
         Valve.Down ->
             refreshColumnGrids FakeClose posy posx grids
-
+{-
 resetLine :  Level -> Int -> Grids ->Grids
 resetLine level x grids =
     List.foldl (refreshRowGrids Open x) grids (List.range 0 (level.width - 1))
@@ -413,7 +413,7 @@ loadValves level valves grids =
         newGrids = resetGrids level grids
     
     in List.foldl loadValve newGrids valves
-
+-}
 sendPainttoGrids : Paint -> Grids -> Grids
 sendPainttoGrids paint grids =
     let

@@ -35,20 +35,20 @@ update msg model =
 move : Model -> Model
 move model =
     let
+        grids = updateGridsfromModel model model.grids
         (player,valves) =
-            case getGstate model.player.pos model.grids model.player.dir of 
+            case getGstate model.player.pos grids model.player.dir of 
                 Open ->
                     (Player.move model.player,model.valves)
                 FakeClose ->
                     (Player.move model.player,pushValve model.player model.valves )
                 Close ->
                     (model.player,model.valves)
-        newmodel={ model | player = { player | state = Stopped }, valves = valves ,paints=List.map (movePaint model.grids) model.paints}
+        newmodel={ model | player = { player | state = Stopped }, valves = valves ,paints=List.map (movePaint grids) model.paints}
     in
-    { newmodel | grids
-        =updateGridsfromModel newmodel newmodel.grids
+        {newmodel|updatedGrids =  updateGridsfromModel newmodel newmodel.grids}
         -- |> bfs model.exit
-    }
+    
 
 
 
