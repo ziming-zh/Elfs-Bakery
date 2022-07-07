@@ -98,7 +98,7 @@ getDistance pos grids =
         distance =
             case grid of
                 Nothing ->
-                    -1
+                    100
 
                 Just g ->
                     Maybe.withDefault -1 g.distance
@@ -129,7 +129,7 @@ type alias Grids =
 
 initGrid : Int -> Int -> Grid
 initGrid x y =
-    { pos = { x = x, y = y }, gridtype = Vacant, gstate = { up = Open, down = Open, left = Open, right = Open }, distance = Just y, renewed = True }
+    { pos = { x = x, y = y }, gridtype = Vacant, gstate = { up = Open, down = Open, left = Open, right = Open }, distance = Just 0, renewed = True }
 
 
 ban : IsOpen -> Direction -> Grid -> Grid
@@ -387,33 +387,7 @@ loadValve valve grids =
 
         Valve.Down ->
             refreshColumnGrids FakeClose posy posx grids
-{-
-resetLine :  Level -> Int -> Grids ->Grids
-resetLine level x grids =
-    List.foldl (refreshRowGrids Open x) grids (List.range 0 (level.width - 1))
 
-
-resetColumn : Level ->  Int ->Grids -> Grids
-resetColumn  level y grids =
-    List.foldl (refreshColumnGrids Open y) grids (List.range 0 (level.height - 1))
-resetGrids : Level -> Grids -> Grids
-resetGrids level grids =
-    let
-
-        loadrow =
-            List.foldl (resetLine level) grids (List.range 0 (level.height - 1))
-
-        loadcolumn =
-            List.foldl (resetColumn  level) grids (List.range 0 (level.width - 1))
-    in
-    loadcolumn
-loadValves : Level -> List Valve -> Grids -> Grids
-loadValves level valves grids =
-    let
-        newGrids = resetGrids level grids
-    
-    in List.foldl loadValve newGrids valves
--}
 sendPainttoGrids : Paint -> Grids -> Grids
 sendPainttoGrids paint grids =
     let
