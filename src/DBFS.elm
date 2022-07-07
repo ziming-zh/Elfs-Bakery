@@ -181,11 +181,13 @@ bfs exit grids =
             Array.length grids
         m =
             Array.length (getrow 0 grids)
+        nexit = 
+            get grids exit.pos.x exit.pos.y
         ngrids = Array.map
                 (\x ->
                     Array.map
                         (\y ->
-                            if y.pos == exit.pos then
+                            if y.pos == nexit.pos then
                                 Grid y.pos y.gridtype y.gstate (Just 0) True
 
                             else
@@ -195,12 +197,12 @@ bfs exit grids =
                 ) grids
 
         n2grids =
-            bfsDirect ngrids (Array.fromList [ exit ]) n m
+            bfsDirect ngrids (Array.fromList [ nexit ]) n m
         n3grids = Array.map
                 (\x ->
                     Array.map
                         (\y ->
-                            if y.pos == exit.pos then
+                            if y.pos == nexit.pos then
                                 Grid y.pos y.gridtype y.gstate y.distance True
 
                             else
@@ -208,6 +210,6 @@ bfs exit grids =
                         )
                         x
                 ) n2grids
-        n4grids = bfsIndirect n3grids (Array.fromList [ exit ]) n m
+        n4grids = bfsIndirect n3grids (Array.fromList [ nexit ]) n m
     in
     n4grids
