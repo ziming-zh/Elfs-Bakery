@@ -128,7 +128,7 @@ type alias Grids =
 
 
 initGrid : Int -> Int -> Grid
-initGrid x y =
+initGrid y x =
     { pos = { x = x, y = y }, gridtype = Vacant, gstate = { up = Open, down = Open, left = Open, right = Open }, distance = Just 0, renewed = True }
 
 
