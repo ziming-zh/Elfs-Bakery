@@ -129,7 +129,7 @@ type alias Grids =
 
 initGrid : Int -> Int -> Grid
 initGrid x y =
-    { pos = { x = x, y = y }, gridtype = Vacant, gstate = { up = Open, down = Open, left = Open, right = Open }, distance = Just 0, renewed = True }
+    { pos = { x = x, y = y }, gridtype = Vacant, gstate = { up = Open, down = Open, left = Open, right = Open }, distance = Just y, renewed = True }
 
 
 ban : IsOpen -> Direction -> Grid -> Grid
@@ -438,7 +438,15 @@ sendPainttoGrids paint grids =
         Just grid ->
             Array.set posx (Array.set posy { grid | gridtype = Paint paint } gridline) grids
 
-
+judgeOk : Grids -> Int -> Int -> Bool
+judgeOk grids x y =
+    case getGrid x y grids of
+        Just g -> 
+            case g.gridtype of
+                Paint _ ->
+                    False
+                _ -> True
+        _ -> False
 movePaint :  Grids -> Paint ->Paint
 movePaint grids paint =
     let
@@ -450,21 +458,24 @@ movePaint grids paint =
 
         grid =
             getGrid x y grids
-
+        downOk = judgeOk grids (x+1) y
+        leftOk = judgeOk grids x (y-1)
+        rightOk =  judgeOk grids x (y+1)
+        upOk =  judgeOk grids (x-1) y 
         distance =
             getDistance paint.pos grids
 
         ( dx, dy ) =
-            if distance == (getDistance { x = x + 1, y = y } grids + 1) && getGstate paint.pos grids Message.Down == Open then
+            if distance == (getDistance { x = x + 1, y = y } grids + 1) && getGstate paint.pos grids Message.Down == Open && downOk then
                 ( 1, 0 )
 
-            else if distance == (getDistance { x = x, y = y + 1 } grids + 1) && getGstate paint.pos grids Message.Right == Open then
+            else if distance == (getDistance { x = x, y = y + 1 } grids + 1) && getGstate paint.pos grids Message.Right == Open && rightOk then
                 ( 0, 1 )
 
-            else if distance == (getDistance { x = x, y = y - 1 } grids + 1)  && getGstate paint.pos grids Message.Left == Open then
+            else if distance == (getDistance { x = x, y = y - 1 } grids + 1)  && getGstate paint.pos grids Message.Left == Open && leftOk then
                 ( 0, -1 )
 
-            else if distance == (getDistance { x = x - 1, y = y } grids + 1)  && getGstate paint.pos grids Message.Up == Open then
+            else if distance == (getDistance { x = x - 1, y = y } grids + 1)  && getGstate paint.pos grids Message.Up == Open && upOk then
                 ( -1, 0 )
 
             else

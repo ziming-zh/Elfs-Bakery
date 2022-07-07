@@ -26,8 +26,8 @@ mapInt2Bool intlist =
 
 initLevel1 : Level
 initLevel1 = 
-    { width = 9
-    , height = 7
+    { width = 8
+    , height = 6
     , wall = 
     {
         row =  mapInt2Bool
