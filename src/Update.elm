@@ -46,8 +46,8 @@ move model =
                     (model.player,model.valves)
         newmodel={ model | player = { player | state = Stopped }, valves = valves ,paints=List.map (movePaint grids) model.paints}
     in
-        {newmodel|updatedGrids =  updateGridsfromModel newmodel newmodel.grids}
-        -- |> bfs model.exit
+        {newmodel|updatedGrids = (updateGridsfromModel newmodel newmodel.grids) |> bfs model.exit }
+          
     
 
 
