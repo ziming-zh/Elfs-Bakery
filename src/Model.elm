@@ -188,7 +188,7 @@ initModel =
       , currentPage = HomePage
       , windowsize = ( 800, 800 )
       , randomindex = 0
-      , exit = initGrid 3 4 -- to be imported from the level later
+      , exit = initGrid 5 7 -- to be imported from the level later
       }
     , Cmd.batch
         [ Random.generate RandomLevel (Random.int 0 39)
