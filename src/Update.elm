@@ -107,7 +107,7 @@ movePaintsRecur (model,paints) grids  i =
                 normalpaint = Tuple.second (List.partition (\x -> (posequal x.pos model.exit.pos)) paints)
                 mcolorseq = model.mcolor_seq ++ List.map (\x -> x.color) exitpaint
             in
-                ({model|mcolor_seq = mcolorseq},normalpaint)
+                ({model|mcolor_seq = mcolorseq}, List.sortBy (\x -> getDistance x.pos grids) normalpaint)
         
 movePaints : (Model, List Paint) -> Grids ->(Model, List Paint)
 movePaints (model,paints) grids  =
