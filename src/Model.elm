@@ -15,6 +15,8 @@ import Grid exposing (initGridsfromLevel,sendPainttoGrids,loadValve,Grid)
 import Grid exposing (initGrid)
 import Player exposing (Player)
 import Levels exposing (initLevel1) 
+import Task
+import Browser.Dom exposing (getViewport)
 
 type alias Model =
     Mapset
@@ -196,6 +198,7 @@ initModel =
       }
     , Cmd.batch
         [ Random.generate RandomLevel (Random.int 0 39)
+        , Task.perform GetViewport getViewport
         ]
     )
 loadValves : Grids -> List Valve -> Grids
