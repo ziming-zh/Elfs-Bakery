@@ -69,8 +69,8 @@ initLevel1 =
         ,{state = Down, pos = {y=7,x=0}}
     ]
     ,paints = [
-         {pos = {x=5,y=7},color=Color.lightPurple}
-        ,{pos = {x=1,y=7},color=Color.lightYellow}
+         {pos = {x=5,y=6},color=Color.white}
+        ,{pos = {x=2,y=7},color=Color.lightYellow}
         ,{pos = {x=2,y=2},color=Color.lightYellow}
         ,{pos = {x=3,y=0},color=Color.blue}
         ,{pos = {x=4,y=0},color=Color.blue}

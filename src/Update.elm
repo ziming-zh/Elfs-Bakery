@@ -16,6 +16,7 @@ import Grid exposing (getDistance)
 -- import Grid exposing (clearPaintGrid)
 import Player exposing (State(..))
 import Message exposing (Page(..))
+import Message exposing (Pos)
 --import Valve exposing(push,isValve)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -78,12 +79,15 @@ move model =
         newmodel={ model | player = { player | state = Stopped }, valves = valves }
         newgrids=loadValves newmodel.grids newmodel.valves
 
-
-        newnewmodel={newmodel|paints=movePaints newmodel newgrids model.paints}
+        (nmodel,npaints) = movePaints (newmodel, model.paints) newgrids
+        newnewmodel={nmodel|paints=npaints}
     in
         {newnewmodel|updatedGrids = (updateGridsfromModel newnewmodel newmodel.grids)|>bfs model.exit  }
-movePaintsRecur : Model -> Grids  -> List Paint -> Int -> List Paint
-movePaintsRecur model grids paints i =
+posequal : Pos -> Pos -> Bool
+posequal pos1 pos2 =
+    pos1.x == pos2.x && pos1.y == pos2.y
+movePaintsRecur : (Model, List Paint) -> Grids -> Int -> (Model,List Paint)
+movePaintsRecur (model,paints) grids  i =
     let
         l=List.length paints
         arrPaints=Array.fromList paints
@@ -96,16 +100,21 @@ movePaintsRecur model grids paints i =
                 newGrid = bfs model.exit (loadValves model.grids model.valves)
                 newnewGrid = (List.foldl sendPainttoGrids newGrid newPaints)
             in
-                movePaintsRecur model newnewGrid newPaints (i+1)
+                movePaintsRecur (model, newPaints) newnewGrid  (i+1)
         else 
-            paints
+            let
+                exitpaint=Tuple.first (List.partition (\x -> (posequal x.pos model.exit.pos)) paints)
+                normalpaint = Tuple.second (List.partition (\x -> (posequal x.pos model.exit.pos)) paints)
+                mcolorseq = model.mcolor_seq ++ List.map (\x -> x.color) exitpaint
+            in
+                ({model|mcolor_seq = mcolorseq},normalpaint)
         
-movePaints : Model -> Grids -> List Paint -> List Paint
-movePaints model grids paints =
+movePaints : (Model, List Paint) -> Grids ->(Model, List Paint)
+movePaints (model,paints) grids  =
     let
         sorted = List.sortBy  (\x -> getDistance x.pos grids) paints
     in
-        movePaintsRecur model grids sorted 0
+        movePaintsRecur (model,sorted) grids  0
     
 
 timedForward : Model -> Model
