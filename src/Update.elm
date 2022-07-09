@@ -79,13 +79,15 @@ move model =
         newmodel={ model | player = { player | state = Stopped }, valves = valves }
         newgrids=loadValves newmodel.grids newmodel.valves
 
-        (nmodel,npaints) = movePaints (newmodel, model.paints) newgrids
+        (nmodel,npaints) = movePaints (newmodel, model.paints) (newgrids |> bfs model.exit)
         newnewmodel={nmodel|paints=npaints}
     in
         {newnewmodel|updatedGrids = (updateGridsfromModel newnewmodel newmodel.grids)|>bfs model.exit  }
+
 posequal : Pos -> Pos -> Bool
 posequal pos1 pos2 =
     pos1.x == pos2.x && pos1.y == pos2.y
+
 movePaintsRecur : (Model, List Paint) -> Grids -> Int -> (Model,List Paint)
 movePaintsRecur (model,paints) grids  i =
     let
@@ -95,7 +97,7 @@ movePaintsRecur (model,paints) grids  i =
         if i<l then
             let 
                 defaultPaint= {pos = {x=-1,y=-1},color=Color.lightYellow}
-                paintMoving =Maybe.withDefault defaultPaint (Array.get i arrPaints)
+                paintMoving = Maybe.withDefault defaultPaint (Array.get i arrPaints)
                 newPaints = Array.toList (Array.set i (Grid.movePaint grids paintMoving) arrPaints)
                 newGrid = bfs model.exit (loadValves model.grids model.valves)
                 newnewGrid = (List.foldl sendPainttoGrids newGrid newPaints)
