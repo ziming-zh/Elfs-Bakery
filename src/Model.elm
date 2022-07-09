@@ -170,6 +170,10 @@ initModel =
             case List.head levels of
                 Just lv-> (lv.wall,lv.valves,lv.paints)
                 Nothing ->({col=[],row=[]},[], [])
+        exit = 
+            case List.head levels of
+                Just lv-> lv.exit
+                Nothing -> Pos -1 -1
     in
     ( { player = Player.init
       , wall = wall
