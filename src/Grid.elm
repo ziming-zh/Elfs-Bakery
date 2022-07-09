@@ -508,6 +508,8 @@ changeSingleColor (lx,ly) ncolor paints =
 
 changeColor : Grids -> Color -> (Int,Int) -> (Int,Int) -> Array Paint -> Array Paint
 changeColor grids color (lx,ly) (dx,dy) paints =
+    if (lx,ly) == (2,2) && (dx,dy) == (1,0) && color == white then (Array.fromList [])
+    else
     let
         (nx,ny) = (lx+dx,ly+dy)
         foldFunction = 
@@ -539,7 +541,7 @@ changeColor grids color (lx,ly) (dx,dy) paints =
             else []
             ]
     in
-        Array.foldl foldFunction paints (Array.fromList list)
+        Array.foldl foldFunction npaints (Array.fromList list)
 movePaint :  Grids -> Int -> Array Paint -> Array Paint
 movePaint grids i paints =
     let
@@ -582,10 +584,14 @@ movePaint grids i paints =
     else 
         if distance == (getDistance { x = x + 1, y = y } grids + 1) && getGstate paint.pos grids Message.Down == Open then
             changeColor grids (mergeColor (getColor grids x y) (getColor grids (x+1) y)) (x,y) (1,0) paints
+                |> changeColor grids (mergeColor (getColor grids x y) (getColor grids (x+1) y)) (x+1,y) (-1,0)
         else if distance == (getDistance { x = x, y = y + 1 } grids + 1) && getGstate paint.pos grids Message.Right == Open then
             changeColor grids (mergeColor (getColor grids x y) (getColor grids x (y+1))) (x,y) (0,1) paints
+                |> changeColor grids (mergeColor (getColor grids x y) (getColor grids x (y+1))) (x,y+1) (0,-1)
         else if distance == (getDistance { x = x, y = y - 1 } grids + 1)  && getGstate paint.pos grids Message.Left == Open then
-            changeColor grids (mergeColor (getColor grids x y) (getColor grids x (y-1))) (x,y) (0,1) paints
+            changeColor grids (mergeColor (getColor grids x y) (getColor grids x (y-1))) (x,y) (0,-1) paints
+                |> changeColor grids (mergeColor (getColor grids x y) (getColor grids x (y-1))) (x,y-1) (0,1)
         else if distance == (getDistance { x = x - 1, y = y } grids + 1)  && getGstate paint.pos grids Message.Up == Open then
-            changeColor grids (mergeColor (getColor grids x y) (getColor grids (x-1) y)) (x,y) (-1,0) paints
+            changeColor grids (mergeColor (getColor grids x y) (getColor grids (x-1) y)) (x,y) (-1,0) paints   
+                |> changeColor grids (mergeColor (getColor grids x y) (getColor grids (x-1) y)) (x-1,y) (1,0)
         else paints
