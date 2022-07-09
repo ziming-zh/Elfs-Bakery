@@ -69,11 +69,11 @@ renderLevelPage model =
        -- , renderButton "Guide" Message.None 978 545 "#FFFFFF"
        -- , renderButton "Seting" Message.None 976 655 "#FFFFFF"
         ]
-        , [ toHtml (800 ,600)
+        , [ toHtml (420 ,310)
             [ HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 2.6 ++ ")")
             , HtmlAttr.style "position" "absolute"
-            , HtmlAttr.style "left" (String.fromFloat 700 ++ "px")
-            , HtmlAttr.style "top" (String.fromFloat 650 ++ "px")]
+            , HtmlAttr.style "left" (String.fromFloat 430 ++ "px")
+            , HtmlAttr.style "top" (String.fromFloat 410 ++ "px")]
             (renderLevel model.wall model.valves (model.updatedGrids) model.player)
         ], List.map (\xx -> text ((String.fromInt xx)++" ")) dis])
 
