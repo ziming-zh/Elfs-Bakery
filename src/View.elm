@@ -32,23 +32,18 @@ view model =
             else
                 Basics.min 1 (w / 1200)
     in
-    if model.currentPage == HomePage then
-    --    renderHome model
-        renderLevelPage model
-    else
-    if model.currentPage == LevelsPage then
-        renderLevelPage model
-    else
-    if model.currentPage == GamePage then
-        renderGamePage model
-    else
-    div
-        [ ]
-        [ toHtml (800 ,600)
-            []
-            (renderLevel model.wall [] (Array.fromList [Array.fromList []]))
 
-        ]
+    case model.currentPage of 
+        HomePage -> renderHome model
+        LevelsPage -> renderLevelPage model
+        GamePage -> renderGamePage model
+        _ -> 
+            div
+                [ ]
+                [ toHtml (800 ,600)
+                    []
+                    (renderLevel model.wall [] (Array.fromList [Array.fromList []]))
+                ]
 
 -- view : Model -> Html msg
 -- view  model =
