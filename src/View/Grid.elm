@@ -20,10 +20,12 @@ drawGrid grid =
     let
         posy = (toFloat grid.pos.x) * setLength
         posx = (toFloat grid.pos.y) * setLength
-        d = 255-(Maybe.withDefault 0 grid.distance) * 5
+        r = 255-(Maybe.withDefault 0 grid.distance) * 2
+        g = 234-(Maybe.withDefault 0 grid.distance) * 6
+        b = 236-(Maybe.withDefault 0 grid.distance) * 3
         color = 
             case grid.gridtype of
-                Vacant -> Color.rgb255 d d d 
+                Vacant -> Color.rgb255 r g b 
                 Exit -> Color.lightGray
                 Paint paint -> paint.color
     in
