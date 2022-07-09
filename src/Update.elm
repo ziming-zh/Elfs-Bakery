@@ -96,9 +96,7 @@ movePaintsRecur (model,paints) grids  i =
     in
         if i<l then
             let 
-                defaultPaint= {pos = {x=-1,y=-1},color=Color.lightYellow}
-                paintMoving = Maybe.withDefault defaultPaint (Array.get i arrPaints)
-                newPaints = Array.toList (Array.set i (Grid.movePaint grids paintMoving) arrPaints)
+                newPaints = Array.toList ( Grid.movePaint grids i arrPaints )
                 newGrid = bfs model.exit (loadValves model.grids model.valves)
                 newnewGrid = (List.foldl sendPainttoGrids newGrid newPaints)
             in

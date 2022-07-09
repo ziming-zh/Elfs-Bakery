@@ -8,6 +8,8 @@ import Message exposing (Direction(..), Paint, Pos)
 import String exposing (lines)
 import Valve exposing (VState(..), Valve)
 import Wall exposing (Wall, Wall_col, Wall_row, getWall)
+import Html exposing (a)
+import Color exposing (..)
 
 
 type IsOpen
@@ -421,9 +423,129 @@ judgeOk grids x y =
                     False
                 _ -> True
         _ -> False
-movePaint :  Grids -> Paint ->Paint
-movePaint grids paint =
+        
+judge1Ok : Grids -> Int -> Int -> Color -> Bool
+judge1Ok grids x y color =
+    case getGrid x y grids of
+        Just g -> 
+            case g.gridtype of
+                Paint a ->
+                    color == a.color
+                _ -> True
+        _ -> False
+
+getColor : Grids -> Int -> Int -> Color
+getColor grids x y =
+    let 
+        grid =
+            getGrid x y grids
+    in
+        case grid of
+            Just singlegrid ->
+                case singlegrid.gridtype of
+                    Paint a ->
+                        a.color 
+                    _ -> white
+            Nothing -> white
+      --  case grid.
+mergeColor : Color -> Color -> Color
+mergeColor a b =
+    if a == b then a
+    else if a == black || b == black then black
+    else if (a,b) == (blue,lightYellow) then orange
+    else if (a,b) == (lightYellow,blue) then orange
+    else if (a,b) == (red,blue) then purple
+    else if (a,b) == (blue,red) then purple
+    else if (a,b) == (blue,lightYellow) then green
+    else if (a,b) == (lightYellow,blue) then green
+
+    else if (a,b) == (blue,purple) then purple
+    else if (a,b) == (purple,blue) then purple
+    else if (a,b) == (blue,green) then green
+    else if (a,b) == (green,blue) then green
+    else if (a,b) == (blue,orange) then black
+    else if (a,b) == (orange,blue) then black
+
+    else if (a,b) == (red,purple) then purple
+    else if (a,b) == (purple,red) then purple
+    else if (a,b) == (red,orange) then orange
+    else if (a,b) == (orange,red) then orange
+    else if (a,b) == (red,green) then black
+    else if (a,b) == (green,red) then black
+
+    else if (a,b) == (lightYellow,orange) then orange
+    else if (a,b) == (orange,lightYellow) then orange
+    else if (a,b) == (lightYellow,green) then green
+    else if (a,b) == (green,lightYellow) then green
+    else if (a,b) == (lightYellow,purple) then black
+    else if (a,b) == (purple,lightYellow) then black
+    else white
+
+nodefault : Maybe Grid -> Grid
+nodefault grid = 
+    case grid of
+        Just a -> a
+        Nothing -> initGrid 0 0
+
+getPaint : (Int,Int) -> Array Paint -> Paint
+getPaint (lx,ly) paints =
     let
+        listpaints = Array.toList paints 
+        list = List.filter (\xx -> xx.pos == Pos lx ly) listpaints
+    in
+        case List.head list of 
+            Just a -> a
+            _ -> {pos = Pos -1 -1,color=Color.lightYellow}
+
+changeSingleColor : (Int,Int) -> Color -> Array Paint -> Array Paint
+changeSingleColor (lx,ly) ncolor paints = 
+    Array.map 
+        (\x ->
+            if x.pos /= (Pos lx ly) then  x
+            else 
+                {pos = x.pos,color = ncolor}
+        ) paints
+
+changeColor : Grids -> Color -> (Int,Int) -> (Int,Int) -> Array Paint -> Array Paint
+changeColor grids color (lx,ly) (dx,dy) paints =
+    let
+        (nx,ny) = (lx+dx,ly+dy)
+        foldFunction = 
+            changeColor grids color (nx,ny)
+        npaints = 
+            changeSingleColor (lx,ly) color 
+                (changeSingleColor (nx,ny) color paints)
+        downOk = judge1Ok grids (nx+1) ny color
+        leftOk = judge1Ok grids nx (ny-1) color
+        rightOk =  judge1Ok grids nx (ny+1) color
+        upOk =  judge1Ok grids (nx-1) ny color   
+        list = 
+            List.concat
+            [
+            if (dx,dy) /= (-1,0) && getGstate (Pos nx ny) grids Message.Down == Open && downOk then
+                [( 1, 0 )]
+            else []
+            ,
+            if (dx,dy) /= (0,-1) && getGstate (Pos nx ny) grids Message.Right == Open && rightOk then
+                [( 0, 1 )]
+            else []
+            ,
+            if (dx,dy) /= (0,1) && getGstate (Pos nx ny) grids Message.Left == Open && leftOk then
+                [( 0, -1 )]
+            else []
+            ,
+            if (dx,dy) /= (1,0) && getGstate (Pos nx ny) grids Message.Up == Open && upOk then
+                [( -1, 0 )]
+            else []
+            ]
+    in
+        Array.foldl foldFunction paints (Array.fromList list)
+movePaint :  Grids -> Int -> Array Paint -> Array Paint
+movePaint grids i paints =
+    let
+    
+        defaultPaint= {pos = {x=-1,y=-1},color=Color.lightYellow}
+        paint = Maybe.withDefault defaultPaint (Array.get i paints)
         x =
             paint.pos.x
 
@@ -455,4 +577,15 @@ movePaint grids paint =
             else
                 ( 0, 0 )
     in
-    { paint | pos = { x = x + dx, y = y + dy } }
+    if (dx,dy) /= (0,0) then
+        Array.set i { paint | pos = { x = x + dx, y = y + dy } } paints 
+    else 
+        if distance == (getDistance { x = x + 1, y = y } grids + 1) && getGstate paint.pos grids Message.Down == Open then
+            changeColor grids (mergeColor (getColor grids x y) (getColor grids (x+1) y)) (x,y) (1,0) paints
+        else if distance == (getDistance { x = x, y = y + 1 } grids + 1) && getGstate paint.pos grids Message.Right == Open then
+            changeColor grids (mergeColor (getColor grids x y) (getColor grids x (y+1))) (x,y) (0,1) paints
+        else if distance == (getDistance { x = x, y = y - 1 } grids + 1)  && getGstate paint.pos grids Message.Left == Open then
+            changeColor grids (mergeColor (getColor grids x y) (getColor grids x (y-1))) (x,y) (0,1) paints
+        else if distance == (getDistance { x = x - 1, y = y } grids + 1)  && getGstate paint.pos grids Message.Up == Open then
+            changeColor grids (mergeColor (getColor grids x y) (getColor grids (x-1) y)) (x,y) (-1,0) paints
+        else paints
