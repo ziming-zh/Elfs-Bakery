@@ -16,27 +16,39 @@ import View.Valve exposing (renderValves)
 import View.Level exposing (renderLevel)
 import DBFS exposing(get)
 import Grid exposing(Grid)
+import View.Level exposing (renderLevel,renderLevelPage)
+import View.Home exposing(renderHome)
+import View.Game exposing(renderGamePage)
+import Html.Attributes as HtmlAttr exposing (..)
 import Array
+import Message exposing (Page(..))
 
 view : Model -> Html Msg
 view model =
     let
+        ( w , h ) =
+            model.windowsize
         level = List.head model.levels
-        arraylist = Array.map ( \xx -> Array.toList xx ) model.updatedGrids
-        list = List.concat (Array.toList arraylist)
-        dis = List.map (\xx ->
-            case xx.distance of 
-                Just a -> a
-                Nothing -> 1000 
-            ) list
+        r = 
+            if w / h > 1200 / 800 then
+                Basics.min 1 (h / 800)
+
+            else
+                Basics.min 1 (w / 1200)
     in
-    div
-        [ ]
-        (List.concat
-        [[ toHtml (800 ,600)
-            []
-            (renderLevel model.wall model.valves (model.updatedGrids) model.player)
-        ], List.map (\xx -> text ((String.fromInt xx)++" ")) dis])
+
+    case model.currentPage of 
+        HomePage -> renderHome model
+        LevelsPage -> renderLevelPage model
+        GamePage -> renderGamePage model
+        _ -> 
+            div
+                [ ]
+                [ 
+                    -- toHtml (800 ,600)
+                    -- []
+                    -- (renderLevel model.wall [] (Array.fromList [Array.fromList []]))
+                ]
 
 -- view : Model -> Html msg
 -- view  model =
