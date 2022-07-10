@@ -1,11 +1,6 @@
-all: clean
-	elm make src/Main.elm --output main.js
-	mkdir build
-	cp -f main.js build/main.js
-	elm make src/Main.elm
-
+elm.js: $(wildcard src/*.elm)
+	elm make src/Main.elm --output=main.js --debug
 	
-dev:
-	elm make src/Main.elm --output build/main.js
+.PHONY=clean
 clean:
-	rm -rf build/
+	rm public/main.js

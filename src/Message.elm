@@ -2,7 +2,7 @@ module Message exposing (..)
 
 import Browser.Dom exposing (Viewport)
 import Color exposing (Color)
-import Levels exposing (EncodeLevel)
+
 
 
 type alias Pos =
@@ -15,11 +15,8 @@ stepTime : Float
 stepTime =
     1000
 type alias Paint =
-    { pos : Pos, dir : MoveDirection, color : Color }
+    { pos : Pos, color : Color }
 
-
-type alias Paints =
-    List Paint
 
 
 grid_size : Int
@@ -27,7 +24,7 @@ grid_size =
     10
 
 
-type MoveDirection
+type Direction
     = Left
     | Right
     | Up
@@ -44,20 +41,17 @@ type Page
 
 
 type Msg
-    = ArrowPressed MoveDirection
+    = ArrowPressed Direction
     | Tick Float
     | GetViewport Viewport
     | Resize Int Int
     | Pause
     | Resume
-    | Move MoveDirection
+    | Move Direction
     | Undo
     | ShowPage Page
     | RestartLevel
     | LoadNextLevel
-    | LoadLevel EncodeLevel
-    | AddLevel EncodeLevel
-    | RemoveLevel EncodeLevel
       -- | ChangeLevelFromUserInput String
       -- | AddLevelFromUserInput
     | RandomLevel Int

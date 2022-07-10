@@ -1,4 +1,3 @@
-*.html
 *.js
 *.tags
 *.aux
@@ -8,6 +7,7 @@
 *.nav
 *.out
 *.snm
+*.vscode
 *.toc
 *.swp
 *.vrb

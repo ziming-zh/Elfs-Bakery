@@ -1,47 +1,61 @@
 module Player exposing (..)
 
-import Message exposing (MoveDirection(..), Pos)
+import Message exposing (Direction(..), Pos)
+import String exposing (left)
 
 
-type alias Model =
+type alias Player =
     { pos : Pos
-    , dir : MoveDirection
+    , dir : Direction
     , state : State
     }
 
-type State = Move
-            |Stopped
 
-init : Model
+type State
+    = Move
+    | Stopped
+
+
+init : Player
 init =
-    { pos = { x = 1, y = 1 }, dir = Up,state = Stopped }
-changeDir: Model->MoveDirection -> Model
-changeDir model dir =
+    { pos = { x = 5, y = 5 }, dir = Message.Up, state = Stopped }
+
+
+changeDir : Player -> Direction -> Player
+changeDir player dir =
     case dir of
-        Stop -> model
-        _ -> {model|dir=dir,state=Move}
-        
+        Stop ->
+            player
+
+        _ ->
+            { player | dir = dir, state = Move }
 
 
-move: Model -> Model
-move model =
+move : Player -> Player
+move player =
     let
-        x=model.pos.x
-        y=model.pos.y
+        x =
+            player.pos.x
+
+        y =
+            player.pos.y
     in
-    if model.state == Stopped then
-        model
-    else 
-        case model.dir of
-            Up -> 
-                {model|pos={x=x,y=y-1}}
+    if player.state == Stopped then
+        player
+
+    else
+        case player.dir of
+            Up ->
+                { player | pos = { x = (x - 1), y = y } }
+
             Right ->
-                {model|pos={x=x+1,y=y}}
-            Down -> 
-                {model|pos={x=x,y=y+1}}
+                { player | pos = { x = x, y = y + 1 } }
+
+            Down ->
+                { player | pos = { x = x + 1, y = y } }
+
             Left ->
-                {model|pos={x=x-1,y=y}}
+                { player | pos = { x = x, y = (y - 1) } }
+
             Stop ->
-                model
-                
-            
+                player

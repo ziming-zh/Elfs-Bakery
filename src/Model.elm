@@ -2,26 +2,33 @@ module Model exposing (..)
 
 import Array exposing (Array)
 import Color exposing (Color)
-import LevelSeq exposing (LevelSeq)
-import Levels exposing (EncodeLevel, Level)
-import Message exposing (MoveDirection(..), Msg(..), Page(..), Paint, Paints, Pos)
+
+import Levels exposing (Level)
+import Message exposing (Direction(..), Msg(..), Page(..), Paint, Pos)
 import Player
 import Random
 import Valve exposing (Valve)
 import Wall exposing (Wall)
-
+import Valve exposing (initValve,VState(..))
+import Grid exposing (Grids)
+import Grid exposing (initGridsfromLevel,sendPainttoGrids,loadValve,Grid)
+import Grid exposing (initGrid)
+import Player exposing (Player)
+import Levels exposing (initLevel1) 
+import Task
+import Browser.Dom exposing (getViewport)
 
 type alias Model =
     Mapset
         { win : Bool
         , move_timer : Float
-        , levels : LevelSeq
-        , currentLevel : EncodeLevel
+        , levels : List Level
         , level_index : Int
         , valves_move : Int
+        , color_seq : List Color.Color
+        , mcolor_seq : List Color.Color
         , history : List GameState
         , currentPage : Page
-
         --, lastMoveDirection : MoveDirection  --merge the direction of the player into Type Player
         --  , stringlevel : StringLevel
         , randomindex : Int
@@ -35,12 +42,15 @@ type alias Flags =
 
 type alias Mapset a =
     { a
-        | player : Player.Model
+        | player : Player
         , wall : Wall
         , valves : List Valve
-        , paints : List Paints
+        , paints : List Paint
+        , updatedGrids : Grids
+        , grids : Grids
         , dots : List Pos --what is dots
         , mapSize : ( Int, Int )
+        , exit :Grid
     }
 
 
@@ -53,15 +63,17 @@ type alias GameState =
 
 
 type alias CurState =
-    { player : Player.Model
+    { player : Player
     , valves : List Valve
-    , paints : List Paints
+    , paints : List Paint
     }
 
 
 {-| load level, new or existing
 set level\_index in each case
 -}
+
+{-
 checkAndLoadGameWithLevel : EncodeLevel -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 checkAndLoadGameWithLevel encodedLevel ( model, cmd ) =
     let
@@ -146,34 +158,60 @@ loadGameWithNewLevel level ( model, cmd ) =
 loadGameWithLevel : EncodeLevel -> Model -> Model
 loadGameWithLevel encodedLevel model =
     model
-
-
-{-| only when init the app
 -}
+
 initModel : ( Model, Cmd Msg )
 initModel =
     let
         levels =
-            LevelSeq.getInitialLevels
+            Levels.getInitialLevels
+        initialgrids = 
+            case List.head levels of
+                Just lv-> initGridsfromLevel lv
+                Nothing -> Array.fromList []
+        (wall,valves,paints) = 
+            case List.head levels of
+                Just lv-> (lv.wall,lv.valves,lv.paints)
+                Nothing ->({col=[],row=[]},[], [])
+        (exit, colorseq) = 
+            case List.head levels of
+                Just lv-> (lv.exit,lv.colorseq)
+                Nothing -> (Pos -1 -1,[])       
     in
     ( { player = Player.init
-      , wall = {col=[],row=[]}
-      , paints = []
-      , valves = []
+      , wall = wall
+      , valves = valves
+      , paints = paints
+      , grids = initialgrids
+      , updatedGrids = initialgrids
       , dots = []
-      , mapSize = ( 0, 0 )
+      , mapSize = (0,0)
       , win = False
       , levels = levels -- important here
       , move_timer = 0.0
-      , currentLevel = ""
       , level_index = 0
       , valves_move = 0
       , history = []
       , currentPage = HomePage
       , windowsize = ( 800, 800 )
       , randomindex = 0
+      , exit = initGrid exit.x exit.y -- to be imported from the level later
+      , color_seq = colorseq
+      , mcolor_seq = []
       }
     , Cmd.batch
         [ Random.generate RandomLevel (Random.int 0 39)
+        , Task.perform GetViewport getViewport
         ]
     )
+loadValves : Grids -> List Valve -> Grids
+loadValves grids valves =
+    List.foldl loadValve grids valves
+updateGridsfromModel : Model -> Grids -> Grids
+updateGridsfromModel model initialgrids= 
+    let
+        paints = model.paints
+        valves = model.valves
+    in
+        List.foldl sendPainttoGrids (loadValves initialgrids valves) paints
+        -- initialgrids
