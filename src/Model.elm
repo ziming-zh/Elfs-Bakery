@@ -15,6 +15,8 @@ import Grid exposing (initGridsfromLevel,sendPainttoGrids,loadValve,Grid)
 import Grid exposing (initGrid)
 import Player exposing (Player)
 import Levels exposing (initLevel1) 
+import Task
+import Browser.Dom exposing (getViewport)
 
 type alias Model =
     Mapset
@@ -23,9 +25,10 @@ type alias Model =
         , levels : List Level
         , level_index : Int
         , valves_move : Int
+        , color_seq : List Color.Color
+        , mcolor_seq : List Color.Color
         , history : List GameState
         , currentPage : Page
-
         --, lastMoveDirection : MoveDirection  --merge the direction of the player into Type Player
         --  , stringlevel : StringLevel
         , randomindex : Int
@@ -170,6 +173,10 @@ initModel =
             case List.head levels of
                 Just lv-> (lv.wall,lv.valves,lv.paints)
                 Nothing ->({col=[],row=[]},[], [])
+        (exit, colorseq) = 
+            case List.head levels of
+                Just lv-> (lv.exit,lv.colorseq)
+                Nothing -> (Pos -1 -1,[])       
     in
     ( { player = Player.init
       , wall = wall
@@ -188,10 +195,13 @@ initModel =
       , currentPage = HomePage
       , windowsize = ( 800, 800 )
       , randomindex = 0
-      , exit = initGrid 5 7 -- to be imported from the level later
+      , exit = initGrid exit.x exit.y -- to be imported from the level later
+      , color_seq = colorseq
+      , mcolor_seq = []
       }
     , Cmd.batch
         [ Random.generate RandomLevel (Random.int 0 39)
+        , Task.perform GetViewport getViewport
         ]
     )
 loadValves : Grids -> List Valve -> Grids

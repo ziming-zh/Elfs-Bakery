@@ -4,6 +4,7 @@ import Wall exposing (Wall)
 import Valve exposing (Valve)
 import Message exposing (Paint)
 import Valve exposing (VState(..))
+import Message exposing (Pos)
 type alias Level =
     { width : Int
     , height : Int
@@ -12,6 +13,8 @@ type alias Level =
     , valves : List Valve
     , paints : List Paint
     , id : Int
+    , exit : Pos
+    , colorseq : List Color.Color
     }
 
 getInitialLevels: List Level
@@ -66,8 +69,7 @@ initLevel1 =
         ,{state = Down, pos = {y=7,x=0}}
     ]
     ,paints = [
-         {pos = {x=5,y=7},color=Color.lightPurple}
-        ,{pos = {x=1,y=7},color=Color.lightYellow}
+         {pos = {x=2,y=7},color=Color.lightYellow}
         ,{pos = {x=2,y=2},color=Color.lightYellow}
         ,{pos = {x=3,y=0},color=Color.blue}
         ,{pos = {x=4,y=0},color=Color.blue}
@@ -75,12 +77,14 @@ initLevel1 =
         ,{pos = {x=5,y=1},color=Color.blue}
         ,{pos = {x=5,y=2},color=Color.blue}
         ,{pos = {x=4,y=2},color=Color.blue}
-        ,{pos = {x=0,y=2},color=Color.lightRed}
-        ,{pos = {x=0,y=4},color=Color.lightRed}
-        ,{pos = {x=0,y=6},color=Color.lightRed}
-        ,{pos = {x=4,y=6},color=Color.lightRed}
+        ,{pos = {x=0,y=2},color=Color.red}
+        ,{pos = {x=0,y=4},color=Color.red}
+        ,{pos = {x=0,y=6},color=Color.red}
+        ,{pos = {x=4,y=6},color=Color.red}
     ]
     ,id = 1
+    ,exit = Pos 5 7
+    ,colorseq = [Color.red , Color.blue, Color.lightYellow]
     }
 
 

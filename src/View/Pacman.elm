@@ -19,7 +19,7 @@ import Canvas.Settings.Line exposing (..)
 fromPlayertoFanShape : Player -> Renderable
 fromPlayertoFanShape player =
   let
-    color = Color.gray
+    color = Color.lightBlue
     anglepair = 
       case player.dir of
         Right -> ((degrees 30),(degrees 330))
