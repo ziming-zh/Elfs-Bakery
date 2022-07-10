@@ -17,6 +17,7 @@ import View.Player exposing (renderPlayer)
 import Canvas exposing (Renderable,toHtml)
 import Array
 import List
+import View.Cake exposing (renderCake,Caketype(..))
 renderLevel : Wall -> List Valve -> Grids -> Player -> List Renderable
 renderLevel wall valves grids player =
     (renderGrids grids) ++
@@ -66,14 +67,17 @@ renderLevelPage model =
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
             ][]
         , renderButton "Next" Message.None (1380,866) (320,87) "#FFFFFF"
+        
        -- , renderButton "Guide" Message.None 978 545 "#FFFFFF"
        -- , renderButton "Seting" Message.None 976 655 "#FFFFFF"
         ]
-        , [ toHtml (420 ,310)
+        , renderCake model.color_seq 1439 390 1.2 (List.length model.color_seq) Recipe
+        , renderCake model.mcolor_seq 1439 750 2.4 (List.length model.color_seq) Progress
+        , [ toHtml (800 ,600)
             [ HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 2.6 ++ ")")
             , HtmlAttr.style "position" "absolute"
-            , HtmlAttr.style "left" (String.fromFloat 430 ++ "px")
-            , HtmlAttr.style "top" (String.fromFloat 410 ++ "px")]
+            , HtmlAttr.style "left" (String.fromFloat 700 ++ "px")
+            , HtmlAttr.style "top" (String.fromFloat 650 ++ "px")]
             (renderLevel model.wall model.valves (model.updatedGrids) model.player)
         ], List.map (\xx -> text ((String.fromInt xx)++" ")) dis])
 
