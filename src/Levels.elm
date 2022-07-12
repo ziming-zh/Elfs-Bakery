@@ -77,14 +77,14 @@ initLevel1 =
         ,{pos = {x=5,y=1},color=Color.blue}
         ,{pos = {x=5,y=2},color=Color.blue}
         ,{pos = {x=4,y=2},color=Color.blue}
-        ,{pos = {x=0,y=2},color=Color.lightRed}
-        ,{pos = {x=0,y=4},color=Color.lightRed}
-        ,{pos = {x=0,y=6},color=Color.lightRed}
-        ,{pos = {x=4,y=6},color=Color.lightRed}
+        ,{pos = {x=0,y=2},color=Color.red}
+        ,{pos = {x=0,y=4},color=Color.red}
+        ,{pos = {x=0,y=6},color=Color.red}
+        ,{pos = {x=4,y=6},color=Color.red}
     ]
     ,id = 1
     ,exit = Pos 5 7
-    ,colorseq = [Color.red , Color.blue, Color.yellow]
+    ,colorseq = [Color.red , Color.blue, Color.lightYellow]
     }
 
 
