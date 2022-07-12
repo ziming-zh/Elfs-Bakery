@@ -456,10 +456,10 @@ mergeColor : Color -> Color -> Color
 mergeColor a b =
     if a == b then a
     else if a == white || b == white then white
-    else if (a,b) == (lightRed,lightYellow) then orange
-    else if (a,b) == (lightYellow,lightRed) then orange
-    else if (a,b) == (lightRed,blue) then purple
-    else if (a,b) == (blue,lightRed) then purple
+    else if (a,b) == (red,lightYellow) then orange
+    else if (a,b) == (lightYellow,red) then orange
+    else if (a,b) == (red,blue) then purple
+    else if (a,b) == (blue,red) then purple
     else if (a,b) == (blue,lightYellow) then green
     else if (a,b) == (lightYellow,blue) then green
 
@@ -470,12 +470,12 @@ mergeColor a b =
     else if (a,b) == (blue,orange) then white
     else if (a,b) == (orange,blue) then white
 
-    else if (a,b) == (lightRed,purple) then purple
-    else if (a,b) == (purple,lightRed) then purple
-    else if (a,b) == (lightRed,orange) then orange
-    else if (a,b) == (orange,lightRed) then orange
-    else if (a,b) == (lightRed,green) then white
-    else if (a,b) == (green,lightRed) then white
+    else if (a,b) == (red,purple) then purple
+    else if (a,b) == (purple,red) then purple
+    else if (a,b) == (red,orange) then orange
+    else if (a,b) == (orange,red) then orange
+    else if (a,b) == (red,green) then white
+    else if (a,b) == (green,red) then white
 
     else if (a,b) == (lightYellow,orange) then orange
     else if (a,b) == (orange,lightYellow) then orange
