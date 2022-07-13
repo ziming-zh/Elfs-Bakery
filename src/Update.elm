@@ -64,7 +64,7 @@ update msg model =
                     Nothing -> (model,Cmd.none)
                     Just (paints,valves,player) -> 
                         let
-                            nmodel = {model|valves=valves,player=player,paints=paints}
+                            nmodel = {model|valves=valves,player={player|state=Player.Stopped},paints=paints}
                         in
                         ({nmodel|updatedGrids=(updateGridsfromModel nmodel model.grids)|> bfs model.exit,history =List.drop 1 model.history},Cmd.none)
                     
@@ -165,20 +165,24 @@ pushValve player valves =
             player.pos
 
         newvalves =
-            case dir of
-                Message.Up ->
-                    pushUp valves pos
-
-                Message.Down ->
-                    pushDown valves pos
-
-                Message.Left ->
-                    pushLeft valves pos
-
-                Message.Right ->
-                    pushRight valves pos
-
-                Message.Stop ->
+            case player.state of
+                Player.Stopped ->
                     valves
+                _ ->
+                    case dir of
+                        Message.Up ->
+                            pushUp valves pos
+
+                        Message.Down ->
+                            pushDown valves pos
+
+                        Message.Left ->
+                            pushLeft valves pos
+
+                        Message.Right ->
+                            pushRight valves pos
+
+                        Message.Stop ->
+                            valves
     in
     newvalves
