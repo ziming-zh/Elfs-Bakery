@@ -26,7 +26,7 @@ update msg model =
             ( { model
                 | move_timer = model.move_timer + elapsed
               }
-                |> timedForward
+                |> timedForward elapsed
             , Cmd.none
             )
 
@@ -59,6 +59,15 @@ update msg model =
                     ( { model | level_index = model.level_index+1, currentPage = LevelsPage } , Cmd.none )
                 _ -> 
                     ( model , Cmd.none )
+        Undo ->
+                case List.head model.history of
+                    Nothing -> (model,Cmd.none)
+                    Just (paints,valves,player) -> 
+                        let
+                            nmodel = {model|valves=valves,player=player,paints=paints}
+                        in
+                        ({nmodel|updatedGrids=(updateGridsfromModel nmodel model.grids)|> bfs model.exit,history =List.drop 1 model.history},Cmd.none)
+                    
 
         _ ->
             ( model, Cmd.none )
@@ -75,14 +84,18 @@ move model =
                     (Player.move model.player,pushValve model.player model.valves )
                 Close ->
                     (model.player,model.valves)
-        
-        newmodel={ model | player = { player | state = Stopped }, valves = valves }
+        n_modelhis =
+            if valves == model.valves then
+                model
+            else
+                {model|history =(model.paints,model.valves,model.player) ::model.history}
+        newmodel={ n_modelhis | player = { player | state = Stopped }, valves = valves }
         newgrids=loadValves newmodel.grids newmodel.valves
-
-        (nmodel,npaints) = movePaints (newmodel, model.paints) (newgrids |> bfs model.exit)
-        newnewmodel={nmodel|paints=npaints}
+        nmodel={newmodel|updatedGrids=newgrids}
+        
     in
-        {newnewmodel|updatedGrids = (updateGridsfromModel newnewmodel newmodel.grids)|>bfs model.exit  }
+        {nmodel|updatedGrids = updateGridsfromModel nmodel nmodel.grids|>bfs model.exit  }
+
 
 posequal : Pos -> Pos -> Bool
 posequal pos1 pos2 =
@@ -117,16 +130,24 @@ movePaints (model,paints) grids  =
         movePaintsRecur (model,sorted) grids  0
     
 
-timedForward : Model -> Model
-timedForward model =
+timedForward : Float -> Model -> Model
+timedForward elapsed model =
     if model.move_timer > stepTime then
         let
             newModel =
                 move model
+            movedPaint =
+                    let 
+                        (nmodel,npaints) = movePaints (newModel, newModel.paints) (newModel.updatedGrids |> bfs model.exit)
+                        newnewmodel={newModel|paints=npaints}
+                    in
+                        {newnewmodel|updatedGrids = updateGridsfromModel newnewmodel newnewmodel.grids |>bfs model.exit  }
+                
         in
-        { newModel | move_timer = 0 }
-
-    else
+        { movedPaint | move_timer = 0 }
+    else if (model.move_timer > stepTime/3 && model.move_timer < (stepTime/3+elapsed))|| (model.move_timer > 2*stepTime/3 && model.move_timer < (2*stepTime/3+elapsed))then
+        move model
+    else 
         model
 pushValve : Player -> List Valve -> List Valve
 pushValve player valves =
