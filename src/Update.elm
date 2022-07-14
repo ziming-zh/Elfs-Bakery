@@ -71,8 +71,14 @@ update msg model =
 
         _ ->
             ( model, Cmd.none )
-
-
+{-
+checkEnd : Model -> (Model,Cmd Msg)
+checkEnd model =
+    if model.mcolor_seq==model.color_seq then
+        (model,LoadNextLevel)
+    else
+        (model,Cmd.none)
+-}
 move : Model -> Model
 move model =
     let
@@ -139,7 +145,7 @@ timedForward elapsed model =
             movedPaint =
                     let 
                         (nmodel,npaints) = movePaints (newModel, newModel.paints) (newModel.updatedGrids |> bfs model.exit)
-                        newnewmodel={newModel|paints=npaints}
+                        newnewmodel={nmodel|paints=npaints}
                     in
                         {newnewmodel|updatedGrids = updateGridsfromModel newnewmodel newnewmodel.grids |>bfs model.exit  }
                 
