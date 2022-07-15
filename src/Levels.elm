@@ -17,8 +17,11 @@ type alias Level =
     , colorseq : List Color.Color
     }
 
-getInitialLevels: List Level
+getInitialLevels : List Level
 getInitialLevels = [initLevel1]
+
+initGuide : List Level
+initGuide = [guideLevel1]
 
 mapInt2Bool : List (List Int) -> List (List Bool)
 mapInt2Bool intlist = 
@@ -26,6 +29,36 @@ mapInt2Bool intlist =
         i2b = (\a -> if a == 1 then True else False)
     in
         List.map (List.map i2b) intlist 
+
+guideLevel1 : Level 
+guideLevel1 = 
+    { width = 6
+    , height = 1
+    , wall = 
+    {
+        row =  mapInt2Bool
+        [[1,1,1,1,1,1]
+        ,[1,1,1,1,1,1]]
+        , col = mapInt2Bool
+        [[1]
+        ,[0]
+        ,[0]
+        ,[0]
+        ,[0]
+        ,[0]
+        ,[1]]
+    }
+    ,valves = [
+        {state = Down, pos = {y=3,x=0}}
+    ]
+    ,paints = [
+        {pos = {x=0,y=0},color=Color.lightYellow}
+    ]
+    ,id = 1
+    ,exit = Pos 5 7
+    ,colorseq = [Color.red , Color.blue, Color.lightYellow]
+    }
+
 
 initLevel1 : Level
 initLevel1 = 
@@ -53,14 +86,12 @@ initLevel1 =
         ,[1,1,1,1,1,1]]
     }
     ,valves = [
-        --  {state = Up, pos = {y=3,x=1}}
          {state = Left, pos = {y=3,x=1}}
         ,{state = Left, pos = {y=3,x=2}}
         ,{state = Down, pos = {y=3,x=2}}
         ,{state = Up, pos = {y=4,x=3}}
         ,{state = Left, pos = {y=4,x=3}}
         ,{state = Up, pos = {y=6,x=4}}
-        -- ,{state = Left, pos = {y=6,x=4}}
         ,{state = Down, pos = {y=6,x=4}}
         ,{state = Down, pos = {y=5,x=4}}
         ,{state = Down, pos = {y=4,x=4}}

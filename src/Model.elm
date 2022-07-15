@@ -22,6 +22,7 @@ type alias Model =
         { win : Bool
         , move_timer : Float
         , levels : List Level
+        , guide_levels : List Level
         , level_index : Int
         , valves_move : Int
         , color_seq : List Color.Color
@@ -186,7 +187,8 @@ getModel k model =
       , dots = []
       , mapSize = (0,0)
       , win = False
-      , levels = levels -- important here
+      , levels = model.levels -- important here
+      , guide_levels = model.guide_levels
       , move_timer = 0.0
       , level_index = k
       , valves_move = 0
@@ -232,6 +234,7 @@ initModel =
       , mapSize = (0,0)
       , win = False
       , levels = levels -- important here
+      , guide_levels = Levels.initGuide
       , move_timer = 0.0
       , level_index = 0
       , valves_move = 0

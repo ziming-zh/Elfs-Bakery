@@ -39,9 +39,9 @@ renderHome model =
             , HtmlAttr.style "top" (String.fromFloat 100 ++ "px")
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.333 ++ ")")
             ][]
-        , renderButton "Play" LoadNextLevel (880,425) (260,66) "#FFFFFF"
-        , renderButton "Guide" Message.None (880,535) (260,66) "#FFFFFF"
-        , renderButton "Seting" Message.None (880,645) (260,66) "#FFFFFF"
+        , renderButton "Play" LoadNextLevel (880,425) 1 (260,66) "#FFFFFF"
+        , renderButton "Guide" LoadGuide (880,535) 1 (260,66) "#FFFFFF"
+        , renderButton "Seting" Message.None (880,645) 1 (260,66) "#FFFFFF"
     --    , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat h)
     --    , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat r)
         ]

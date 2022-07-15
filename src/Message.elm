@@ -38,6 +38,7 @@ type Page
     | HomePage
     | LevelsPage
     | ChoicePage
+    | GuidePage
 
 
 type Msg
@@ -53,6 +54,7 @@ type Msg
     | RestartLevel
     | LoadNextLevel
     | LoadLevel Int
+    | LoadGuide
     | RandomLevel Int
     | None
 

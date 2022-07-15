@@ -51,6 +51,8 @@ update msg model =
 
         LoadNextLevel ->
             case model.currentPage of
+                GuidePage ->
+                    ( { model | level_index = model.level_index + 1 , move_timer = 0 } , Cmd.none )
                 HomePage -> 
                     ( { model | currentPage = ChoicePage } , Cmd.none )
                 LevelsPage ->
@@ -62,6 +64,9 @@ update msg model =
 
         LoadLevel k ->
             getModel k model
+
+        LoadGuide ->
+            ( { model | currentPage = GuidePage , move_timer = 0 } , Cmd.none )
 
         _ ->
             ( model, Cmd.none )
@@ -122,6 +127,8 @@ movePaints (model,paints) grids  =
 
 timedForward : Model -> Model
 timedForward model =
+    if model.currentPage == GuidePage then model
+    else
     if model.move_timer > stepTime then
         let
             newModel =

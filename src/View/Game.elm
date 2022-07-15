@@ -54,7 +54,7 @@ renderGamePage model =
             , HtmlAttr.style "top" (String.fromFloat 0 ++ "px")
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
             ][]
-        , renderButton "Next" Message.None (680,486) (196,52) "#FFFFFF"
+        , renderButton "Next" LoadNextLevel (680,486) 1 (196,52) "#FFFFFF"
         , renderTxt 400 318 68 "#FFFFFF" (String.fromInt model.level_index)
        -- , renderButton "Seting" Message.None 976 655 "#FFFFFF"
         ]

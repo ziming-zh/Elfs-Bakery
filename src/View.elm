@@ -6,6 +6,7 @@ import View.Level exposing (renderLevelPage)
 import View.Home exposing(renderHome)
 import View.Game exposing(renderGamePage)
 import View.Choice exposing(renderChoicePage)
+import View.Guide exposing(renderGuidePage)
 import Html.Attributes as HtmlAttr exposing (..)
 import Message exposing (Page(..))
 
@@ -28,6 +29,7 @@ view model =
         HomePage -> renderHome model
         LevelsPage -> renderLevelPage model
         GamePage -> renderGamePage model
+        GuidePage -> renderGuidePage model
         _ -> 
             div
                 [ ]

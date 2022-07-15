@@ -1,4 +1,4 @@
-module View.Choice exposing (..)
+module View.Guide exposing (..)
 import Model exposing (Model)
 import Message exposing (Msg(..))
 import Html.Attributes as HtmlAttr exposing (..)
@@ -6,9 +6,29 @@ import Html exposing (Html, div)
 import View.Basic exposing (renderButton)
 
 
+page2 : Model -> Html Msg
 
-renderChoicePage : Model -> Html Msg
-renderChoicePage model =
+page1 : Model -> Html Msg
+page1 model = 
+    let
+        opa = Basics.min (model.move_timer/1000) 1
+    in
+    div
+        [ HtmlAttr.style "opacity" (String.fromFloat opa)
+        ]
+        [ Html.img
+            [ HtmlAttr.src "./assets/font/1.png"
+            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
+            , HtmlAttr.style "position" "absolute"
+            , HtmlAttr.style "left" (String.fromFloat 0 ++ "px")
+            , HtmlAttr.style "top" (String.fromFloat 100 ++ "px")
+            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.333 ++ ")")
+            ][] 
+        , renderButton "Go!" LoadNextLevel (150,200) (Basics.min (model.move_timer/1000-1) 1) (50,50) "#FFFFFF"
+        ]
+
+renderGuidePage : Model -> Html Msg
+renderGuidePage model =
     let
         ( w , h ) =
             model.windowsize
@@ -28,15 +48,5 @@ renderChoicePage model =
         , HtmlAttr.style "transform-origin" "0 0"
         , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat r ++ ")")
         ]
-        [ Html.img
-            [ HtmlAttr.src "./assets/game_house.png"
-            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
-            , HtmlAttr.style "position" "absolute"
-            , HtmlAttr.style "left" (String.fromFloat 72 ++ "px")
-            , HtmlAttr.style "top" (String.fromFloat 100 ++ "px")
-            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.333 ++ ")")
-            ][]
-        , renderButton "Level 1" (LoadLevel 1) (880,100) 1 (260,66) "#FFFFFF"
-        , renderButton "Level 2" (LoadLevel 1) (880,210) 1 (260,66) "#FFFFFF"
-        , renderButton "Level 3" (LoadLevel 1) (880,320) 1 (260,66) "#FFFFFF"
+        [ page1 model
         ]

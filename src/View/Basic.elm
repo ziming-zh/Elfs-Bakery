@@ -31,6 +31,19 @@ circleRender x y radius color =
         [ stroke color]
         [ circle ( x, y) radius ]
 
+transparentTxt : Int -> Int -> Int -> Float -> String -> String -> Html Msg
+transparentTxt x y size opa color txt = 
+    div
+        [ style "left" (String.fromInt x ++ "px")
+        , style "top" (String.fromInt y ++ "px")
+        , style "position" "absolute"
+        , style "font-size" (String.fromInt size ++ "px")
+        , style "font-family" "Helvetica, Arial, sans-serif"
+        , style "color" color
+        , style "opacity" (String.fromFloat opa)
+        ]
+        [ text txt ]
+
 renderTxt : Int -> Int -> Int -> String -> String -> Html Msg
 renderTxt x y size color txt = 
     div
@@ -43,8 +56,8 @@ renderTxt x y size color txt =
         ]
         [ text txt ]
 
-renderButton : String -> Msg -> (Int,Int) -> (Int,Int) -> String -> Html Msg
-renderButton txt msg (x,y) (w,h) color =
+renderButton : String -> Msg -> (Int,Int) -> Float -> (Int,Int) -> String -> Html Msg
+renderButton txt msg (x,y) opa (w,h) color =
     button
       [   style "background" "#4472C4"
         , style "border" "0"
@@ -57,6 +70,7 @@ renderButton txt msg (x,y) (w,h) color =
         , style "left" (String.fromInt x ++ "px")
         , style "top" (String.fromInt y ++ "px")
         , style "position" "absolute"
+        , style "opacity" (String.fromFloat opa)
         , onClick msg
         ]
         [ text txt ]
