@@ -37,7 +37,7 @@ type Page
     | SettingsPage
     | HomePage
     | LevelsPage
-    | CakeCollectionPage
+    | ChoicePage
 
 
 type Msg
@@ -52,8 +52,7 @@ type Msg
     | ShowPage Page
     | RestartLevel
     | LoadNextLevel
-      -- | ChangeLevelFromUserInput String
-      -- | AddLevelFromUserInput
+    | LoadLevel Int
     | RandomLevel Int
     | None
 

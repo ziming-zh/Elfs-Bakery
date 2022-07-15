@@ -9,12 +9,11 @@ import Player
 import Random
 import Valve exposing (Valve)
 import Wall exposing (Wall)
-import Valve exposing (initValve,VState(..))
+import Valve exposing (VState(..))
 import Grid exposing (Grids)
 import Grid exposing (initGridsfromLevel,sendPainttoGrids,loadValve,Grid)
 import Grid exposing (initGrid)
 import Player exposing (Player)
-import Levels exposing (initLevel1) 
 import Task
 import Browser.Dom exposing (getViewport)
 
@@ -159,6 +158,51 @@ loadGameWithLevel : EncodeLevel -> Model -> Model
 loadGameWithLevel encodedLevel model =
     model
 -}
+
+getModel : Int -> Model -> ( Model, Cmd Msg )
+getModel k model =
+    let
+        levels =
+            List.drop (k-1) model.levels
+        initialgrids = 
+            case List.head levels of
+                Just lv-> initGridsfromLevel lv
+                Nothing -> Array.fromList []
+        (wall,valves,paints) = 
+            case List.head levels of
+                Just lv-> (lv.wall,lv.valves,lv.paints)
+                Nothing ->({col=[],row=[]},[], [])
+        (exit, colorseq) = 
+            case List.head levels of
+                Just lv-> (lv.exit,lv.colorseq)
+                Nothing -> (Pos -1 -1,[])       
+    in
+    ( { player = Player.init
+      , wall = wall
+      , valves = valves
+      , paints = paints
+      , grids = initialgrids
+      , updatedGrids = initialgrids
+      , dots = []
+      , mapSize = (0,0)
+      , win = False
+      , levels = levels -- important here
+      , move_timer = 0.0
+      , level_index = k
+      , valves_move = 0
+      , history = []
+      , currentPage = GamePage
+      , windowsize = ( 800, 800 )
+      , randomindex = 0
+      , exit = initGrid exit.x exit.y -- to be imported from the level later
+      , color_seq = colorseq
+      , mcolor_seq = []
+      }
+    , Cmd.batch
+        [ --Random.generate RandomLevel (Random.int 0 39),
+          Task.perform GetViewport getViewport
+        ]
+    )
 
 initModel : ( Model, Cmd Msg )
 initModel =
