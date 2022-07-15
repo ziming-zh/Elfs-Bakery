@@ -11,7 +11,7 @@ import Grid exposing (IsOpen(..),Grids,movePaint)
 import DBFS exposing (bfs)
 import Message exposing (Paint)
 import Color
-import Model exposing (loadValves)
+import Model exposing (loadValves,getModel)
 import Grid exposing (getDistance)
 -- import Grid exposing (clearPaintGrid)
 import Player exposing (State(..))
@@ -52,13 +52,16 @@ update msg model =
         LoadNextLevel ->
             case model.currentPage of
                 HomePage -> 
-                    ( { model | currentPage = LevelsPage } , Cmd.none )
+                    ( { model | currentPage = ChoicePage } , Cmd.none )
                 LevelsPage ->
                     ( { model | currentPage = GamePage } , Cmd.none )
                 GamePage -> 
-                    ( { model | level_index = model.level_index+1, currentPage = LevelsPage } , Cmd.none )
+                    ( { model | currentPage = LevelsPage } , Cmd.none )
                 _ -> 
                     ( model , Cmd.none )
+
+        LoadLevel k ->
+            getModel k model
 
         _ ->
             ( model, Cmd.none )

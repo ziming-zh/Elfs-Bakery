@@ -2,8 +2,8 @@ module View.Home exposing (..)
 import Model exposing (Model)
 import Message exposing (Msg(..))
 import Html.Attributes as HtmlAttr exposing (..)
-import Html exposing (Html, button, div, text)
-import View.Basic exposing (renderTxt,renderButton)
+import Html exposing (Html, div)
+import View.Basic exposing (renderButton)
 import Color exposing (Color(..))
 
 
