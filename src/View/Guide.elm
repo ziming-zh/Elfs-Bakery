@@ -3,10 +3,8 @@ import Model exposing (Model)
 import Message exposing (Msg(..))
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html, div)
-import View.Basic exposing (renderButton)
+import View.Basic exposing (renderButton,renderImg)
 
-
-page2 : Model -> Html Msg
 
 page1 : Model -> Html Msg
 page1 model = 
@@ -16,15 +14,32 @@ page1 model =
     div
         [ HtmlAttr.style "opacity" (String.fromFloat opa)
         ]
-        [ Html.img
-            [ HtmlAttr.src "./assets/font/1.png"
-            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
-            , HtmlAttr.style "position" "absolute"
-            , HtmlAttr.style "left" (String.fromFloat 0 ++ "px")
-            , HtmlAttr.style "top" (String.fromFloat 100 ++ "px")
-            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.333 ++ ")")
-            ][] 
+        [ renderImg "./assets/font/1.png" (1,100)
         , renderButton "Go!" LoadNextLevel (150,200) (Basics.min (model.move_timer/1000-1) 1) (50,50) "#FFFFFF"
+        ]
+
+page2 : Model -> Html Msg
+page2 model = 
+    let
+        opa = Basics.min (model.move_timer/1000) 1
+    in
+    div
+        [ HtmlAttr.style "opacity" (String.fromFloat opa)
+        ]
+        [ renderImg "./assets/font/2.png" (1,100)
+        , renderButton "Go!" LoadNextLevel (300,200) (Basics.min (model.move_timer/1000-1) 1) (50,50) "#FFFFFF"
+        ]
+
+page3 : Model -> Html Msg
+page3 model = 
+    let
+        opa = Basics.min (model.move_timer/1000) 1
+    in
+    div
+        [ HtmlAttr.style "opacity" (String.fromFloat opa)
+        ]
+        [ renderImg "./assets/font/3.png" (1,100)
+        , renderButton "Go!" LoadNextLevel (300,200) (Basics.min (model.move_timer/1000-1) 1) (50,50) "#FFFFFF"
         ]
 
 renderGuidePage : Model -> Html Msg
@@ -48,5 +63,9 @@ renderGuidePage model =
         , HtmlAttr.style "transform-origin" "0 0"
         , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat r ++ ")")
         ]
-        [ page1 model
+        [ case model.level_index of 
+            0 -> page1 model
+            2 -> page2 model
+            4 -> page3 model
+            _ -> page1 model
         ]
