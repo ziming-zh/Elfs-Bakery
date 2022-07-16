@@ -74,3 +74,14 @@ renderButton txt msg (x,y) opa (w,h) color =
         , onClick msg
         ]
         [ text txt ]
+
+renderImg : String -> (Float,Float) -> Html Msg
+renderImg link (x,y) = 
+    Html.img
+            [ HtmlAttr.src link
+            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
+            , HtmlAttr.style "position" "absolute"
+            , HtmlAttr.style "left" (String.fromFloat x ++ "px")
+            , HtmlAttr.style "top" (String.fromFloat y ++ "px")
+            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.333 ++ ")")
+            ][] 
