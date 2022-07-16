@@ -73,8 +73,8 @@ update msg model =
         LoadLevel k ->
             getModel k model
 
-        LoadGuide ->
-            ( { model | currentPage = GuidePage , move_timer = 0 } , Cmd.none )
+        Load page ->
+            ( { model | currentPage = page , move_timer = 0 , level_index = 0 } , Cmd.none )
 
         _ ->
             ( model, Cmd.none )

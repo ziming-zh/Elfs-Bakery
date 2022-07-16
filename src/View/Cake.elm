@@ -1,9 +1,8 @@
 module View.Cake exposing (Caketype(..), renderCake)
 
 import Color exposing (..)
-import Html exposing (Html, div, text)
+import Html exposing (Html)
 import Html.Attributes as HtmlAttr exposing (..)
-import Model exposing (Model)
 
 
 type Caketype

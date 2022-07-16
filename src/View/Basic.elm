@@ -75,8 +75,8 @@ renderButton txt msg (x,y) opa (w,h) color =
         ]
         [ text txt ]
 
-renderImg : String -> (Float,Float) -> Html Msg
-renderImg link (x,y) = 
+renderImg : String -> (Float,Float) -> Float -> Html Msg
+renderImg link (x,y) opa = 
     Html.img
             [ HtmlAttr.src link
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
@@ -84,4 +84,5 @@ renderImg link (x,y) =
             , HtmlAttr.style "left" (String.fromFloat x ++ "px")
             , HtmlAttr.style "top" (String.fromFloat y ++ "px")
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.333 ++ ")")
+            , HtmlAttr.style "opacity" (String.fromFloat opa)
             ][] 

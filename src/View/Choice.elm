@@ -1,6 +1,6 @@
 module View.Choice exposing (..)
 import Model exposing (Model)
-import Message exposing (Msg(..))
+import Message exposing (Msg(..),Page(..))
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html, div)
 import View.Basic exposing (renderButton)
@@ -36,7 +36,8 @@ renderChoicePage model =
             , HtmlAttr.style "top" (String.fromFloat 100 ++ "px")
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.333 ++ ")")
             ][]
-        , renderButton "Level 1" (LoadLevel 1) (880,100) 1 (260,66) "#FFFFFF"
-        , renderButton "Level 2" (LoadLevel 1) (880,210) 1 (260,66) "#FFFFFF"
-        , renderButton "Level 3" (LoadLevel 1) (880,320) 1 (260,66) "#FFFFFF"
+        , renderButton "Level 1" (LoadLevel 1) (880,300) 1 (260,66) "#FFFFFF"
+        , renderButton "<" (Load HomePage) (-60,0) 1 (50,50) "#FFFFFF"
+       -- , renderButton "Level 2" (LoadLevel 1) (880,210) 1 (260,66) "#FFFFFF"
+        --, renderButton "Level 3" (LoadLevel 1) (880,320) 1 (260,66) "#FFFFFF"
         ]

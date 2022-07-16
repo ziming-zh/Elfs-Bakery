@@ -3,13 +3,12 @@ import Canvas exposing (Renderable)
 import View.Grid exposing (renderGrids)
 import Valve exposing (Valve)
 import Wall exposing (Wall)
-import Grid exposing (Grid)
 import View.Wall exposing (drawWall)
 import View.Valve exposing (renderValves)
 import Grid exposing (Grids)
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html,div,text)
-import Message exposing (Msg(..))
+import Message exposing (Msg(..),Page(..))
 import Model exposing (Model)
 import View.Basic exposing (renderTxt,renderButton)
 import Player exposing (Player)
@@ -81,6 +80,9 @@ renderLevelPage model =
             , HtmlAttr.style "left" (String.fromFloat 400 ++ "px")
             , HtmlAttr.style "top" (String.fromFloat 420 ++ "px")]
             (renderLevel model.wall model.valves (model.updatedGrids) model.player)
-        ], List.map (\xx -> text ((String.fromInt xx)++" ")) dis])
+        ], List.map (\xx -> text ((String.fromInt xx)++" ")) dis
+        , [renderButton "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"]
+        ])
+        
 
         

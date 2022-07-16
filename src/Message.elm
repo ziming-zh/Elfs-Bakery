@@ -54,7 +54,7 @@ type Msg
     | RestartLevel
     | LoadNextLevel
     | LoadLevel Int
-    | LoadGuide1
+    | Load Page
     | RandomLevel Int
     | None
 

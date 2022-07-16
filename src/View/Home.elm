@@ -1,6 +1,6 @@
 module View.Home exposing (..)
 import Model exposing (Model)
-import Message exposing (Msg(..))
+import Message exposing (Msg(..),Page(..))
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html, div)
 import View.Basic exposing (renderButton)
@@ -40,7 +40,7 @@ renderHome model =
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.333 ++ ")")
             ][]
         , renderButton "Play" LoadNextLevel (880,425) 1 (260,66) "#FFFFFF"
-        , renderButton "Guide" LoadGuide (880,535) 1 (260,66) "#FFFFFF"
+        , renderButton "Guide" (Load GuidePage) (880,535) 1 (260,66) "#FFFFFF"
         , renderButton "Seting" Message.None (880,645) 1 (260,66) "#FFFFFF"
     --    , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat h)
     --    , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat r)
