@@ -3,14 +3,13 @@ import Canvas exposing (Renderable)
 import View.Grid exposing (renderGrids)
 import Valve exposing (Valve)
 import Wall exposing (Wall)
-import Grid exposing (Grid)
 import View.Wall exposing (drawWall)
 import View.Valve exposing (renderValves)
 import Grid exposing (Grids)
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html,div,text)
-import Message exposing (Msg(..))
-import Model exposing (Model)
+import Message exposing (Msg(..),Page(..))
+import Model exposing (Model,GaState(..))
 import View.Basic exposing (renderTxt,renderButton)
 import Player exposing (Player)
 import View.Player exposing (renderPlayer)
@@ -59,25 +58,39 @@ renderLevelPage model =
         (List.concat
         [
         [ Html.img
-            [ HtmlAttr.src "./assets/game_interface.png"
+            [ HtmlAttr.src "./assets/gamepage/game_interface.png"
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
             , HtmlAttr.style "position" "absolute"
             , HtmlAttr.style "left" (String.fromFloat 0 ++ "px")
             , HtmlAttr.style "top" (String.fromFloat 0 ++ "px")
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
             ][]
-        , renderButton "Next" Message.None (1380,866) (320,87) "#FFFFFF"
+            , renderGstate model
+        
+        --, renderButton "Next" Message.None (1380,866) (320,87) "#FFFFFF"
         
        -- , renderButton "Guide" Message.None 978 545 "#FFFFFF"
        -- , renderButton "Seting" Message.None 976 655 "#FFFFFF"
         ]
         , renderCake model.color_seq 1439 390 1.2 (List.length model.color_seq) Recipe
         , renderCake model.mcolor_seq 1439 750 2.4 (List.length model.color_seq) Progress
-        , [ toHtml (800 ,600)
+        , [ toHtml (405 ,310)
             [ HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 2.6 ++ ")")
             , HtmlAttr.style "position" "absolute"
-            , HtmlAttr.style "left" (String.fromFloat 700 ++ "px")
-            , HtmlAttr.style "top" (String.fromFloat 650 ++ "px")]
+            , HtmlAttr.style "left" (String.fromFloat 400 ++ "px")
+            , HtmlAttr.style "top" (String.fromFloat 420 ++ "px")]
             (renderLevel model.wall model.valves (model.updatedGrids) model.player)
-        ], List.map (\xx -> text ((String.fromInt xx)++" ")) dis])
+        ], List.map (\xx -> text ((String.fromInt xx)++" ")) dis
+        , [renderButton "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"]
+        ])
+        
 
+renderGstate : Model -> Html Msg
+renderGstate model =
+    case model.win of
+        Model.Playing ->
+            renderButton "Undo" Undo (1380,866) 1 (320,87) "#FFFFFF"
+        Model.Lose ->
+            renderButton "Retry" (LoadLevel model.level_index)  (1380,866) 1 (320,87) "#FFFFFF"
+        Model.Win ->
+            renderButton "Next Level" (Load ChoicePage) (1380,866) 1 (320,87) "#FFFFFF"

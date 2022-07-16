@@ -424,8 +424,8 @@ judgeOk grids x y =
                 _ -> True
         _ -> False
         
-judge1Ok : Grids -> Int -> Int -> Color -> Bool
-judge1Ok grids x y color =
+judge1Ok : Grids -> Int -> Int -> (Color,Color) -> Bool
+judge1Ok grids x y (color1,color2) =
     let 
         grid =
             getGrid x y grids
@@ -434,7 +434,7 @@ judge1Ok grids x y color =
             Just singlegrid ->
                 case singlegrid.gridtype of
                     Paint a ->
-                        a.color == color
+                        a.color == color1 || a.color == color2
                     _ -> False
             Nothing -> False
 
@@ -456,10 +456,10 @@ mergeColor : Color -> Color -> Color
 mergeColor a b =
     if a == b then a
     else if a == white || b == white then white
-    else if (a,b) == (lightRed,lightYellow) then orange
-    else if (a,b) == (lightYellow,lightRed) then orange
-    else if (a,b) == (lightRed,blue) then purple
-    else if (a,b) == (blue,lightRed) then purple
+    else if (a,b) == (red,lightYellow) then orange
+    else if (a,b) == (lightYellow,red) then orange
+    else if (a,b) == (red,blue) then purple
+    else if (a,b) == (blue,red) then purple
     else if (a,b) == (blue,lightYellow) then green
     else if (a,b) == (lightYellow,blue) then green
 
@@ -470,12 +470,12 @@ mergeColor a b =
     else if (a,b) == (blue,orange) then white
     else if (a,b) == (orange,blue) then white
 
-    else if (a,b) == (lightRed,purple) then purple
-    else if (a,b) == (purple,lightRed) then purple
-    else if (a,b) == (lightRed,orange) then orange
-    else if (a,b) == (orange,lightRed) then orange
-    else if (a,b) == (lightRed,green) then white
-    else if (a,b) == (green,lightRed) then white
+    else if (a,b) == (red,purple) then purple
+    else if (a,b) == (purple,red) then purple
+    else if (a,b) == (red,orange) then orange
+    else if (a,b) == (orange,red) then orange
+    else if (a,b) == (red,green) then white
+    else if (a,b) == (green,red) then white
 
     else if (a,b) == (lightYellow,orange) then orange
     else if (a,b) == (orange,lightYellow) then orange
@@ -511,18 +511,18 @@ changeSingleColor (lx,ly) ncolor paints =
                 {pos = x.pos,color = ncolor}
         ) paints
 
-changeColor : Grids -> Color -> Color -> (Int,Int) -> (Int,Int) -> Array Paint -> Array Paint
-changeColor grids color lcolor (lx,ly) (dx,dy) paints =
+changeColor : Grids -> Color -> (Color,Color) -> (Int,Int) -> (Int,Int) -> Array Paint -> Array Paint
+changeColor grids color (lcolor1,lcolor2) (lx,ly) (dx,dy) paints =
     let
         (nx,ny) = (lx+dx,ly+dy)
         foldFunction = 
-            changeColor grids color lcolor (nx,ny)
+            changeColor grids color (lcolor1,lcolor2) (nx,ny)
         npaints = 
             (changeSingleColor (nx,ny) color paints)
-        downOk = judge1Ok grids (nx+1) ny lcolor
-        leftOk = judge1Ok grids nx (ny-1) lcolor
-        rightOk =  judge1Ok grids nx (ny+1) lcolor
-        upOk =  judge1Ok grids (nx-1) ny lcolor   
+        downOk = judge1Ok grids (nx+1) ny (lcolor1,lcolor2)
+        leftOk = judge1Ok grids nx (ny-1) (lcolor1,lcolor2)
+        rightOk =  judge1Ok grids nx (ny+1) (lcolor1,lcolor2)
+        upOk =  judge1Ok grids (nx-1) ny (lcolor1,lcolor2)   
         list = 
             List.concat
             [
@@ -584,16 +584,22 @@ movePaint grids i paints =
     if (dx,dy) /= (0,0) then
         Array.set i { paint | pos = { x = x + dx, y = y + dy } } paints 
     else 
-        if distance == (getDistance { x = x + 1, y = y } grids + 1) && getGstate paint.pos grids Message.Down == Open then
-            changeColor grids (mergeColor (getColor grids x y) (getColor grids (x+1) y)) (getColor grids (x+1) y) (x,y) (1,0) paints
-                |> changeColor grids (mergeColor (getColor grids x y) (getColor grids (x+1) y)) (getColor grids x y) (x+1,y) (-1,0)
-        else if distance == (getDistance { x = x, y = y + 1 } grids + 1) && getGstate paint.pos grids Message.Right == Open then
-            changeColor grids (mergeColor (getColor grids x y) (getColor grids x (y+1))) (getColor grids x (y+1)) (x,y) (0,1) paints
-                |> changeColor grids (mergeColor (getColor grids x y) (getColor grids x (y+1))) (getColor grids x y) (x,y+1) (0,-1)
-        else if distance == (getDistance { x = x, y = y - 1 } grids + 1)  && getGstate paint.pos grids Message.Left == Open then
-            changeColor grids (mergeColor (getColor grids x y) (getColor grids x (y-1))) (getColor grids x (y-1)) (x,y) (0,-1) paints
-                |> changeColor grids (mergeColor (getColor grids x y) (getColor grids x (y-1))) (getColor grids x y) (x,y-1) (0,1)
-        else if distance == (getDistance { x = x - 1, y = y } grids + 1)  && getGstate paint.pos grids Message.Up == Open then
-            changeColor grids (mergeColor (getColor grids x y) (getColor grids (x-1) y)) (getColor grids (x-1) y) (x,y) (-1,0) paints   
-                |> changeColor grids (mergeColor (getColor grids x y) (getColor grids (x-1) y)) (getColor grids x y) (x-1,y) (1,0)
-        else paints
+        let
+            (ndx,ndy) =  
+                if distance == (getDistance { x = x + 1, y = y } grids + 1) && getGstate paint.pos grids Message.Down == Open then
+                    (1,0)
+                else if distance == (getDistance { x = x, y = y + 1 } grids + 1) && getGstate paint.pos grids Message.Right == Open then
+                    (0,1)
+                else if distance == (getDistance { x = x, y = y - 1 } grids + 1)  && getGstate paint.pos grids Message.Left == Open then
+                    (0,-1)
+                else if distance == (getDistance { x = x - 1, y = y } grids + 1)  && getGstate paint.pos grids Message.Up == Open then
+                    (-1,0)
+                else (0,0) 
+            lcolor1 = getColor grids x y
+            lcolor2 = getColor grids (x+ndx) (y+ndy)
+            ncolor = mergeColor lcolor1 lcolor2
+        in
+            if (ndx,ndy) /= (0,0) then
+                changeColor grids ncolor (lcolor1,lcolor2) (x,y) (ndx,ndy) paints
+                    |> changeColor grids ncolor (lcolor1,lcolor2) (x+ndx,y+ndy) (-ndx,-ndy)
+            else paints

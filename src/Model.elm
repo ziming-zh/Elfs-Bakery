@@ -9,32 +9,37 @@ import Player
 import Random
 import Valve exposing (Valve)
 import Wall exposing (Wall)
-import Valve exposing (initValve,VState(..))
+import Valve exposing (VState(..))
 import Grid exposing (Grids)
 import Grid exposing (initGridsfromLevel,sendPainttoGrids,loadValve,Grid)
 import Grid exposing (initGrid)
 import Player exposing (Player)
-import Levels exposing (initLevel1) 
 import Task
 import Browser.Dom exposing (getViewport)
+import Grid exposing (drawWallIndex)
 
 type alias Model =
     Mapset
-        { win : Bool
+        { win : GaState
         , move_timer : Float
         , levels : List Level
+        , guide_levels : List Level
         , level_index : Int
         , valves_move : Int
         , color_seq : List Color.Color
         , mcolor_seq : List Color.Color
-        , history : List GameState
+        , history : List (List Paint,List Valve,Player)
         , currentPage : Page
         --, lastMoveDirection : MoveDirection  --merge the direction of the player into Type Player
         --  , stringlevel : StringLevel
         , randomindex : Int
         , windowsize : ( Float, Float )
         }
-
+type GaState
+    = Win
+    | Lose
+    | Playing
+    
 
 type alias Flags =
     { levels : Maybe String }
@@ -160,6 +165,56 @@ loadGameWithLevel encodedLevel model =
     model
 -}
 
+getModel : Int -> Model -> ( Model, Cmd Msg )
+getModel k model =
+    let
+        levels =
+            List.drop (k-1) (if model.currentPage == GuidePage then model.guide_levels else model.levels)
+        initialgrids = 
+            case List.head levels of
+                Just lv-> initGridsfromLevel lv
+                Nothing -> Array.fromList []
+        (wall,valves,paints) = 
+            case List.head levels of
+                Just lv-> (lv.wall,lv.valves,lv.paints)
+                Nothing ->({col=[],row=[]},[], [])
+        (exit, colorseq) = 
+            case List.head levels of
+                Just lv-> (lv.exit,lv.colorseq)
+                Nothing -> (Pos -1 -1,[])       
+        initplayer = 
+            case List.head levels of
+                Just lv-> lv.player
+                Nothing -> Player.init (Pos 0 0) Message.Up
+    in
+    ( { player = initplayer
+      , wall = wall
+      , valves = valves
+      , paints = paints
+      , grids = initialgrids
+      , updatedGrids = initialgrids
+      , dots = []
+      , mapSize = (0,0)
+      , win = Playing
+      , levels = model.levels -- important here
+      , guide_levels = model.guide_levels
+      , move_timer = 0.0
+      , level_index = k
+      , valves_move = 0
+      , history = []
+      , currentPage = LevelsPage
+      , windowsize = ( 800, 800 )
+      , randomindex = 0
+      , exit = initGrid exit.x exit.y -- to be imported from the level later
+      , color_seq = colorseq
+      , mcolor_seq = []
+      }
+    , Cmd.batch
+        [ --Random.generate RandomLevel (Random.int 0 39),
+          Task.perform GetViewport getViewport
+        ]
+    )
+
 initModel : ( Model, Cmd Msg )
 initModel =
     let
@@ -176,9 +231,13 @@ initModel =
         (exit, colorseq) = 
             case List.head levels of
                 Just lv-> (lv.exit,lv.colorseq)
-                Nothing -> (Pos -1 -1,[])       
+                Nothing -> (Pos -1 -1,[])     
+        initplayer = 
+            case List.head levels of
+                Just lv-> lv.player
+                Nothing -> Player.init (Pos 0 0) Message.Up
     in
-    ( { player = Player.init
+    ( { player = initplayer
       , wall = wall
       , valves = valves
       , paints = paints
@@ -186,12 +245,13 @@ initModel =
       , updatedGrids = initialgrids
       , dots = []
       , mapSize = (0,0)
-      , win = False
+      , win = Playing
       , levels = levels -- important here
+      , guide_levels = Levels.initGuide
       , move_timer = 0.0
       , level_index = 0
       , valves_move = 0
-      , history = []
+      , history = [(paints,valves,initplayer)]
       , currentPage = HomePage
       , windowsize = ( 800, 800 )
       , randomindex = 0
