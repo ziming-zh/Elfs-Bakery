@@ -65,7 +65,7 @@ renderLevelPage model =
             , HtmlAttr.style "top" (String.fromFloat 0 ++ "px")
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
             ][]
-            ,renderButton "Undo" LoadNextLevel (1380,866) 1 (320,87) "#FFFFFF"
+            ,renderButton "Undo" Undo (1380,866) 1 (320,87) "#FFFFFF"
         
         --, renderButton "Next" Message.None (1380,866) (320,87) "#FFFFFF"
         

@@ -63,8 +63,8 @@ update msg model =
                         ( { model | level_index = model.level_index + 1 , move_timer = 0 } , Cmd.none )
                 HomePage -> 
                     ( { model | currentPage = ChoicePage } , Cmd.none )
-                LevelsPage ->
-                    ( { model | currentPage = GamePage } , Cmd.none )
+              --  LevelsPage ->
+                --    ( { model | currentPage = GamePage } , Cmd.none )
                 GamePage -> 
                     ( { model | currentPage = LevelsPage } , Cmd.none )
                 _ -> 
