@@ -27,7 +27,7 @@ type alias Model =
         , valves_move : Int
         , color_seq : List Color.Color
         , mcolor_seq : List Color.Color
-        , history : List GameState
+        , history : List (List Paint,List Valve,Player)
         , currentPage : Page
         --, lastMoveDirection : MoveDirection  --merge the direction of the player into Type Player
         --  , stringlevel : StringLevel
@@ -246,7 +246,7 @@ initModel =
       , move_timer = 0.0
       , level_index = 0
       , valves_move = 0
-      , history = []
+      , history = [(paints,valves,initplayer)]
       , currentPage = HomePage
       , windowsize = ( 800, 800 )
       , randomindex = 0
