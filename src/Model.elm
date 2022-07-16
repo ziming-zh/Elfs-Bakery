@@ -164,7 +164,7 @@ getModel : Int -> Model -> ( Model, Cmd Msg )
 getModel k model =
     let
         levels =
-            List.drop (k-1) model.levels
+            List.drop (k-1) (if model.currentPage == GuidePage then model.guide_levels else model.levels)
         initialgrids = 
             case List.head levels of
                 Just lv-> initGridsfromLevel lv
@@ -177,8 +177,12 @@ getModel k model =
             case List.head levels of
                 Just lv-> (lv.exit,lv.colorseq)
                 Nothing -> (Pos -1 -1,[])       
+        initplayer = 
+            case List.head levels of
+                Just lv-> lv.player
+                Nothing -> Player.init (Pos 0 0) Message.Up
     in
-    ( { player = Player.init
+    ( { player = initplayer
       , wall = wall
       , valves = valves
       , paints = paints
@@ -222,9 +226,13 @@ initModel =
         (exit, colorseq) = 
             case List.head levels of
                 Just lv-> (lv.exit,lv.colorseq)
-                Nothing -> (Pos -1 -1,[])       
+                Nothing -> (Pos -1 -1,[])     
+        initplayer = 
+            case List.head levels of
+                Just lv-> lv.player
+                Nothing -> Player.init (Pos 0 0) Message.Up
     in
-    ( { player = Player.init
+    ( { player = initplayer
       , wall = wall
       , valves = valves
       , paints = paints

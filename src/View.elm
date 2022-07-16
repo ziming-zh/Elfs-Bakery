@@ -29,7 +29,10 @@ view model =
         HomePage -> renderHome model
         LevelsPage -> renderLevelPage model
         GamePage -> renderGamePage model
-        GuidePage -> renderGuidePage model
+        GuidePage ->
+            if Basics.modBy 2 model.level_index == 0 then
+                renderGuidePage model
+            else renderLevelPage model
         _ -> 
             div
                 [ ]
