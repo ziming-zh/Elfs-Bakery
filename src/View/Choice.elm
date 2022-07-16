@@ -1,20 +1,17 @@
-module View.Home exposing (..)
+module View.Choice exposing (..)
 import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html, div)
-import View.Basic exposing (renderButton)
-import Color exposing (Color(..))
+import View.Basic exposing (renderButton,renderButtonColor)
 
 
 
-
-renderHome : Model -> Html Msg
-renderHome model = 
+renderChoicePage : Model -> Html Msg
+renderChoicePage model =
     let
         ( w , h ) =
             model.windowsize
-        level = List.head (model.levels)
         r = 
             if w / h > 1200 / 800 then
                 (h / 800)
@@ -32,16 +29,15 @@ renderHome model =
         , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat r ++ ")")
         ]
         [ Html.img
-            [ HtmlAttr.src "./assets/gamepage/beginning.png"
+            [ HtmlAttr.src "./assets/gamepage/level.png"
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
             , HtmlAttr.style "position" "absolute"
             , HtmlAttr.style "left" (String.fromFloat 90 ++ "px")
             , HtmlAttr.style "top" (String.fromFloat 149 ++ "px")
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.6 ++ ")")
             ][]
-        , renderButton "Play" LoadNextLevel (880,425) 1 (260,66) "#FFFFFF"
-        , renderButton "Guide" (Load GuidePage) (880,535) 1 (260,66) "#FFFFFF"
-        , renderButton "Seting" Message.None (880,645) 1 (260,66) "#FFFFFF"
-    --    , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat h)
-    --    , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat r)
+        , renderButtonColor "#F4B183" "1" (LoadLevel 1) (23,395) 1 (65,65) "#FFFFFF"
+        , renderButton "<" (Load HomePage) (-60,0) 1 (50,50) "#FFFFFF"
+        --, renderButtonColor "#F4B183" "2" (LoadLevel 2) (100,395) 1 (260,66) "#FFFFFF"
+        --, renderButton "Level 3" (LoadLevel 1) (880,320) 1 (260,66) "#FFFFFF"
         ]

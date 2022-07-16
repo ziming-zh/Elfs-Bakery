@@ -1,26 +1,9 @@
 module View.Game exposing (..)
-import Canvas exposing (Renderable,toHtml)
-import Grid exposing (Grids)
 import Html.Attributes as HtmlAttr exposing (..)
-import Html exposing (Html,div,text)
-import Message exposing (Msg(..))
+import Html exposing (Html,div)
+import Message exposing (Msg(..),Page(..))
 import Model exposing (Model)
 import View.Basic exposing (renderTxt,renderButton)
-
-import Canvas exposing (toHtml)
-import View.Wall exposing (drawWall)
-import Model exposing (Mapset,updateGridsfromModel)
-import View.Basic exposing (rectRender)
-import Color exposing (Color)
-import Canvas exposing (clear)
-import Canvas exposing (rect)
-import Canvas exposing (shapes)
-import Html.Attributes exposing (style)
-import Canvas.Settings exposing (fill)
-import View.Valve exposing (renderValves)
-import View.Level exposing (renderLevel)
-import DBFS exposing(get)
-import Grid exposing(Grid)
 
 renderGamePage : Model -> Html Msg
 renderGamePage model = 
@@ -47,15 +30,16 @@ renderGamePage model =
         , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat r ++ ")")
         ]
         [ Html.img
-            [ HtmlAttr.src "./assets/level_1.png"
+            [ HtmlAttr.src "./assets/gamepage/house.png"
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
             , HtmlAttr.style "position" "absolute"
             , HtmlAttr.style "left" (String.fromFloat 0 ++ "px")
             , HtmlAttr.style "top" (String.fromFloat 0 ++ "px")
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
             ][]
-        , renderButton "Next" Message.None (680,486) (196,52) "#FFFFFF"
+        , renderButton "Next" LoadNextLevel (680,486) 1 (196,52) "#FFFFFF"
         , renderTxt 400 318 68 "#FFFFFF" (String.fromInt model.level_index)
+        , renderButton "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"
        -- , renderButton "Seting" Message.None 976 655 "#FFFFFF"
         ]
        

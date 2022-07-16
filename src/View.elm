@@ -1,26 +1,13 @@
 module View exposing (view)
-import Model exposing (Model,updateGridsfromModel)
+import Model exposing (Model)
 import Message exposing (Msg(..))
-import Html exposing (Html, button, div, text)
-import Canvas exposing (toHtml)
-import View.Wall exposing (drawWall)
-import Model exposing (Mapset,updateGridsfromModel)
-import View.Basic exposing (rectRender)
-import Color exposing (Color)
-import Canvas exposing (clear)
-import Canvas exposing (rect)
-import Canvas exposing (shapes)
-import Html.Attributes exposing (style)
-import Canvas.Settings exposing (fill)
-import View.Valve exposing (renderValves)
-import View.Level exposing (renderLevel)
-import DBFS exposing(get)
-import Grid exposing(Grid)
-import View.Level exposing (renderLevel,renderLevelPage)
+import Html exposing (Html, div)
+import View.Level exposing (renderLevelPage)
 import View.Home exposing(renderHome)
 import View.Game exposing(renderGamePage)
+import View.Choice exposing(renderChoicePage)
+import View.Guide exposing(renderGuidePage)
 import Html.Attributes as HtmlAttr exposing (..)
-import Array
 import Message exposing (Page(..))
 
 view : Model -> Html Msg
@@ -38,9 +25,14 @@ view model =
     in
 
     case model.currentPage of 
+        ChoicePage -> renderChoicePage model
         HomePage -> renderHome model
         LevelsPage -> renderLevelPage model
         GamePage -> renderGamePage model
+        GuidePage ->
+            if Basics.modBy 2 model.level_index == 0 then
+                renderGuidePage model
+            else renderLevelPage model
         _ -> 
             div
                 [ ]
