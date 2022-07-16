@@ -16,9 +16,9 @@ type State
     | Stopped
 
 
-init : Player
-init =
-    { pos = { x = 5, y = 5 }, dir = Message.Up, state = Stopped }
+init : Pos -> Direction -> Player
+init initial dirr =
+    { pos = initial, dir = dirr, state = Stopped }
 
 
 changeDir : Player -> Direction -> Player

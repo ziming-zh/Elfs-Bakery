@@ -2,9 +2,9 @@ module Levels exposing (..)
 import Color exposing (..)
 import Wall exposing (Wall)
 import Valve exposing (Valve)
-import Message exposing (Paint)
+import Message exposing (Paint,Pos)
 import Valve exposing (VState(..))
-import Message exposing (Pos)
+import Player exposing (Player,init)
 type alias Level =
     { width : Int
     , height : Int
@@ -14,6 +14,7 @@ type alias Level =
     , paints : List Paint
     , id : Int
     , exit : Pos
+    , player : Player
     , colorseq : List Color.Color
     }
 
@@ -21,7 +22,7 @@ getInitialLevels : List Level
 getInitialLevels = [initLevel1]
 
 initGuide : List Level
-initGuide = [guideLevel1]
+initGuide = [guideLevel1,guideLevel2,guideLevel3]
 
 mapInt2Bool : List (List Int) -> List (List Bool)
 mapInt2Bool intlist = 
@@ -29,6 +30,76 @@ mapInt2Bool intlist =
         i2b = (\a -> if a == 1 then True else False)
     in
         List.map (List.map i2b) intlist 
+
+guideLevel3 : Level
+guideLevel3 = 
+    { width = 7
+    , height = 3
+    , wall = 
+    {
+        row =  mapInt2Bool
+        [[0,0,1,0,1,0,0]
+        ,[0,0,0,0,0,0,0]
+        ,[1,1,0,1,0,1,1]
+        ,[1,1,1,1,1,1,1]]
+        , col = mapInt2Bool
+        [[0,0,1]
+        ,[0,0,0]
+        ,[1,1,0]
+        ,[1,1,0]
+        ,[1,1,0]
+        ,[1,1,0]
+        ,[0,0,0]
+        ,[0,0,1]]
+    }
+    ,valves = [
+        {state = Left, pos = {y=3,x=2}}
+       ,{state = Right, pos = {y=4,x=2}}
+    ]
+    ,paints = [
+        {pos = {x=0,y=2},color=Color.red}
+       ,{pos = {x=0,y=4},color=Color.lightYellow}
+    ]
+    ,id = 2
+    ,exit = Pos 2 6
+    ,colorseq = [Color.orange]
+    ,player = init (Pos 2 4) Message.Left
+    }  
+
+guideLevel2 : Level 
+guideLevel2 = 
+    { width = 7
+    , height = 3
+    , wall = 
+    {
+        row =  mapInt2Bool
+        [[0,0,1,0,1,0,0]
+        ,[0,0,0,0,0,0,0]
+        ,[1,1,0,1,0,1,1]
+        ,[1,1,1,1,1,1,1]]
+        , col = mapInt2Bool
+        [[0,0,1]
+        ,[0,0,0]
+        ,[1,1,0]
+        ,[1,1,0]
+        ,[1,1,0]
+        ,[1,1,0]
+        ,[0,0,0]
+        ,[0,0,1]]
+    }
+    ,valves = [
+        {state = Left, pos = {y=3,x=2}}
+       ,{state = Right, pos = {y=4,x=2}}
+    ]
+    ,paints = [
+        {pos = {x=0,y=2},color=Color.red}
+       ,{pos = {x=0,y=4},color=Color.lightYellow}
+    ]
+    ,id = 2
+    ,exit = Pos 2 6
+    ,colorseq = [Color.red,Color.lightYellow]
+    ,player = init (Pos 2 4) Message.Left
+    }
 
 guideLevel1 : Level 
 guideLevel1 = 
@@ -55,8 +126,9 @@ guideLevel1 =
         {pos = {x=0,y=0},color=Color.lightYellow}
     ]
     ,id = 1
-    ,exit = Pos 5 7
-    ,colorseq = [Color.red , Color.blue, Color.lightYellow]
+    ,exit = Pos 0 5
+    ,colorseq = [Color.lightYellow]
+    ,player = init (Pos 0 0) Message.Right
     }
 
 
@@ -116,6 +188,7 @@ initLevel1 =
     ,id = 1
     ,exit = Pos 5 7
     ,colorseq = [Color.red , Color.blue, Color.lightYellow]
+    ,player = init (Pos 5 5) Message.Up
     }
 
 
