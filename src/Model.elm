@@ -16,10 +16,11 @@ import Grid exposing (initGrid)
 import Player exposing (Player)
 import Task
 import Browser.Dom exposing (getViewport)
+import Grid exposing (drawWallIndex)
 
 type alias Model =
     Mapset
-        { win : Bool
+        { win : GaState
         , move_timer : Float
         , levels : List Level
         , guide_levels : List Level
@@ -34,7 +35,11 @@ type alias Model =
         , randomindex : Int
         , windowsize : ( Float, Float )
         }
-
+type GaState
+    = Win
+    | Lose
+    | Playing
+    
 
 type alias Flags =
     { levels : Maybe String }
@@ -190,7 +195,7 @@ getModel k model =
       , updatedGrids = initialgrids
       , dots = []
       , mapSize = (0,0)
-      , win = False
+      , win = Playing
       , levels = model.levels -- important here
       , guide_levels = model.guide_levels
       , move_timer = 0.0
@@ -240,7 +245,7 @@ initModel =
       , updatedGrids = initialgrids
       , dots = []
       , mapSize = (0,0)
-      , win = False
+      , win = Playing
       , levels = levels -- important here
       , guide_levels = Levels.initGuide
       , move_timer = 0.0

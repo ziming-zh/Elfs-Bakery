@@ -9,7 +9,7 @@ import Grid exposing (Grids)
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html,div,text)
 import Message exposing (Msg(..),Page(..))
-import Model exposing (Model)
+import Model exposing (Model,GaState(..))
 import View.Basic exposing (renderTxt,renderButton)
 import Player exposing (Player)
 import View.Player exposing (renderPlayer)
@@ -65,7 +65,7 @@ renderLevelPage model =
             , HtmlAttr.style "top" (String.fromFloat 0 ++ "px")
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
             ][]
-            ,renderButton "Undo" Undo (1380,866) 1 (320,87) "#FFFFFF"
+            , renderGstate model
         
         --, renderButton "Next" Message.None (1380,866) (320,87) "#FFFFFF"
         
@@ -85,4 +85,12 @@ renderLevelPage model =
         ])
         
 
-        
+renderGstate : Model -> Html Msg
+renderGstate model =
+    case model.win of
+        Model.Playing ->
+            renderButton "Undo" Undo (1380,866) 1 (320,87) "#FFFFFF"
+        Model.Lose ->
+            renderButton "Retry" (LoadLevel model.level_index)  (1380,866) 1 (320,87) "#FFFFFF"
+        Model.Win ->
+            renderButton "Next Level" (Load ChoicePage) (1380,866) 1 (320,87) "#FFFFFF"

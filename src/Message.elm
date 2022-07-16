@@ -56,6 +56,7 @@ type Msg
     | LoadLevel Int
     | Load Page
     | RandomLevel Int
+    | Retry
     | None
 
 

@@ -1,4 +1,4 @@
-module Update exposing (update)
+module Update exposing (update,compareList)
 import Array
 import Message exposing (Msg(..), stepTime,Direction)
 import Model exposing (Model,updateGridsfromModel,getModel)
@@ -11,29 +11,35 @@ import Grid exposing (IsOpen(..),Grids,movePaint)
 import DBFS exposing (bfs)
 import Message exposing (Paint)
 import Color
-import Model exposing (loadValves,getModel)
+import Model exposing (loadValves,getModel,GaState(..))
 import Grid exposing (getDistance)
 -- import Grid exposing (clearPaintGrid)
 import Player exposing (State(..))
 import Message exposing (Page(..))
 import Message exposing (Pos)
+import Html exposing (a)
 --import Valve exposing(push,isValve)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Tick elapsed ->
-            ( { model
-                | move_timer = model.move_timer + elapsed
-              }
-                |> timedForward elapsed
-            , Cmd.none
-            )
+            if model.win == Model.Playing then
+                ( { model
+                    | move_timer = model.move_timer + elapsed
+                }
+                    |> timedForward elapsed
+                    |> checkEnd
+                , Cmd.none
+                )
+            else (model,Cmd.none)
 
         ArrowPressed dir ->
-            ({ model| player = Player.changeDir model.player dir
-            }, Cmd.none
-            )
+            if model.win == Model.Playing then
+                ({ model| player = Player.changeDir model.player dir
+                }, Cmd.none
+                )
+            else (model,Cmd.none)
 
         GetViewport { viewport } ->
             ( { model
@@ -66,7 +72,7 @@ update msg model =
               --  LevelsPage ->
                 --    ( { model | currentPage = GamePage } , Cmd.none )
                 GamePage -> 
-                    ( { model | currentPage = LevelsPage } , Cmd.none )
+                    ( { model | currentPage = ChoicePage } , Cmd.none )
                 _ -> 
                     ( model , Cmd.none )
         Undo ->
@@ -77,7 +83,7 @@ update msg model =
                             nmodel = {model|valves=valves,player={player|state=Player.Stopped},paints=paints}
                         in
                         ({nmodel|updatedGrids=(updateGridsfromModel nmodel model.grids)|> bfs model.exit,history =List.drop 1 model.history},Cmd.none)
-                    
+
 
         LoadLevel k ->
             getModel k model
@@ -87,14 +93,27 @@ update msg model =
 
         _ ->
             ( model, Cmd.none )
-{-
-checkEnd : Model -> (Model,Cmd Msg)
+
+checkEnd : Model -> (Model)
 checkEnd model =
     if model.mcolor_seq==model.color_seq then
-        (model,LoadNextLevel)
+        {model|win = Model.Win}
+    else if compareList model.mcolor_seq model.color_seq then
+        model
     else
-        (model,Cmd.none)
--}
+        {model|win= Model.Lose}
+
+        
+compareList : List a -> List a -> Bool
+compareList a b =
+    let 
+        al=List.length a
+        bl=List.length b
+        min=Basics.min al bl
+        aa=List.take min a
+        ba=List.take min b
+    in 
+        aa==ba
 move : Model -> Model
 move model =
     let
