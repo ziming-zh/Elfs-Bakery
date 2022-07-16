@@ -32,12 +32,12 @@ renderHome model =
         , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat r ++ ")")
         ]
         [ Html.img
-            [ HtmlAttr.src "./assets/game_beginning_1.png"
+            [ HtmlAttr.src "./assets/gamepage/beginning.png"
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
             , HtmlAttr.style "position" "absolute"
-            , HtmlAttr.style "left" (String.fromFloat 0 ++ "px")
-            , HtmlAttr.style "top" (String.fromFloat 100 ++ "px")
-            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.333 ++ ")")
+            , HtmlAttr.style "left" (String.fromFloat 90 ++ "px")
+            , HtmlAttr.style "top" (String.fromFloat 149 ++ "px")
+            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.6 ++ ")")
             ][]
         , renderButton "Play" LoadNextLevel (880,425) 1 (260,66) "#FFFFFF"
         , renderButton "Guide" (Load GuidePage) (880,535) 1 (260,66) "#FFFFFF"

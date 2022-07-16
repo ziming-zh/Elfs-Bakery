@@ -72,7 +72,7 @@ renderCandle now total x scale caketype =
     in
     if now == total then
         [ Html.img
-            [ HtmlAttr.src "./assets/candles.png"
+            [ HtmlAttr.src "./assets/cake/candles.png"
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat scale ++ ")")
             , HtmlAttr.style "position" "absolute"
             , HtmlAttr.style "left" (String.fromInt (x + 47) ++ "px")
@@ -124,25 +124,25 @@ renderith total x y scale ( i, color ) =
 selectColor : Color -> Html.Attribute msg
 selectColor color =
     if color == red then
-        HtmlAttr.src "./assets/red.png"
+        HtmlAttr.src "./assets/cake/red.png"
 
     else if color == green then
-        HtmlAttr.src "./assets/green.png"
+        HtmlAttr.src "./assets/cake/green.png"
 
     else if color == orange then
-        HtmlAttr.src "./assets/orange.png"
+        HtmlAttr.src "./assets/cake/orange.png"
 
     else if color == lightYellow then
-        HtmlAttr.src "./assets/yellow.png"
+        HtmlAttr.src "./assets/cake/yellow.png"
 
     else if color == blue then
-        HtmlAttr.src "./assets/blue.png"
+        HtmlAttr.src "./assets/cake/blue.png"
 
     else if color == white then
-        HtmlAttr.src "./assets/white.png"
+        HtmlAttr.src "./assets/cake/white.png"
 
     else if color == purple then
-        HtmlAttr.src "./assets/purple.png"
+        HtmlAttr.src "./assets/cake/purple.png"
 
     else
-        HtmlAttr.src "./assets/grey.png"
+        HtmlAttr.src "./assets/cake/grey.png"

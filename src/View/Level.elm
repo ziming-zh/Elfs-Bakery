@@ -58,7 +58,7 @@ renderLevelPage model =
         (List.concat
         [
         [ Html.img
-            [ HtmlAttr.src "./assets/game_interface.png"
+            [ HtmlAttr.src "./assets/gamepage/game_interface.png"
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
             , HtmlAttr.style "position" "absolute"
             , HtmlAttr.style "left" (String.fromFloat 0 ++ "px")

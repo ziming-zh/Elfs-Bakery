@@ -30,7 +30,7 @@ renderGamePage model =
         , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat r ++ ")")
         ]
         [ Html.img
-            [ HtmlAttr.src "./assets/level_1.png"
+            [ HtmlAttr.src "./assets/gamepage/house.png"
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
             , HtmlAttr.style "position" "absolute"
             , HtmlAttr.style "left" (String.fromFloat 0 ++ "px")
