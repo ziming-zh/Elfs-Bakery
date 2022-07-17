@@ -8,7 +8,6 @@ import Color exposing (Color(..))
 
 
 
-
 renderHome : Model -> Html Msg
 renderHome model = 
     let
