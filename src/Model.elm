@@ -189,7 +189,7 @@ getModel k model =
         mapsize = 
             case List.head levels of
                 Just lv-> (lv.width,lv.height)
-                Nothing -> (16,16)
+                Nothing -> (0,0)
     in
     ( { player = initplayer
       , wall = wall
@@ -244,7 +244,7 @@ initModel =
         mapsize = 
             case List.head levels of
                 Just lv-> (lv.width,lv.height)
-                Nothing -> (16,16)
+                Nothing -> (0,0)
     in
     ( { player = initplayer
       , wall = wall

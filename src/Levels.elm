@@ -19,7 +19,7 @@ type alias Level =
     }
 
 getInitialLevels : List Level
-getInitialLevels = [initLevel1,initLevel1,initLevel2]
+getInitialLevels = [initLevel1,initLevel7,initLevel2]
 
 initGuide : List Level
 initGuide = [guideLevel1,guideLevel2,guideLevel3]
@@ -234,12 +234,12 @@ initLevel2 =
     ,paints = [
          {pos = {x=2,y=7},color=Color.lightYellow}
         ,{pos = {x=2,y=2},color=Color.lightYellow}
-        ,{pos = {x=3,y=0},color=Color.blue}
-        ,{pos = {x=4,y=0},color=Color.blue}
-        ,{pos = {x=5,y=0},color=Color.blue}
-        ,{pos = {x=5,y=1},color=Color.blue}
-        ,{pos = {x=5,y=2},color=Color.blue}
-        ,{pos = {x=4,y=2},color=Color.blue}
+        -- ,{pos = {x=3,y=0},color=Color.blue}
+        -- ,{pos = {x=4,y=0},color=Color.blue}
+        -- ,{pos = {x=5,y=0},color=Color.blue}
+        -- ,{pos = {x=5,y=1},color=Color.blue}
+        -- ,{pos = {x=5,y=2},color=Color.blue}
+        -- ,{pos = {x=4,y=2},color=Color.blue}
         ,{pos = {x=0,y=2},color=Color.red}
         ,{pos = {x=0,y=4},color=Color.red}
         ,{pos = {x=0,y=6},color=Color.red}
@@ -261,9 +261,9 @@ initLevel7 =
         row =  mapInt2Bool
         [[0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0]
         ,[1,1,1,1,0,0,0,0,0,0,0,0,1,1,0,0]
-        ,[0,1,1,1,1,1,1,1,1,1,0,1,0,0,0,0]
+        ,[0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0]
         ,[0,0,0,0,0,1,1,0,1,1,1,0,0,0,1,1]
-        ,[0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0]
+        ,[0,0,1,1,0,1,0,0,1,0,0,0,0,0,0,0]
         ,[0,0,0,0,0,0,1,1,1,1,0,0,0,0,1,0]
         ,[0,0,0,1,1,0,0,0,0,0,0,0,0,0,1,0]
         ,[0,1,1,0,1,0,0,1,0,0,1,1,0,0,1,0]
@@ -279,9 +279,9 @@ initLevel7 =
         [[0,1,1,1,1,1,1,1,1,1,1,1,0,0]
         ,[0,0,1,1,1,1,1,1,1,1,1,0,0,0]
         ,[0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-        ,[0,0,0,0,0,0,0,0,0,0,0,0,1,1]
-        ,[1,0,0,0,0,0,0,0,0,0,0,0,1,0]
-        ,[0,0,1,0,1,1,0,1,1,1,1,1,0,0]
+        ,[0,0,0,1,1,0,0,0,0,0,0,0,1,1]
+        ,[1,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        ,[1,1,1,0,1,1,0,1,1,1,1,1,0,0]
         ,[0,0,0,0,1,1,1,1,1,1,1,1,0,0]
         ,[0,0,1,0,0,0,0,0,0,0,0,0,0,0]
         ,[0,0,0,1,0,0,0,1,1,0,0,0,0,0]
@@ -352,7 +352,7 @@ initLevel7 =
         ,{pos = {x=4,y=3},color=Color.red}
     ]
     ,id = 7
-    ,exit = Pos 15 14
+    ,exit = Pos 3 12
     ,colorseq = [Color.lightYellow, Color.purple,Color.green,Color.lightYellow, Color.purple,Color.green,Color.lightYellow, Color.purple,Color.green]
     ,player = init (Pos 0 11) Message.Down
     }

@@ -33,7 +33,7 @@ setBool : (Int,Int) -> Grids -> Grids
 setBool (x,y) grids = 
     let
         grid = get grids x y
-        ngrid = Grid grid.pos grid.gridtype grid.gstate grid.distance True
+        ngrid = Grid grid.pos grid.gridtype grid.gstate grid.distance True grid.specialtype
     in
         Array.set x ( Array.set y ngrid (getrow x grids) ) grids
 
@@ -106,8 +106,8 @@ checkSurround grids n m tp grid =
             List.map (
                 \xx ->
                 case xx.distance of
-                    Just a -> Grid xx.pos xx.gridtype xx.gstate (Just a) True
-                    Nothing -> Grid xx.pos xx.gridtype xx.gstate (Just distance) True
+                    Just a -> Grid xx.pos xx.gridtype xx.gstate (Just a) True xx.specialtype
+                    Nothing -> Grid xx.pos xx.gridtype xx.gstate (Just distance) True xx.specialtype
             ) nqueue
     in
     nnnqueue
@@ -188,10 +188,10 @@ bfs exit grids =
                     Array.map
                         (\y ->
                             if y.pos == nexit.pos then
-                                Grid y.pos y.gridtype y.gstate (Just 0) True
+                                Grid y.pos y.gridtype y.gstate (Just 0) True y.specialtype
 
                             else
-                                Grid y.pos y.gridtype y.gstate Nothing False
+                                Grid y.pos y.gridtype y.gstate Nothing False y.specialtype
                         )
                         x
                 ) grids
@@ -203,10 +203,10 @@ bfs exit grids =
                     Array.map
                         (\y ->
                             if y.pos == nexit.pos then
-                                Grid y.pos y.gridtype y.gstate y.distance True
+                                Grid y.pos y.gridtype y.gstate y.distance True y.specialtype
 
                             else
-                                Grid y.pos y.gridtype y.gstate y.distance False
+                                Grid y.pos y.gridtype y.gstate y.distance False y.specialtype
                         )
                         x
                 ) n2grids
