@@ -186,6 +186,10 @@ getModel k model =
             case List.head levels of
                 Just lv-> lv.player
                 Nothing -> Player.init (Pos 0 0) Message.Up
+        mapsize = 
+            case List.head levels of
+                Just lv-> (lv.width,lv.height)
+                Nothing -> (16,16)
     in
     ( { player = initplayer
       , wall = wall
@@ -194,7 +198,7 @@ getModel k model =
       , grids = initialgrids
       , updatedGrids = initialgrids
       , dots = []
-      , mapSize = (0,0)
+      , mapSize = mapsize
       , win = Playing
       , levels = model.levels -- important here
       , guide_levels = model.guide_levels
@@ -236,15 +240,20 @@ initModel =
             case List.head levels of
                 Just lv-> lv.player
                 Nothing -> Player.init (Pos 0 0) Message.Up
+
+        mapsize = 
+            case List.head levels of
+                Just lv-> (lv.width,lv.height)
+                Nothing -> (16,16)
     in
     ( { player = initplayer
       , wall = wall
       , valves = valves
       , paints = paints
       , grids = initialgrids
+      , mapSize = mapsize
       , updatedGrids = initialgrids
       , dots = []
-      , mapSize = (0,0)
       , win = Playing
       , levels = levels -- important here
       , guide_levels = Levels.initGuide

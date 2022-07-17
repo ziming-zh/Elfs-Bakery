@@ -40,6 +40,7 @@ renderLevelPage model =
         level = List.head model.levels
         arraylist = Array.map ( \xx -> Array.toList xx ) model.updatedGrids
         list = List.concat (Array.toList arraylist)
+        scale = Tuple.first model.mapSize
         dis = List.map (\xx ->
             case xx.distance of 
                 Just a -> a
@@ -74,11 +75,11 @@ renderLevelPage model =
         ]
         , renderCake model.color_seq 1439 390 1.2 (List.length model.color_seq) Recipe
         , renderCake model.mcolor_seq 1439 750 2.4 (List.length model.color_seq) Progress
-        , [ toHtml (405 ,310)
-            [ HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 2.6 ++ ")")
+        , [ toHtml (58*scale ,44*scale)
+            [ HtmlAttr.style "transform" ("scale(" ++ String.fromFloat (2.6*7/(toFloat scale)) ++ ")")
             , HtmlAttr.style "position" "absolute"
-            , HtmlAttr.style "left" (String.fromFloat 400 ++ "px")
-            , HtmlAttr.style "top" (String.fromFloat 420 ++ "px")]
+            , HtmlAttr.style "left" (String.fromFloat (70*16/7*16/(toFloat scale)) ++ "px")
+            , HtmlAttr.style "top" (String.fromFloat (85*16/7*16/(toFloat scale)) ++ "px")]
             (renderLevel model.wall model.valves (model.updatedGrids) model.player)
         ], List.map (\xx -> text ((String.fromInt xx)++" ")) dis
         , [renderButton "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"]
