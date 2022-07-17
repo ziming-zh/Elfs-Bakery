@@ -7,6 +7,8 @@ import Html.Attributes exposing (list)
 import Set exposing (Set)
 import Svg.Attributes exposing (y)
 
+import Model exposing(Model)
+
 
 
 -- all the grids, can update others
@@ -115,11 +117,8 @@ checkSurround grids n m tp grid =
 
 update :Grids -> Array Grid -> (Grids,Array Grid)
 update grids queue =
-  --  if Array.length queue > 0 then
     if Array.length queue > 0 then
         let
-            m =
-                Array.length (getrow 0 grids)
             grid =
                 gett 0 queue
 
@@ -129,15 +128,15 @@ update grids queue =
             y =
                 grid.pos.y
 
-            ngrids =
+            (ngrids,elem) =
                 if getBool (x,y) grids then 
-                    grids
+                    (grids,[])
                 else
-                    Array.set x (Array.set y grid (getrow x grids)) grids
+                    (Array.set x (Array.set y grid (getrow x grids)) grids,[grid])
             (agrids,aqueue) = 
                 update ngrids (Array.slice 1 (Array.length queue) queue)
         in
-            (agrids, Array.fromList( List.concat [ [grid] , Array.toList aqueue ] ) )
+            (agrids, Array.fromList( List.concat [ elem , Array.toList aqueue ] ) )
 
     else
         (grids, Array.fromList [] )
