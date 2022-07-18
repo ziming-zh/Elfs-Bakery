@@ -19,7 +19,7 @@ type alias Level =
     }
 
 getInitialLevels : List Level
-getInitialLevels = [initLevel1,initLevel7,initLevel2]
+getInitialLevels = [initLevel7,initLevel7,initLevel2]
 
 initGuide : List Level
 initGuide = [guideLevel1,guideLevel2,guideLevel3]
@@ -260,7 +260,7 @@ initLevel7 =
     {
         row =  mapInt2Bool
         [[0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0]
-        ,[1,1,1,1,0,0,0,0,0,0,0,0,1,1,0,0]
+        ,[1,1,1,1,0,1,1,1,1,0,0,0,1,1,0,0]
         ,[0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0]
         ,[0,0,0,0,0,1,1,0,1,1,1,0,0,0,1,1]
         ,[0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0]
