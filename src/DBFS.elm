@@ -106,11 +106,8 @@ checkSurround grids n m tp grid =
 
         nnnqueue =
             List.map (
-                \xx ->
-                case xx.distance of
-                    Just a -> Grid xx.pos xx.gridtype xx.gstate (Just a) True xx.specialtype
-                    Nothing -> Grid xx.pos xx.gridtype xx.gstate (Just distance) True xx.specialtype
-            ) nqueue
+                \xx -> Grid xx.pos xx.gridtype xx.gstate (Just distance) True xx.specialtype
+             ) nqueue
     in
     nnnqueue
 
@@ -121,15 +118,16 @@ update grids queue =
         let
             grid =
                 gett 0 queue
-
             x =
                 grid.pos.x
 
             y =
                 grid.pos.y
 
+            lgrid = get grids x y
+
             (ngrids,elem) =
-                if getBool (x,y) grids then 
+                if lgrid.renewed || ( lgrid.distance /= Nothing && lgrid.distance /= grid.distance ) then 
                     (grids,[])
                 else
                     (Array.set x (Array.set y grid (getrow x grids)) grids,[grid])

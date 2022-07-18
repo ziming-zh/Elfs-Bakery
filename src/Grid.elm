@@ -604,7 +604,7 @@ movePaint grids i paints =
             lcolor2 = getColor grids (x+ndx) (y+ndy)
             ncolor = mergeColor lcolor1 lcolor2
         in
-            if (ndx,ndy) /= (0,0) then
+            if (ndx,ndy) /= (0,0) && lcolor1 /= lcolor2 then
                 changeColor grids ncolor (lcolor1,lcolor2) (x,y) (ndx,ndy) paints
                     |> changeColor grids ncolor (lcolor1,lcolor2) (x+ndx,y+ndy) (-ndx,-ndy)
             else paints
