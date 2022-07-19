@@ -122,7 +122,12 @@ type alias Grid =
     , gstate : GState
     , distance : Maybe Int
     , renewed : Bool
+    , specialtype : Maybe SpecialType
     }
+
+type SpecialType
+    = Chocolate
+    | Vanilla
 
 
 type alias Grids =
@@ -131,7 +136,7 @@ type alias Grids =
 
 initGrid : Int -> Int -> Grid
 initGrid x y =
-    { pos = { x = x, y = y }, gridtype = Vacant, gstate = { up = Open, down = Open, left = Open, right = Open }, distance = Just 0, renewed = True }
+    { pos = { x = x, y = y }, gridtype = Vacant, gstate = { up = Open, down = Open, left = Open, right = Open }, distance = Just 0, renewed = True, specialtype = Nothing }
 
 
 ban : IsOpen -> Direction -> Grid -> Grid
@@ -599,7 +604,7 @@ movePaint grids i paints =
             lcolor2 = getColor grids (x+ndx) (y+ndy)
             ncolor = mergeColor lcolor1 lcolor2
         in
-            if (ndx,ndy) /= (0,0) then
+            if (ndx,ndy) /= (0,0) && lcolor1 /= lcolor2 then
                 changeColor grids ncolor (lcolor1,lcolor2) (x,y) (ndx,ndy) paints
                     |> changeColor grids ncolor (lcolor1,lcolor2) (x+ndx,y+ndy) (-ndx,-ndy)
             else paints

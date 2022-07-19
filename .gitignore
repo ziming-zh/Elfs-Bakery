@@ -17,3 +17,4 @@ minted-*
 *.tag*
 elm-stuff/
 scripts/grouping.csv
+build/main.js

@@ -38,7 +38,7 @@ renderGamePage model =
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
             ][]
         , renderButton "Next" LoadNextLevel (680,486) 1 (196,52) "#FFFFFF"
-        , renderTxt 400 318 68 "#FFFFFF" (String.fromInt model.level_index)
+        , renderTxt (400,318) 68 "#FFFFFF" (String.fromInt model.level_index) 1
         , renderButton "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"
        -- , renderButton "Seting" Message.None 976 655 "#FFFFFF"
         ]

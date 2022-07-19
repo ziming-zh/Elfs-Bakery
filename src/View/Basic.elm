@@ -44,15 +44,16 @@ transparentTxt x y size opa color txt =
         ]
         [ text txt ]
 
-renderTxt : Int -> Int -> Int -> String -> String -> Html Msg
-renderTxt x y size color txt = 
+renderTxt : (Int,Int) -> Int -> String -> String -> Float -> Html Msg
+renderTxt (x,y) size color txt opa = 
     div
         [ style "left" (String.fromInt x ++ "px")
         , style "top" (String.fromInt y ++ "px")
         , style "position" "absolute"
         , style "font-size" (String.fromInt size ++ "px")
-        , style "font-family" "Helvetica, Arial, sans-serif"
+        , style "font-family" "Times New Romans"
         , style "color" color
+        , style "opacity" (String.fromFloat opa)
         ]
         [ text txt ]
 
