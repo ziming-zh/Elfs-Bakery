@@ -34,6 +34,34 @@ pageSingleRank cleared k =
             , HtmlAttr.style "top" (String.fromFloat y ++ "px")
             ][]
 
+pageSingleHat : List Bool -> Int -> Html Msg
+pageSingleHat cleared k =
+    if not (check cleared k) then div [][]
+    else
+    let
+        list = [250,433.3,616.6,800,260,485,665]
+        listx = List.map (\xx -> xx-20) list
+        listy = [320,320,320,320,500,500,480]
+        (x,y) = (get listx k,get listy k)
+    in
+        Html.img
+            [ HtmlAttr.src ("./assets/hat/hat" ++ (String.fromInt k) ++ ".png" )
+            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.5 ++ ")")
+            , HtmlAttr.style "position" "absolute"
+            , HtmlAttr.style "left" (String.fromFloat x ++ "px")
+            , HtmlAttr.style "top" (String.fromFloat y ++ "px")
+            ][]
+
+pageRank : Model -> Html Msg
+pageRank model =
+    let
+        opa = model.move_timer/1000
+    in
+    div 
+        [ style "opacity" (String.fromFloat (Basics.min 1 opa))
+        ]
+        (List.map (pageSingleRank model.level_cleared) (List.range 1 7))
+
 pageHat : Model -> Html Msg
 pageHat model =
     let
@@ -42,11 +70,7 @@ pageHat model =
     div 
         [ style "opacity" (String.fromFloat (Basics.min 1 opa))
         ]
-        (List.map (pageSingleRank model.level_cleared) (List.range 0 7))
-
-pageMedal : Model -> Html Msg
-pageMedal model =
-    div [][]
+        (List.map (pageSingleHat model.level_cleared) (List.range 1 7))
 
 pageNone : Html Msg
 pageNone =
@@ -85,7 +109,7 @@ renderCollectionPage model =
         , renderButtonColor "#4472C4" "<" (Load HomePage) (-60,0) 1 (50,50) "#FFFFFF"
         , (case model.level_index of
             0 -> pageNone
-            1 -> pageMedal model
+            1 -> pageRank model
             2 -> pageHat model
             _ -> pageNone
           )
