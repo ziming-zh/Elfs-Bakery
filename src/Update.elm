@@ -18,13 +18,14 @@ import Player exposing (State(..))
 import Message exposing (Page(..))
 import Message exposing (Pos)
 import Html exposing (a)
+import Task
 --import Valve exposing(push,isValve)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Tick elapsed ->
-            if model.win == Model.Playing then
+            if model.win == Model.Playing || model.currentPage == GuidePage then
                 ( { model
                     | move_timer = model.move_timer + elapsed
                 }

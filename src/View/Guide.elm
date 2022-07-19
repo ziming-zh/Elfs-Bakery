@@ -3,7 +3,7 @@ import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html, div)
-import View.Basic exposing (renderButton,renderImg)
+import View.Basic exposing (renderButton,renderImg,renderTxt)
 
 
 page1 : Model -> Html Msg
@@ -14,8 +14,8 @@ page1 model =
     div
         [ HtmlAttr.style "opacity" (String.fromFloat opa)
         ]
-        [ renderImg "./assets/font/1.png" (1,100) (Basics.min opa 1)
-        , renderImg "./assets/font/0.png" (-50,200) (Basics.min (opa-1) 1)
+        [ renderTxt (1,100) 35  "#000000"  "Try to make the first cake!" (Basics.min opa 1)
+        , renderTxt (-50,200) 35 "#000000"  "Use ↑↓←→ to control~" (Basics.min (opa-1) 1)
         , renderButton "Go!" LoadNextLevel (150,300) (Basics.min (opa-2) 1) (50,50) "#FFFFFF"
         ]
 
@@ -27,7 +27,7 @@ page2 model =
     div
         [ HtmlAttr.style "opacity" (String.fromFloat opa)
         ]
-        [ renderImg "./assets/font/2.png" (1,100) (Basics.min opa 1)
+        [ renderTxt (1,100) 35  "#000000"  "Control the order to make the second cake!" (Basics.min opa 1)
         , renderButton "Go!" LoadNextLevel (300,200) (Basics.min (model.move_timer/1000-1) 1) (50,50) "#FFFFFF"
         ]
 
@@ -39,7 +39,7 @@ page3 model =
     div
         [
         ]
-        [ renderImg "./assets/font/3.png" (1,100) (Basics.min opa 1)
+        [ renderTxt (1,100) 35  "#000000"  "Create new color by mixing different colors!" (Basics.min opa 1)
         , renderButton "Go!" LoadNextLevel (300,200) (Basics.min (model.move_timer/1000-1) 1) (50,50) "#FFFFFF"
         ]
 
@@ -51,8 +51,8 @@ page4 model =
     div
         [
         ]
-        [ renderImg "./assets/font/4.png" (60,100) (Basics.min opa 1)
-        , renderImg "./assets/font/5.png" (1,200) (Basics.min (opa-1) 1)
+        [ renderTxt (60,100) 35  "#000000"  "You are a new backery now!" (Basics.min opa 1)
+        , renderTxt (1,200) 35  "#000000"  "Try to make as much cakes as possible~" (Basics.min (opa-1) 1)
         , renderButton "<" (Load HomePage) (250,300) (Basics.min (opa-2) 1) (50,50) "#FFFFFF"
         ]
 

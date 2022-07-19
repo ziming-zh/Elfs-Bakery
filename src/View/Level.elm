@@ -94,4 +94,4 @@ renderGstate model =
         Model.Lose ->
             renderButton "Retry" (LoadLevel model.level_index)  (1380,866) 1 (320,87) "#FFFFFF"
         Model.Win ->
-            renderButton "Next Level" (Load ChoicePage) (1380,866) 1 (320,87) "#FFFFFF"
+            renderButton "Next Level" (if model.currentPage == GuidePage then LoadNextLevel else (Load ChoicePage)) (1380,866) 1 (320,87) "#FFFFFF"
