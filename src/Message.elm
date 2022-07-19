@@ -39,6 +39,7 @@ type Page
     | LevelsPage
     | ChoicePage
     | GuidePage
+    | CollectionPage
 
 
 type Msg

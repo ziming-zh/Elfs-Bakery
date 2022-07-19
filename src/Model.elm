@@ -25,6 +25,7 @@ type alias Model =
         , levels : List Level
         , guide_levels : List Level
         , level_index : Int
+        , level_cleared : List Bool
         , valves_move : Int
         , color_seq : List Color.Color
         , mcolor_seq : List Color.Color
@@ -212,6 +213,7 @@ getModel k model =
       , exit = initGrid exit.x exit.y -- to be imported from the level later
       , color_seq = colorseq
       , mcolor_seq = []
+      , level_cleared = []
       }
     , Cmd.batch
         [ --Random.generate RandomLevel (Random.int 0 39),
@@ -267,6 +269,7 @@ initModel =
       , exit = initGrid exit.x exit.y -- to be imported from the level later
       , color_seq = colorseq
       , mcolor_seq = []
+      , level_cleared = []
       }
     , Cmd.batch
         [ Random.generate RandomLevel (Random.int 0 39)
