@@ -51,7 +51,7 @@ renderTxt (x,y) size color txt opa =
         , style "top" (String.fromInt y ++ "px")
         , style "position" "absolute"
         , style "font-size" (String.fromInt size ++ "px")
-        , style "font-family" "Helvetica, Arial, sans-serif"
+        , style "font-family" "Times New Romans"
         , style "color" color
         , style "opacity" (String.fromFloat opa)
         ]
