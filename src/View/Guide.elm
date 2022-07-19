@@ -15,8 +15,8 @@ page1 model =
         [ HtmlAttr.style "opacity" (String.fromFloat opa)
         ]
         [ renderTxt (1,100) 35  "#000000"  "Try to make the first cake!" (Basics.min opa 1)
-        , renderTxt (-50,200) 35 "#000000"  "Use the arrow keys to control~" (Basics.min (opa-1) 1)
-        , renderButton "Go!" LoadNextLevel (150,300) (Basics.min (opa-2) 1) (50,50) "#FFFFFF"
+        , renderTxt (-40,200) 35 "#000000"  "Use the arrow keys to control~" (Basics.min (opa-1) 1)
+        , renderButton "Go!" LoadNextLevel (180,300) (Basics.min (opa-2) 1) (50,50) "#FFFFFF"
         ]
 
 page2 : Model -> Html Msg
@@ -28,7 +28,7 @@ page2 model =
         [ HtmlAttr.style "opacity" (String.fromFloat opa)
         ]
         [ renderTxt (1,100) 35  "#000000"  "Control the order to make the second cake!" (Basics.min opa 1)
-        , renderButton "Go!" LoadNextLevel (300,200) (Basics.min (model.move_timer/1000-1) 1) (50,50) "#FFFFFF"
+        , renderButton "Go!" LoadNextLevel (330,200) (Basics.min (model.move_timer/1000-1) 1) (50,50) "#FFFFFF"
         ]
 
 page3 : Model -> Html Msg
@@ -52,7 +52,7 @@ page4 model =
         [
         ]
         [ renderTxt (60,100) 35  "#000000"  "You are a new backery now!" (Basics.min opa 1)
-        , renderTxt (1,200) 35  "#000000"  "Try to make as much cakes as possible~" (Basics.min (opa-1) 1)
+        , renderTxt (-20,200) 35  "#000000"  "Try to make as much cakes as possible~" (Basics.min (opa-1) 1)
         , renderButton "<" (Load HomePage) (250,300) (Basics.min (opa-2) 1) (50,50) "#FFFFFF"
         ]
 
