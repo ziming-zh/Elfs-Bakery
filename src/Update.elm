@@ -87,7 +87,10 @@ update msg model =
 
 
         LoadLevel k ->
-            getModel k model
+            case model.currentPage of
+                CollectionPage -> ( { model | level_index = k } , Cmd.none )
+                _ ->
+                    getModel k model
 
         Load page ->
             ( { model | currentPage = page , move_timer = 0 , level_index = 0 } , Cmd.none )
