@@ -74,7 +74,7 @@ renderGuidePage model =
         , HtmlAttr.style "left" (String.fromFloat ((w - 1200 * r) / 2) ++ "px")
         , HtmlAttr.style "top" (String.fromFloat ((h - 800 * r) / 2) ++ "px")
         , HtmlAttr.style "position" "absolute"
-        , HtmlAttr.style "transform-origin" "0 0"
+        , HtmlAttr.style "transform-origin" "0 0" 
         , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat r ++ ")")
         ]
         [ case model.level_index of 
