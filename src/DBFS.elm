@@ -35,7 +35,7 @@ setBool : (Int,Int) -> Grids -> Grids
 setBool (x,y) grids = 
     let
         grid = get grids x y
-        ngrid = Grid grid.pos grid.gridtype grid.gstate grid.distance True grid.specialtype
+        ngrid = Grid grid.pos grid.gridtype grid.gstate grid.distance True grid.stype
     in
         Array.set x ( Array.set y ngrid (getrow x grids) ) grids
 
@@ -106,7 +106,7 @@ checkSurround grids n m tp grid =
 
         nnnqueue =
             List.map (
-                \xx -> Grid xx.pos xx.gridtype xx.gstate (Just distance) True xx.specialtype
+                \xx -> Grid xx.pos xx.gridtype xx.gstate (Just distance) True xx.stype
              ) nqueue
     in
     nnnqueue
@@ -185,10 +185,10 @@ bfs exit grids =
                     Array.map
                         (\y ->
                             if y.pos == nexit.pos then
-                                Grid y.pos y.gridtype y.gstate (Just 0) True y.specialtype
+                                Grid y.pos y.gridtype y.gstate (Just 0) True y.stype
 
                             else
-                                Grid y.pos y.gridtype y.gstate Nothing False y.specialtype
+                                Grid y.pos y.gridtype y.gstate Nothing False y.stype
                         )
                         x
                 ) grids
@@ -200,10 +200,10 @@ bfs exit grids =
                     Array.map
                         (\y ->
                             if y.pos == nexit.pos then
-                                Grid y.pos y.gridtype y.gstate y.distance True y.specialtype
+                                Grid y.pos y.gridtype y.gstate y.distance True y.stype
 
                             else
-                                Grid y.pos y.gridtype y.gstate y.distance False y.specialtype
+                                Grid y.pos y.gridtype y.gstate y.distance False y.stype
                         )
                         x
                 ) n2grids

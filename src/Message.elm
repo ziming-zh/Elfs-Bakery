@@ -77,3 +77,13 @@ key keycode =
 
         _ ->
             ArrowPressed Stop
+
+
+type SpecialType
+    = Chocolate
+    | Vanilla
+type alias Stype =
+    { content : SpecialType, state : Sstate, pos : Pos }
+type Sstate
+    = Moving
+    | Still

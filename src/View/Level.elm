@@ -17,6 +17,7 @@ import Canvas exposing (Renderable,toHtml)
 import Array
 import List
 import View.Cake exposing (renderCake,Caketype(..))
+import View.Grid exposing (renderStypes)
 renderLevel : Wall -> List Valve -> Grids -> Player -> List Renderable
 renderLevel wall valves grids player =
     (renderGrids grids) ++
@@ -83,7 +84,8 @@ renderLevelPage model =
             (renderLevel model.wall model.valves (model.updatedGrids) model.player)
         ], List.map (\xx -> text ((String.fromInt xx)++" ")) dis
         , [renderButton "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"]
-        ])
+        , View.Grid.renderStypes model.updatedGrids]
+        )
         
 
 renderGstate : Model -> Html Msg

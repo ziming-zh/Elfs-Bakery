@@ -2,7 +2,7 @@ module Levels exposing (..)
 import Color exposing (..)
 import Wall exposing (Wall)
 import Valve exposing (Valve)
-import Message exposing (Paint,Pos)
+import Message exposing (Paint,Pos,SpecialType(..),Stype,Sstate(..))
 import Valve exposing (VState(..))
 import Player exposing (Player,init)
 type alias Level =
@@ -16,6 +16,7 @@ type alias Level =
     , exit : Pos
     , player : Player
     , colorseq : List Color.Color
+    , stypes : List Stype
     }
 
 getInitialLevels : List Level
@@ -64,6 +65,7 @@ guideLevel3 =
     ,exit = Pos 2 6
     ,colorseq = [Color.orange]
     ,player = init (Pos 2 4) Message.Left
+    ,stypes=[]
     }  
 
 guideLevel2 : Level 
@@ -99,6 +101,7 @@ guideLevel2 =
     ,exit = Pos 2 6
     ,colorseq = [Color.red,Color.lightYellow]
     ,player = init (Pos 2 4) Message.Left
+    ,stypes=[]
     }
 
 guideLevel1 : Level 
@@ -129,6 +132,7 @@ guideLevel1 =
     ,exit = Pos 0 5
     ,colorseq = [Color.lightYellow]
     ,player = init (Pos 0 0) Message.Right
+    ,stypes=[]
     }
 
 
@@ -187,6 +191,7 @@ initLevel1 =
     ]
     ,id = 1
     ,exit = Pos 5 7
+    ,stypes = []
     ,colorseq = [Color.lightYellow, Color.red,Color.red]
     ,player = init (Pos 5 5) Message.Up
     }
@@ -230,6 +235,7 @@ initLevel2 =
         ,{state = Down, pos = {y=1,x=3}}
         ,{state = Left, pos = {y=1,x=3}}
         ,{state = Down, pos = {y=7,x=0}}
+        
     ]
     ,paints = [
          {pos = {x=2,y=7},color=Color.lightYellow}
@@ -249,6 +255,7 @@ initLevel2 =
     ,exit = Pos 5 7
     ,colorseq = [Color.lightYellow, Color.red,Color.red]
     ,player = init (Pos 5 5) Message.Up
+    ,stypes=[]
     }
 
 
@@ -355,4 +362,5 @@ initLevel7 =
     ,exit = Pos 3 12
     ,colorseq = [Color.lightYellow, Color.purple,Color.green,Color.lightYellow, Color.purple,Color.green,Color.lightYellow, Color.purple,Color.green]
     ,player = init (Pos 0 11) Message.Down
+    ,stypes=[{pos ={x=7,y=3},state=Still,content=Chocolate}]
     }

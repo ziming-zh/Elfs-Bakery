@@ -17,6 +17,8 @@ import Player exposing (Player)
 import Task
 import Browser.Dom exposing (getViewport)
 import Grid exposing (drawWallIndex)
+import Grid exposing (sendStype2Grid)
+import Message exposing (Paint,Pos,SpecialType(..),Stype,Sstate(..))
 
 type alias Model =
     Mapset
@@ -51,6 +53,7 @@ type alias Mapset a =
         , wall : Wall
         , valves : List Valve
         , paints : List Paint
+        , stypes : List Stype
         , updatedGrids : Grids
         , grids : Grids
         , dots : List Pos --what is dots
@@ -182,10 +185,10 @@ getModel k model =
             case List.head levels of
                 Just lv-> (lv.exit,lv.colorseq)
                 Nothing -> (Pos -1 -1,[])       
-        initplayer = 
+        (initplayer,stypes) = 
             case List.head levels of
-                Just lv-> lv.player
-                Nothing -> Player.init (Pos 0 0) Message.Up
+                Just lv-> (lv.player,lv.stypes)
+                Nothing -> (Player.init (Pos 0 0) Message.Up,[])
         mapsize = 
             case List.head levels of
                 Just lv-> (lv.width,lv.height)
@@ -197,6 +200,7 @@ getModel k model =
       , paints = paints
       , grids = initialgrids
       , updatedGrids = initialgrids
+      , stypes = stypes
       , dots = []
       , mapSize = mapsize
       , win = Playing
@@ -236,10 +240,10 @@ initModel =
             case List.head levels of
                 Just lv-> (lv.exit,lv.colorseq)
                 Nothing -> (Pos -1 -1,[])     
-        initplayer = 
+        (initplayer,stypes) = 
             case List.head levels of
-                Just lv-> lv.player
-                Nothing -> Player.init (Pos 0 0) Message.Up
+                Just lv-> (lv.player,lv.stypes)
+                Nothing -> (Player.init (Pos 0 0) Message.Up,[])
 
         mapsize = 
             case List.head levels of
@@ -251,6 +255,7 @@ initModel =
       , valves = valves
       , paints = paints
       , grids = initialgrids
+      , stypes= []
       , mapSize = mapsize
       , updatedGrids = initialgrids
       , dots = []
@@ -281,6 +286,8 @@ updateGridsfromModel model initialgrids=
     let
         paints = model.paints
         valves = model.valves
-    in
-        List.foldl sendPainttoGrids (loadValves initialgrids valves) paints
+        stypes =model.stypes
+        ngrids=List.foldl sendPainttoGrids (loadValves initialgrids valves) paints
+    in 
+        List.foldl sendStype2Grid ngrids stypes
         -- initialgrids
