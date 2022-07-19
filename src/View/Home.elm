@@ -40,7 +40,7 @@ renderHome model =
             ][]
         , renderButton "Play" LoadNextLevel (880,425) 1 (260,66) "#FFFFFF"
         , renderButton "Guide" (Load GuidePage) (880,535) 1 (260,66) "#FFFFFF"
-        , renderButton "Seting" Message.None (880,645) 1 (260,66) "#FFFFFF"
+        , renderButton "Collections" Message.None (880,645) 1 (260,66) "#FFFFFF"
     --    , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat h)
     --    , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat r)
         ]
