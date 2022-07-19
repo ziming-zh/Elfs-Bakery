@@ -20,7 +20,6 @@ import Message exposing (Pos)
 import Html exposing (a)
 import Task
 import Grid exposing (updateSpecialType)
-import Grid exposing (moveSpecialTypes)
 --import Valve exposing(push,isValve)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -196,10 +195,12 @@ timedForward elapsed model =
                 move model
             movedPaint =
                     let 
+                        ngrids=(newModel.updatedGrids |> bfs model.exit)
+                        nstypes=List.map (Grid.updateSpecialType ngrids) model.stypes
                         (nmodel,npaints) = movePaints (newModel, newModel.paints) (newModel.updatedGrids |> bfs model.exit)
                        
-                        ngrids=List.foldl sendPainttoGrids (loadValves model.grids model.valves) npaints
-                        newnewmodel={nmodel|paints=npaints,stypes=moveSpecialTypes ngrids model.stypes}
+                        
+                        newnewmodel={nmodel|paints=npaints,stypes=List.map (Grid.moveSpecialType  ngrids) nstypes}
 
                     in
                         {newnewmodel|updatedGrids = updateGridsfromModel newnewmodel newnewmodel.grids |>bfs model.exit  }

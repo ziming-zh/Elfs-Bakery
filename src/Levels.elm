@@ -362,5 +362,5 @@ initLevel7 =
     ,exit = Pos 3 12
     ,colorseq = [Color.lightYellow, Color.purple,Color.green,Color.lightYellow, Color.purple,Color.green,Color.lightYellow, Color.purple,Color.green]
     ,player = init (Pos 0 11) Message.Down
-    ,stypes=[{pos ={x=7,y=3},state=Still,content=Chocolate}]
+    ,stypes=[{pos ={x=7,y=0},state=Still,content=Chocolate}]
     }

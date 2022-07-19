@@ -771,23 +771,8 @@ moveSpecialType : Grids -> Stype -> Stype
 moveSpecialType grids stype =
     let
         pos=stype.pos
-        distance =
-            getDistance pos grids
         ( dx, dy ) =
-            if distance == (getDistance { x = x + 1, y = y } grids + 1) && getGstate pos grids Message.Down == Open  then
-                ( 1, 0 )
-
-            else if distance == (getDistance { x = x, y = y + 1 } grids + 1) && getGstate pos grids Message.Right == Open then
-                ( 0, 1 )
-
-            else if distance == (getDistance { x = x, y = y - 1 } grids + 1) && getGstate pos grids Message.Left == Open  then
-                ( 0, -1 )
-
-            else if distance == (getDistance { x = x - 1, y = y } grids + 1) && getGstate pos grids Message.Up == Open  then
-                ( -1, 0 )
-
-            else
-                ( 0, 0 )
+            checkDirections grids pos
         x=stype.pos.x
         y=stype.pos.y
     in
@@ -796,10 +781,6 @@ moveSpecialType grids stype =
                 {stype|pos={x=x+dx,y=y+dy}}
             Still -> 
                 stype
-moveSpecialTypes : Grids -> List Stype -> List Stype
-moveSpecialTypes grids stypes =
-    List.map (updateSpecialType grids) stypes
-    |> List.map (moveSpecialType grids)
 movePaint : Grids -> Int -> Array Paint -> Array Paint
 movePaint grids i paints =
     let
