@@ -10,7 +10,7 @@ import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html,div,text)
 import Message exposing (Msg(..),Page(..))
 import Model exposing (Model,GaState(..))
-import View.Basic exposing (renderTxt,renderButton)
+import View.Basic exposing (renderTxt,renderButtonColor)
 import Player exposing (Player)
 import View.Player exposing (renderPlayer)
 import Canvas exposing (Renderable,toHtml)
@@ -83,7 +83,7 @@ renderLevelPage model =
             , HtmlAttr.style "top" (String.fromFloat (85*16/7*16/(toFloat scale)) ++ "px")]
             (renderLevel model.wall model.valves (model.updatedGrids) model.player)
         ], List.map (\xx -> text ((String.fromInt xx)++" ")) dis
-        , [renderButton "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"]
+        , [renderButtonColor "#4472C4" "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"]
         , View.Grid.renderStypes model.updatedGrids]
         )
         
@@ -92,8 +92,8 @@ renderGstate : Model -> Html Msg
 renderGstate model =
     case model.win of
         Model.Playing ->
-            renderButton "Undo" Undo (1380,866) 1 (320,87) "#FFFFFF"
+            renderButtonColor "#4472C4" "Undo" Undo (1380,866) 1 (320,87) "#FFFFFF"
         Model.Lose ->
-            renderButton "Retry" (LoadLevel model.level_index)  (1380,866) 1 (320,87) "#FFFFFF"
+            renderButtonColor "#4472C4" "Retry" (LoadLevel model.level_index)  (1380,866) 1 (320,87) "#FFFFFF"
         Model.Win ->
-            renderButton "Next Level" (if model.currentPage == GuidePage then LoadNextLevel else (Load ChoicePage)) (1380,866) 1 (320,87) "#FFFFFF"
+            renderButtonColor "#4472C4" "Next Level" (if model.currentPage == GuidePage then LoadNextLevel else (Load ChoicePage)) (1380,866) 1 (320,87) "#FFFFFF"

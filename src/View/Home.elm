@@ -3,7 +3,7 @@ import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html, div)
-import View.Basic exposing (renderButton)
+import View.Basic exposing (renderButtonColor)
 import Color exposing (Color(..))
 
 
@@ -38,9 +38,9 @@ renderHome model =
             , HtmlAttr.style "top" (String.fromFloat 149 ++ "px")
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.6 ++ ")")
             ][]
-        , renderButton "Play" LoadNextLevel (880,425) 1 (260,66) "#FFFFFF"
-        , renderButton "Guide" (Load GuidePage) (880,535) 1 (260,66) "#FFFFFF"
-        , renderButton "Collections" Message.None (880,645) 1 (260,66) "#FFFFFF"
+        , renderButtonColor "#4472C4" "Play" LoadNextLevel (880,425) 1 (260,66) "#FFFFFF"
+        , renderButtonColor "#4472C4" "Guide" (Load GuidePage) (880,535) 1 (260,66) "#FFFFFF"
+        , renderButtonColor "#4472C4" "Collection" (Load CollectionPage) (880,645) 1 (260,66) "#FFFFFF"
     --    , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat h)
     --    , renderTxt 0 0 10 "#0C0C0B" (String.fromFloat r)
         ]

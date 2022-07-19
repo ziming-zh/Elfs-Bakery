@@ -39,7 +39,7 @@ renderChoicePage model =
         , renderButtonColor "#F4B183" "1" (LoadLevel 1) (23,395) 1 (65,65) "#FFFFFF"
         , renderButtonColor "#F4B183" "2" (LoadLevel 2) (184,395) 1 (65,65) "#FFFFFF"
         , renderButtonColor "#F4B183" "3" (LoadLevel 3) (346,395) 1 (65,65) "#FFFFFF"
-        , renderButton "<" (Load HomePage) (-60,0) 1 (50,50) "#FFFFFF"
+        , renderButtonColor "#4472C4" "<" (Load HomePage) (-60,0) 1 (50,50) "#FFFFFF"
         --, renderButtonColor "#F4B183" "2" (LoadLevel 2) (100,395) 1 (260,66) "#FFFFFF"
         --, renderButton "Level 3" (LoadLevel 1) (880,320) 1 (260,66) "#FFFFFF"
         ]

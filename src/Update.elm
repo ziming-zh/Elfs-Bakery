@@ -27,7 +27,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Tick elapsed ->
-            if model.win == Model.Playing || model.currentPage == GuidePage then
+            if model.win == Model.Playing then
                 ( { model
                     | move_timer = model.move_timer + elapsed
                 }
@@ -35,6 +35,8 @@ update msg model =
                     |> checkEnd
                 , Cmd.none
                 )
+            else if model.currentPage == GuidePage || model.currentPage == CollectionPage then
+                ( { model | move_timer = model.move_timer + elapsed } , Cmd.none )
             else (model,Cmd.none)
 
         ArrowPressed dir ->
@@ -89,22 +91,30 @@ update msg model =
 
 
         LoadLevel k ->
-            getModel k model
+            case model.currentPage of
+                CollectionPage -> ( { model | level_index = k , move_timer = 0 } , Cmd.none )
+                _ ->
+                    getModel k model
 
         Load page ->
-            ( { model | currentPage = page , move_timer = 0 , level_index = 0 } , Cmd.none )
+            ( { model | currentPage = page , move_timer = 0 , level_index = 0 
+                        , win = (if page == CollectionPage then Lose else model.win ) } , Cmd.none )
 
         _ ->
             ( model, Cmd.none )
 
 checkEnd : Model -> (Model)
 checkEnd model =
-    if model.mcolor_seq==model.color_seq then
-        {model|win = Model.Win}
-    else if compareList model.mcolor_seq model.color_seq then
-        model
-    else
-        {model|win= Model.Lose}
+    let 
+        k = model.level_index
+        list = model.level_cleared
+    in
+        if model.mcolor_seq==model.color_seq then
+            {model|win = Model.Win,level_cleared = List.concat[List.take (k-1) list,[True],List.drop k list]}
+        else if compareList model.mcolor_seq model.color_seq then
+            model
+        else
+            {model|win= Model.Lose}
 
         
 compareList : List a -> List a -> Bool
@@ -177,7 +187,8 @@ movePaints (model,paints) grids  =
 
 timedForward : Float -> Model -> Model
 timedForward elapsed model =
-    if model.currentPage == GuidePage && ( Basics.modBy 2 model.level_index == 0 ) then model
+    if ( model.currentPage == GuidePage && ( Basics.modBy 2 model.level_index == 0 ) )
+      || model.currentPage == CollectionPage then model
         else
     if model.move_timer > stepTime then
         let
