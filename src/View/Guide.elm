@@ -15,7 +15,7 @@ page1 model =
         [ HtmlAttr.style "opacity" (String.fromFloat opa)
         ]
         [ renderTxt (1,100) 35  "#000000"  "Try to make the first cake!" (Basics.min opa 1)
-        , renderTxt (-50,200) 35 "#000000"  "Use ↑↓←→ to control~" (Basics.min (opa-1) 1)
+        , renderTxt (-50,200) 35 "#000000"  "Use the arrow keys to control~" (Basics.min (opa-1) 1)
         , renderButton "Go!" LoadNextLevel (150,300) (Basics.min (opa-2) 1) (50,50) "#FFFFFF"
         ]
 
