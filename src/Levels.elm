@@ -19,7 +19,7 @@ type alias Level =
     }
 
 getInitialLevels : List Level
-getInitialLevels = [initLevel7,initLevel7,initLevel2]
+getInitialLevels = [initLevel1,initLevel2,initLevel7]
 
 initGuide : List Level
 initGuide = [guideLevel1,guideLevel2,guideLevel3]

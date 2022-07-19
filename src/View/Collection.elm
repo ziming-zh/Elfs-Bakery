@@ -37,10 +37,10 @@ pageSingleRank cleared k =
 pageHat : Model -> Html Msg
 pageHat model =
     let
-        index = [1,2,3,4,5,6,7]
+        opa = model.move_timer/1000
     in
     div 
-        [
+        [ style "opacity" (String.fromFloat (Basics.min 1 opa))
         ]
         (List.map (pageSingleRank model.level_cleared) (List.range 0 7))
 
@@ -80,8 +80,9 @@ renderCollectionPage model =
             , HtmlAttr.style "left" (String.fromFloat 50 ++ "px")
             , HtmlAttr.style "top" (String.fromFloat 15 ++ "px")
             ][]
-        , renderButtonColor "#FFC000" "Medal" (LoadLevel 1) (0,0) 1 (200,50) "#FFFFFF"
-        , renderButtonColor "#FFC000" "Hat" (LoadLevel 2) (0,50) 1 (200,50) "#FFFFFF"
+        , renderButtonColor "#FFC000" "Medal" (LoadLevel 1) (1000,0) 1 (200,50) "#FFFFFF"
+        , renderButtonColor "#FFC000" "Hat" (LoadLevel 2) (1000,50) 1 (200,50) "#FFFFFF"
+        , renderButtonColor "#4472C4" "<" (Load HomePage) (-60,0) 1 (50,50) "#FFFFFF"
         , (case model.level_index of
             0 -> pageNone
             1 -> pageMedal model
