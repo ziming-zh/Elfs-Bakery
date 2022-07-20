@@ -84,7 +84,7 @@ type SpecialType
     = Chocolate
     | Vanilla
 type alias Stype =
-    { content : SpecialType, state : Sstate, pos : Pos }
+    { content : SpecialType, state : Sstate, pos : Pos,target: Int }
 type Sstate
     = Moving
     | Still Int

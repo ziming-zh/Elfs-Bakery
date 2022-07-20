@@ -108,14 +108,74 @@ checkEnd model =
         k = model.level_index
         list = model.level_cleared
     in
-        if model.mcolor_seq==model.color_seq then
+        if model.mcolor_seq==model.color_seq &&checkEqualStypes model then
             {model|win = Model.Win,level_cleared = List.concat[List.take (k-1) list,[True],List.drop k list]}
-        else if compareList model.mcolor_seq model.color_seq then
+        else if compareList model.mcolor_seq model.color_seq && checkGameStypes model then
             model
         else
             {model|win= Model.Lose}
 
-        
+checkGameStype : Int -> Message.Stype -> Bool
+checkGameStype now stype =
+    case stype.state of
+        Message.SExit i ->
+            if i /= stype.target then
+                False
+            else 
+                True
+        _ ->
+            if stype.target>=now then
+                True
+            else
+                False
+checkGameStypes : Model -> Bool
+checkGameStypes model =
+    let
+        now = List.length model.mcolor_seq
+        stypes=model.stypes
+    in
+        List.all isTrue (List.map (checkGameStype now) stypes)
+isTrue : Bool -> Bool
+isTrue bool =
+    bool
+checkEqualStypes : Model -> Bool
+checkEqualStypes model =
+    let
+        now = List.length model.color_seq
+        stypes=model.stypes
+    in
+        List.all isTrue (List.map checkEqualStype  stypes)
+checkEqualStype : Message.Stype -> Bool
+checkEqualStype stype =
+    case stype.state of
+        Message.SExit i ->
+            if stype.target == i then
+                True
+            else 
+                False
+        _ -> False
+
+
+checkSpecialExit : Model -> Message.Stype -> Message.Stype 
+checkSpecialExit model stype =
+    let
+        exit=model.exit.pos
+        now =List.length model.mcolor_seq
+        nstype=
+            if exit == stype.pos then
+                {stype|state=Message.SExit (now-1)}
+            else
+                stype
+        in 
+            nstype
+checkSpecialExits : Model -> Model
+checkSpecialExits model = 
+    let 
+        stypes=model.stypes
+    
+        nstypes=List.map (checkSpecialExit model) model.stypes
+    in 
+        {model|stypes=nstypes}
 compareList : List a -> List a -> Bool
 compareList a b =
     let 
@@ -200,8 +260,8 @@ timedForward elapsed model =
                         (nmodel,npaints) = movePaints (newModel, newModel.paints) (newModel.updatedGrids |> bfs model.exit)
                        
                         
-                        newnewmodel={nmodel|paints=npaints,stypes=List.map (Grid.moveSpecialType  ngrids) nstypes}
-
+                        newnewmodel={nmodel|paints=npaints,stypes=List.map (Grid.moveSpecialType  ngrids) nstypes}|>checkSpecialExits
+                        
                     in
                         {newnewmodel|updatedGrids = updateGridsfromModel newnewmodel newnewmodel.grids |>bfs model.exit  }
                 

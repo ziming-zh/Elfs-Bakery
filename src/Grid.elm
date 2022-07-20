@@ -164,7 +164,10 @@ updateSpecialType grids stype  =
         Just grid ->
             case grid.gridtype of
                 Paint a ->
-                    { stype | state = Moving }
+                    case stype.state of 
+                        SExit i -> stype
+                        _ ->    
+                            { stype | state = Moving }
 
                 _ ->
                     stype
