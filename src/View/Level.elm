@@ -76,7 +76,7 @@ renderLevelPage model =
        -- , renderButton "Seting" Message.None 976 655 "#FFFFFF"
         ]
         , renderCake model.color_seq 1439 390 1.2 (List.length model.color_seq) Recipe
-        , renderCake model.mcolor_seq 1439 750 2.4 (List.length model.color_seq) Progress
+        , renderCake model.color_seq 1439 750 2.4 (List.length model.color_seq) Progress
         , List.map (renderRecipeDeco (List.length model.color_seq)) model.stypes
         , List.concat (List.map (renderProgressDeco (List.length model.color_seq)) model.stypes)
         , [ toHtml (58*scale ,44*scale)
