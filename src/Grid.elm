@@ -779,7 +779,7 @@ moveSpecialType grids stype =
         case stype.state of
             Moving -> 
                 {stype|pos={x=x+dx,y=y+dy}}
-            Still -> 
+            _ -> 
                 stype
 movePaint : Grids -> Int -> Array Paint -> Array Paint
 movePaint grids i paints =

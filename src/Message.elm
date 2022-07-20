@@ -87,4 +87,5 @@ type alias Stype =
     { content : SpecialType, state : Sstate, pos : Pos }
 type Sstate
     = Moving
-    | Still
+    | Still Int
+    | SExit Int

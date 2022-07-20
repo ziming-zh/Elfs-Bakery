@@ -191,7 +191,7 @@ initLevel1 =
     ]
     ,id = 1
     ,exit = Pos 5 7
-    ,stypes = []
+    ,stypes = [{pos ={x=2,y=0},state=SExit 1,content=Vanilla}]
     ,colorseq = [Color.lightYellow, Color.red,Color.red]
     ,player = init (Pos 5 5) Message.Up
     }
@@ -362,5 +362,5 @@ initLevel7 =
     ,exit = Pos 3 12
     ,colorseq = [Color.lightYellow, Color.purple,Color.green,Color.lightYellow, Color.purple,Color.green,Color.lightYellow, Color.purple,Color.green]
     ,player = init (Pos 0 11) Message.Down
-    ,stypes=[{pos ={x=7,y=0},state=Still,content=Chocolate}]
+    ,stypes=[{pos ={x=7,y=0},state=Still 2,content=Chocolate}]
     }

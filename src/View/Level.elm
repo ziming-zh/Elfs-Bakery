@@ -18,6 +18,7 @@ import Array
 import List
 import View.Cake exposing (renderCake,Caketype(..))
 import View.Grid exposing (renderStypes)
+import View.Cake exposing (renderDeco)
 renderLevel : Wall -> List Valve -> Grids -> Player -> List Renderable
 renderLevel wall valves grids player =
     (renderGrids grids) ++
@@ -75,7 +76,8 @@ renderLevelPage model =
        -- , renderButton "Seting" Message.None 976 655 "#FFFFFF"
         ]
         , renderCake model.color_seq 1439 390 1.2 (List.length model.color_seq) Recipe
-        , renderCake model.mcolor_seq 1439 750 2.4 (List.length model.color_seq) Progress
+        , renderCake model.color_seq 1439 750 2.4 (List.length model.color_seq) Progress
+        , List.concat (List.map (renderDeco 1.2 1439 390 (List.length model.color_seq)) model.stypes)
         , [ toHtml (58*scale ,44*scale)
             [ HtmlAttr.style "transform" ("scale(" ++ String.fromFloat (2.6*7/(toFloat scale)) ++ ")")
             , HtmlAttr.style "position" "absolute"

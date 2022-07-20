@@ -48,24 +48,28 @@ drawStype : Grid -> List (Html msg)
 drawStype grid =
     case grid.stype of
         Just a ->
-            let
-                pic =
-                    case a.content of
-                        Chocolate ->
-                            HtmlAttr.src "./assets/chocolate_grid.png"
+            case a.state of
+                Message.SExit i -> []
+                _ ->
 
-                        Vanilla ->
-                            HtmlAttr.src "./assets/vanilla_grid.png"
-            in
-            [ Html.img
-                [ pic
-                , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
-                , HtmlAttr.style "position" "absolute"
-                , HtmlAttr.style "left" (String.fromFloat ((toFloat grid.pos.y) * setLength) ++ "px")
-                , HtmlAttr.style "top" (String.fromFloat ((toFloat grid.pos.x) * setLength) ++ "px")
-                ]
-                []
-            ]
+                    let
+                        pic =
+                            case a.content of
+                                Chocolate ->
+                                    HtmlAttr.src "./assets/chocolate_grid.png"
+
+                                Vanilla ->
+                                    HtmlAttr.src "./assets/vanilla_grid.png"
+                    in
+                    [ Html.img
+                        [ pic
+                        , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
+                        , HtmlAttr.style "position" "absolute"
+                        , HtmlAttr.style "left" (String.fromFloat ((toFloat grid.pos.y) * setLength) ++ "px")
+                        , HtmlAttr.style "top" (String.fromFloat ((toFloat grid.pos.x) * setLength) ++ "px")
+                        ]
+                        []
+                    ]
 
         Nothing ->
             []
