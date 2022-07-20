@@ -65,9 +65,11 @@ renderCandle now total x scale caketype =
                     else if total == 4 then
                         304
 
-                    else if total == 4 then
+                    else if total == 5 then
                         302
 
+                    else if total ==6 then
+                        312
                     else
                         302
 
@@ -84,9 +86,10 @@ renderCandle now total x scale caketype =
                     else if total == 4 then
                         567
 
-                    else if total == 4 then
+                    else if total == 5 then
                         562
-
+                    else if total ==6 then
+                        575
                     else
                         562
     in
