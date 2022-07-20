@@ -1,4 +1,4 @@
-module View.Cake exposing (Caketype(..), renderCake,renderDeco)
+module View.Cake exposing (Caketype(..), renderCake,renderRecipeDeco,renderProgressDeco)
 
 import Color exposing (..)
 import Html exposing (Html)
@@ -24,16 +24,15 @@ selectDeco stype =
         Vanilla ->
             HtmlAttr.src "./assets/vanilla.png"
 
-renderDeco : Float -> Int -> Int ->Int -> Stype -> List (Html msg)
-renderDeco scale x y total stype =
+renderProgressDeco : Int -> Stype -> List (Html msg)
+renderProgressDeco total stype =
         case stype.state of
-            Message.Still i ->
-                [renderith total 1487 424 2.8 Cream i  (selectDeco stype) ]
             Message.SExit i -> 
                 [renderith total 1487 785 5.6 Cream i  (selectDeco stype)]
-            _ ->
-                []
-
+            _ -> []
+renderRecipeDeco: Int -> Stype ->Html msg
+renderRecipeDeco total stype =
+    renderith total 1487 424 2.8 Cream stype.target  (selectDeco stype)
 renderCake : List Color -> Int -> Int -> Float -> Int -> Caketype -> List (Html msg)
 renderCake colors x y scale total caketype =
     let

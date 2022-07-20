@@ -163,7 +163,10 @@ checkSpecialExit model stype =
         now =List.length model.mcolor_seq
         nstype=
             if exit == stype.pos then
-                {stype|state=Message.SExit (now-1)}
+                case stype.state of 
+                    Message.Moving ->
+                        {stype|state=Message.SExit (now-1)}
+                    _ -> stype
             else
                 stype
         in 
