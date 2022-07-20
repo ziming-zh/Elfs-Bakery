@@ -31,7 +31,7 @@ type alias Model =
         , valves_move : Int
         , color_seq : List Color.Color
         , mcolor_seq : List Color.Color
-        , history : List (List Paint,List Valve,Player)
+        , history : List History
         , currentPage : Page
         --, lastMoveDirection : MoveDirection  --merge the direction of the player into Type Player
         --  , stringlevel : StringLevel
@@ -42,7 +42,13 @@ type GaState
     = Win
     | Lose
     | Playing
-    
+type alias History =
+    {
+        paints: List Paint,
+        valves: List Valve,
+        player: Player,
+        stypes: List Stype
+    }
 
 type alias Flags =
     { levels : Maybe String }
@@ -267,7 +273,7 @@ initModel =
       , move_timer = 0.0
       , level_index = 0
       , valves_move = 0
-      , history = [(paints,valves,initplayer)]
+      , history = [{paints=paints,valves=valves,player=initplayer,stypes=stypes}]
       , currentPage = HomePage
       , windowsize = ( 800, 800 )
       , randomindex = 0

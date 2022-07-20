@@ -82,9 +82,10 @@ update msg model =
         Undo ->
                 case List.head model.history of
                     Nothing -> (model,Cmd.none)
-                    Just (paints,valves,player) -> 
+                    Just h -> 
                         let
-                            nmodel = {model|valves=valves,player={player|state=Player.Stopped},paints=paints}
+                            hplayer=h.player
+                            nmodel = {model|valves=h.valves,player={hplayer|state=Player.Stopped},paints=h.paints,stypes=h.stypes}
                         in
                         ({nmodel|updatedGrids=(updateGridsfromModel nmodel model.grids)|> bfs model.exit,history =List.drop 1 model.history},Cmd.none)
 
@@ -204,7 +205,7 @@ move model =
             if valves == model.valves then
                 model
             else
-                {model|history =(model.paints,model.valves,model.player) ::model.history}
+                {model|history ={paints=model.paints,valves=model.valves,player=model.player,stypes=model.stypes} ::model.history}
         newmodel={ n_modelhis | player = { player | state = Stopped }, valves = valves }
         newgrids=loadValves newmodel.grids newmodel.valves
         nmodel={newmodel|updatedGrids=newgrids}
