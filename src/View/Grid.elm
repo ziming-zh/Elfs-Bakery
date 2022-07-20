@@ -44,12 +44,13 @@ drawGrid mx grid =
     rectRender posx posy setLength setLength color
 
 
-drawStype : Grid -> List (Html msg)
-drawStype grid =
+drawStype : Int -> Int -> Grid -> List (Html msg)
+drawStype level_index scale grid =
+
     case grid.stype of
         Just a ->
             case a.state of
-                Message.SExit i -> []
+                Message.SExit _ -> []
                 _ ->
 
                     let
@@ -60,20 +61,26 @@ drawStype grid =
 
                                 Vanilla ->
                                     HtmlAttr.src "./assets/vanilla_grid.png"
+                        (initx,inity) =
+                            if level_index==1 then
+                                (40,167)
+                            else 
+                                (81,126)
+
                     in
                     [ Html.img
                         [ pic
-                        , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
+                        , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat (22.0/(toFloat scale*2.1)) ++ ")")
                         , HtmlAttr.style "position" "absolute"
-                        , HtmlAttr.style "left" (String.fromFloat ((toFloat grid.pos.y) * setLength) ++ "px")
-                        , HtmlAttr.style "top" (String.fromFloat ((toFloat grid.pos.x) * setLength) ++ "px")
+                        , HtmlAttr.style "left" (String.fromFloat (initx+(toFloat grid.pos.y) * setLength/(toFloat scale)/3.5*64) ++ "px")
+                        , HtmlAttr.style "top" (String.fromFloat (inity+(toFloat grid.pos.x) * setLength/(toFloat scale)/3.5*64) ++ "px")
                         ]
                         []
                     ]
 
         Nothing ->
             []
-renderStypes : Grids -> List (Html msg)
-renderStypes grids =
-    List.concat (List.map (\y -> Array.toList (Array.map (\x -> drawStype x) y)) (Array.toList grids)
+renderStypes :Int -> Int -> Grids -> List (Html msg)
+renderStypes scale level_index grids =
+    List.concat (List.map (\y -> Array.toList (Array.map (\x -> drawStype level_index scale x) y)) (Array.toList grids)
         |> List.foldl List.append [])
