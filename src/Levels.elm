@@ -23,7 +23,7 @@ getInitialLevels : List Level
 getInitialLevels = [initLevel1,initLevel2,initLevel7]
 
 initGuide : List Level
-initGuide = [guideLevel1,guideLevel2,guideLevel3]
+initGuide = [guideLevel1,guideLevel2,guideLevel3,guideLevel4]
 
 mapInt2Bool : List (List Int) -> List (List Bool)
 mapInt2Bool intlist = 
@@ -31,6 +31,45 @@ mapInt2Bool intlist =
         i2b = (\a -> if a == 1 then True else False)
     in
         List.map (List.map i2b) intlist 
+
+guideLevel4 : Level
+guideLevel4 =
+    { width = 7
+    , height = 5
+    , wall = 
+    {
+        row =  mapInt2Bool
+        [[0,0,0,1,1,1,1]
+        ,[0,0,0,0,1,1,0]
+        ,[0,0,0,0,0,0,0]
+        ,[0,0,0,0,0,0,0]
+        ,[1,1,1,0,1,1,0]
+        ,[1,1,1,1,1,1,1]]
+        , col = mapInt2Bool
+        [[0,0,0,0,1]
+        ,[0,0,0,0,0]
+        ,[0,0,0,0,0]
+        ,[1,1,1,1,0]
+        ,[0,1,1,1,0]
+        ,[0,0,0,0,0]
+        ,[0,1,1,1,0]
+        ,[1,1,1,1,1]]
+    }
+    ,valves = [
+        {state = Left, pos = {y=4,x=1}}
+       ,{state = Down, pos = {y=4,x=1}}
+       ,{state = Right, pos = {y=6,x=2}}
+       ,{state = Down, pos = {x=4,y=3}}
+    ]
+    ,paints = [
+        {pos = {x=4,y=0},color=Color.red}
+    ]
+    ,id = 2
+    ,exit = Pos 0 4
+    ,colorseq = [Color.red]
+    ,player = init (Pos 4 3) Message.Up
+    ,stypes = [{pos ={x=1,y=3},state=Still 1,content=Chocolate,target=0}]
+    }  
 
 guideLevel3 : Level
 guideLevel3 = 
