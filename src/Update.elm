@@ -93,6 +93,11 @@ update msg model =
         LoadLevel k ->
             case model.currentPage of
                 CollectionPage -> ( { model | level_index = k , move_timer = 0 } , Cmd.none )
+                GuidePage -> 
+                    let
+                        (nmodel,nmsg) = getModel (round ((toFloat (model.level_index+1))/2)) model 
+                    in  
+                        ( { nmodel | currentPage = GuidePage , level_index = model.level_index } , nmsg )
                 _ ->
                     getModel k model
 
