@@ -32,9 +32,9 @@ renderChoicePage model =
             [ HtmlAttr.src "./assets/gamepage/level.png"
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
             , HtmlAttr.style "position" "absolute"
-            , HtmlAttr.style "left" (String.fromFloat 90 ++ "px")
-            , HtmlAttr.style "top" (String.fromFloat 149 ++ "px")
-            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.6 ++ ")")
+            , HtmlAttr.style "left" (String.fromFloat 0 ++ "px")
+            , HtmlAttr.style "top" (String.fromFloat 87 ++ "px")
+            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.328 ++ ")")
             ][]
         , renderButtonColor "#F4B183" "1" (LoadLevel 1) (23,395) 1 (65,65) "#FFFFFF"
         , renderButtonColor "#F4B183" "2" (LoadLevel 2) (184,395) 1 (65,65) "#FFFFFF"

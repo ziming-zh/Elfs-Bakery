@@ -99,7 +99,7 @@ renderCollectionPage model =
         ]
         [ Html.img
             [ HtmlAttr.src "./assets/gamepage/collection.png"
-            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 0.94 ++ ")")
+            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.33 ++ ")")
             , HtmlAttr.style "position" "absolute"
             , HtmlAttr.style "left" (String.fromFloat 50 ++ "px")
             , HtmlAttr.style "top" (String.fromFloat 15 ++ "px")
