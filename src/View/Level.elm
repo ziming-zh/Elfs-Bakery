@@ -86,7 +86,6 @@ renderLevelPage model =
             , HtmlAttr.style "top" (String.fromFloat (85*16/7*16/(toFloat scale)) ++ "px")]
             (renderLevel model.wall model.valves (model.updatedGrids) model.player)
         ]
-        , List.map (\xx -> text ((String.fromInt xx)++" ")) dis
         , [renderButtonColor "#4472C4" "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"]
         , View.Grid.renderStypes scale model.level_index model.updatedGrids]
         )

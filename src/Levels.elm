@@ -213,10 +213,10 @@ initLevel1 =
         ,{state = Down, pos = {y=1,x=3}}
         ,{state = Left, pos = {y=1,x=3}}
         ,{state = Down, pos = {y=7,x=0}}
+        ,{state = Down, pos = {y=5,x=0}}
     ]
     ,paints = [
-         {pos = {x=2,y=7},color=Color.lightYellow}
-        ,{pos = {x=2,y=2},color=Color.lightYellow}
+         {pos = {x=2,y=2},color=Color.lightYellow}
         ,{pos = {x=3,y=0},color=Color.blue}
         ,{pos = {x=4,y=0},color=Color.blue}
         ,{pos = {x=5,y=0},color=Color.blue}
@@ -230,7 +230,7 @@ initLevel1 =
     ]
     ,id = 1
     ,exit = Pos 5 7
-    ,stypes = [{pos ={x=2,y=5},state=Still 1,content=Vanilla,target=1}]
+    ,stypes = [{pos ={x=2,y=4},state=Still 1,content=Vanilla,target=1}]
     ,colorseq = [Color.lightYellow, Color.red,Color.red]
     ,player = init (Pos 5 5) Message.Up
     }
