@@ -3,7 +3,7 @@ import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html, div)
-import View.Basic exposing(renderButtonColor)
+import View.Basic exposing(renderButtonColor,renderButtonRotate)
 import Svg.Attributes exposing (mode)
 
 check : List Bool -> Int -> Bool
@@ -88,29 +88,28 @@ renderCollectionPage model =
             else
                 Basics.min 1 (w / 1200)
     in
-    div
-        [ HtmlAttr.style "width" (String.fromFloat 1200 ++ "px")
-        , HtmlAttr.style "height"  (String.fromFloat 800 ++ "px")
-        , HtmlAttr.style "left" (String.fromFloat ((w - 1200 * r) / 2) ++ "px")
-        , HtmlAttr.style "top" (String.fromFloat ((h - 800 * r) / 2) ++ "px")
-        , HtmlAttr.style "position" "absolute"
-        , HtmlAttr.style "transform-origin" "0 0"
-        , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat r ++ ")")
-        ]
-        [ Html.img
-            [ HtmlAttr.src "./assets/gamepage/collection.png"
-            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.33 ++ ")")
+        div
+            [ HtmlAttr.style "width" (String.fromFloat 1200 ++ "px")
+            , HtmlAttr.style "height"  (String.fromFloat 800 ++ "px")
+            , HtmlAttr.style "left" (String.fromFloat ((w - 1200 * r) / 2) ++ "px")
+            , HtmlAttr.style "top" (String.fromFloat ((h - 800 * r) / 2) ++ "px")
             , HtmlAttr.style "position" "absolute"
-            , HtmlAttr.style "left" (String.fromFloat 50 ++ "px")
-            , HtmlAttr.style "top" (String.fromFloat 15 ++ "px")
-            ][]
-        , renderButtonColor "#FFC000" "Medal" (LoadLevel 1) (1000,0) 1 (200,50) "#FFFFFF"
-        , renderButtonColor "#FFC000" "Hat" (LoadLevel 2) (1000,50) 1 (200,50) "#FFFFFF"
-        , renderButtonColor "#4472C4" "<" (Load HomePage) (-60,0) 1 (50,50) "#FFFFFF"
-        , (case model.level_index of
-            0 -> pageNone
-            1 -> pageRank model
-            2 -> pageHat model
-            _ -> pageNone
-          )
-        ]
+            , HtmlAttr.style "transform-origin" "0 0"
+            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat r ++ ")")
+            ]
+            [ Html.img
+                [ HtmlAttr.src "./assets/gamepage/collection.png"
+                , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.2 ++ ")")
+                , HtmlAttr.style "position" "absolute"
+                , HtmlAttr.style "left" (String.fromFloat 150 ++ "px")
+                , HtmlAttr.style "top" (String.fromFloat 70 ++ "px")
+                ][]
+            ,renderButtonRotate "#FFC000" "Medal" (LoadLevel 1) (1017,373) 1 (200,40) "#FFFFFF"
+            , renderButtonRotate "#FFC000" "Hat" (LoadLevel 2) (1017,620) 1 (200,40) "#FFFFFF"
+            , renderButtonColor "#4472C4" "<" (Load HomePage) (-60,0) 1 (50,50) "#FFFFFF"
+            , (case model.level_index of
+                0 -> pageNone
+                1 -> pageRank model
+                2 -> pageHat model
+                _ -> pageNone
+            )]

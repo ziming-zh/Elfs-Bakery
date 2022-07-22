@@ -95,6 +95,27 @@ renderButtonColor colorback txt msg (x,y) opa (w,h) color =
         ]
         [ text txt ]
 
+renderButtonRotate : String -> String -> Msg -> (Int,Int) -> Float -> (Int,Int) -> String -> Html Msg
+renderButtonRotate colorback txt msg (x,y) opa (w,h) color =
+    button
+      [   style "background" colorback
+        , style "border" "0"
+        , style "color" color
+        , style "font-family" "Helvetica, Arial, sans-serif"
+        , style "font-size" "18px"
+        , style "line-height" "45px"
+        , style "width" (String.fromInt w ++ "px")
+        , style "height" (String.fromInt h ++ "px")
+        , style "left" (String.fromInt x ++ "px")
+        , style "top" (String.fromInt y ++ "px")
+        , style "position" "absolute"
+        , style "opacity" (String.fromFloat opa)
+        , style "transform-origin" "0 0"
+        , style "transform" "rotate(270deg)"
+        , onClick msg
+        ]
+        [ text txt ]
+
 renderImg : String -> (Float,Float) -> Float -> Html Msg
 renderImg link (x,y) opa = 
     Html.img
