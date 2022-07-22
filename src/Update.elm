@@ -240,7 +240,20 @@ movePaintsRecur (model,paints) grids  i =
             let
                 exitpaint=Tuple.first (List.partition (\x -> (posequal x.pos model.exit.pos)) paints)
                 normalpaint = Tuple.second (List.partition (\x -> (posequal x.pos model.exit.pos)) paints)
-                mcolorseq = model.mcolor_seq ++ List.map (\x -> x.color) exitpaint
+                lastpaint = List.head ( List.drop ((List.length model.mcolor_seq)-1) model.mcolor_seq )
+                thispaint = 
+                    case List.head exitpaint of
+                        Just a -> a
+                        Nothing ->  { pos = Pos 0 0 , color = Color.red }
+                mcolorseq = 
+                    case lastpaint of
+                        Just a ->
+                            if a == thispaint.color then
+                                model.mcolor_seq
+                            else 
+                                model.mcolor_seq ++ List.map (\x -> x.color) exitpaint
+                        Nothing -> 
+                            model.mcolor_seq ++ List.map (\x -> x.color) exitpaint
             in
                 ({model|mcolor_seq = mcolorseq}, List.sortBy (\x -> getDistance x.pos grids) normalpaint)
         
@@ -267,12 +280,15 @@ timedForward elapsed model =
                         ngrids=(newModel.updatedGrids |> bfs model.exit)
                         nstypes=List.map (Grid.updateSpecialType ngrids) model.stypes
                         (nmodel,npaints) = movePaints (newModel, newModel.paints) (newModel.updatedGrids |> bfs model.exit)
-                       
-                        
-                        newnewmodel={nmodel|paints=npaints,stypes=List.map (Grid.moveSpecialType  ngrids) nstypes}|>checkSpecialExits
+                        newnewmodel={nmodel|paints=npaints,stypes = List.map (Grid.moveSpecialType  ngrids) nstypes}
+                        finalmodel = 
+                            if nmodel.mcolor_seq /= newModel.mcolor_seq then
+                                checkSpecialExits newnewmodel
+                            else 
+                                { newnewmodel | stypes = List.filter ( \x -> x.pos /= model.exit.pos ) newnewmodel.stypes  }
                         
                     in
-                        {newnewmodel|updatedGrids = updateGridsfromModel newnewmodel newnewmodel.grids |>bfs model.exit  }
+                        {finalmodel|updatedGrids = updateGridsfromModel finalmodel finalmodel.grids |>bfs model.exit  }
                 
         in
         { movedPaint | move_timer = 0 }
