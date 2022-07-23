@@ -80,7 +80,7 @@ renderLevelPage model =
             (renderLevel model.wall model.valves (model.updatedGrids) model.player)
         ]
         , [renderButtonColor "#4472C4" "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"]
-        , View.Grid.renderStypes scale model.level_index model.updatedGrids]
+        , View.Grid.renderStypes model.mapSize model.updatedGrids]
         )
         
 
