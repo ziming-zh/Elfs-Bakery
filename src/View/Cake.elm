@@ -9,6 +9,7 @@ import Model exposing (Model)
 type Caketype
     = Progress
     | Recipe
+    | Task
 
 
 
@@ -50,48 +51,51 @@ renderCake colors x y scale total caketype =
 renderCandle : Int -> Int -> Int -> Float -> Caketype -> List (Html msg)
 renderCandle now total x scale caketype =
     let
-        y =
+        yo =
+            if scale == 1.2 then
+                        if total == 1 then
+                            327
+
+                        else if total == 2 then
+                            307
+
+                        else if total == 3 then
+                            307
+
+                        else if total == 4 then
+                            304
+
+                        else if total == 5 then
+                            302
+
+                        else if total ==6 then
+                            312
+                        else
+                            302
+            else
+                        if total == 1 then
+                            601
+
+                        else if total == 2 then
+                            570
+
+                        else if total == 3 then
+                            577
+
+                        else if total == 4 then
+                            567
+
+                        else if total == 5 then
+                            562
+                        else if total ==6 then
+                            575
+                        else
+                            562
+        y = 
             case caketype of
-                Recipe ->
-                    if total == 1 then
-                        327
-
-                    else if total == 2 then
-                        307
-
-                    else if total == 3 then
-                        307
-
-                    else if total == 4 then
-                        304
-
-                    else if total == 5 then
-                        302
-
-                    else if total ==6 then
-                        312
-                    else
-                        302
-
-                Progress ->
-                    if total == 1 then
-                        601
-
-                    else if total == 2 then
-                        570
-
-                    else if total == 3 then
-                        577
-
-                    else if total == 4 then
-                        567
-
-                    else if total == 5 then
-                        562
-                    else if total ==6 then
-                        575
-                    else
-                        562
+                Recipe -> yo
+                Progress -> yo
+                Task -> (yo-110)
     in
     if now == total then
         [ Html.img

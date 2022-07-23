@@ -59,6 +59,7 @@ type Msg
     | RandomLevel Int
     | Retry
     | None
+    | ChoiceInfo Int
 
 
 key : Int -> Msg

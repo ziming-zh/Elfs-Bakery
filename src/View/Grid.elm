@@ -62,18 +62,18 @@ drawStype level_index scale grid =
                                 Vanilla ->
                                     HtmlAttr.src "./assets/vanilla_grid.png"
                         (initx,inity) =
-                            if level_index==1 then
-                                (40,167)
+                            if level_index==2 then
+                                (140,180)
                             else 
-                                (81,126)
+                                (0,0)
 
                     in
                     [ Html.img
                         [ pic
                         , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat (22.0/(toFloat scale*2.1)) ++ ")")
                         , HtmlAttr.style "position" "absolute"
-                        , HtmlAttr.style "left" (String.fromFloat (initx+(toFloat grid.pos.y) * setLength/(toFloat scale)/3.5*64) ++ "px")
-                        , HtmlAttr.style "top" (String.fromFloat (inity+(toFloat grid.pos.x) * setLength/(toFloat scale)/3.5*64) ++ "px")
+                        , HtmlAttr.style "left" (String.fromFloat (initx+(toFloat grid.pos.y) * setLength/(toFloat scale)/3.1*64) ++ "px")
+                        , HtmlAttr.style "top" (String.fromFloat (inity+(toFloat grid.pos.x) * setLength/(toFloat scale)/3.1*64) ++ "px")
                         ]
                         []
                     ]
