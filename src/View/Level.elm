@@ -81,6 +81,7 @@ renderLevelPage model =
         ]
         , [renderButtonColor "#4472C4" "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"]
         , View.Grid.renderStypes model.mapSize model.updatedGrids]
+       -- , RENDER 
         )
         
 

@@ -20,7 +20,7 @@ type alias Level =
     }
 
 getInitialLevels : List Level
-getInitialLevels = [initLevel1,initLevel2,initLevel3,initLevel7]
+getInitialLevels = [initLevel1,initLevel2,initLevel5,initLevel6,initLevel7]
 
 initGuide : List Level
 initGuide = [guideLevel1,guideLevel2,guideLevel3,guideLevel4]
@@ -175,8 +175,8 @@ guideLevel1 =
     }
 
 
-initLevel2 : Level
-initLevel2 = 
+initLevel5 : Level
+initLevel5 = 
     { width = 8
     , height = 6
     , wall = 
@@ -228,17 +228,17 @@ initLevel2 =
         ,{pos = {x=0,y=6},color=Color.red}
         ,{pos = {x=4,y=6},color=Color.red}
     ]
-    ,id = 2
+    ,id = 5
     ,exit = Pos 5 7
     ,stypes = [{pos ={x=2,y=4},state=Still 1,content=Vanilla,target=1}]
-    ,colorseq = [Color.lightYellow, Color.red,Color.red]
+    ,colorseq = [Color.purple, Color.orange,Color.red]
 
     ,player = init (Pos 5 5) Message.Up
     }
 
 
-initLevel3 : Level
-initLevel3 = 
+initLevel6 : Level
+initLevel6 = 
     { width = 8
     , height = 6
     , wall = 
@@ -285,7 +285,7 @@ initLevel3 =
         ,{pos = {x=0,y=6},color=Color.red}
         ,{pos = {x=4,y=6},color=Color.red}
     ]
-    ,id = 3
+    ,id = 6
     ,exit = Pos 5 7
     ,colorseq = [Color.lightYellow, Color.red,Color.red]
     ,player = init (Pos 5 5) Message.Up
@@ -328,17 +328,71 @@ initLevel1 =
         ,{state = Right, pos = {x=4,y=3}}
     ]
     ,paints = [
-         {pos = {x=0,y=3},color=Color.lightYellow}
-        ,{pos = {x=1,y=3},color=Color.lightYellow}
+         {pos = {x=0,y=3},color=Color.blue}
+        ,{pos = {x=1,y=3},color=Color.blue}
         ,{pos = {x=3,y=0},color=Color.red}
         ,{pos = {x=3,y=1},color=Color.red}
-        ,{pos = {x=6,y=3},color=Color.blue}
-        ,{pos = {x=5,y=3},color=Color.blue}
+        ,{pos = {x=6,y=3},color=Color.lightYellow}
+        ,{pos = {x=5,y=3},color=Color.lightYellow}
     ]
     ,id = 1
     ,exit = Pos 3 6
-    ,colorseq = [Color.red]
+    ,colorseq = [Color.green,Color.orange]
     ,player = init (Pos 3 3) Message.Down
+    ,stypes=[]
+    }
+
+initLevel2 : Level
+initLevel2 = 
+    { width = 9
+    , height = 9
+    , wall = 
+    {
+        row =  mapInt2Bool
+        [[0,0,0,0,1,0,0,0,0]
+        ,[0,0,0,0,0,0,0,0,0]
+        ,[0,0,0,0,0,0,0,0,0]
+        ,[0,0,0,1,0,1,0,0,0]
+        ,[1,1,1,0,0,0,1,1,1]
+        ,[1,1,1,0,0,0,1,1,1]
+        ,[0,0,0,1,0,1,0,0,0]
+        ,[0,0,0,0,0,0,0,0,0]
+        ,[0,0,0,0,0,0,0,0,0]
+        ,[0,0,0,0,1,0,0,0,0]]
+        , col = mapInt2Bool
+        [[0,0,0,0,1,0,0,0,0]
+        ,[0,0,0,0,0,0,0,0,0]
+        ,[0,0,0,0,0,0,0,0,0]
+        ,[0,0,0,1,0,1,0,0,0]
+        ,[1,1,1,0,0,0,1,1,1]
+        ,[1,1,1,0,0,0,1,1,1]
+        ,[0,0,0,1,0,1,0,0,0]
+        ,[0,0,0,0,0,0,0,0,0]
+        ,[0,0,0,0,0,0,0,0,0]
+        ,[0,0,0,0,1,0,0,0,0]]
+    }
+    ,valves = [
+         {state = Left , pos = {x=3,y=5}}
+        ,{state = Down , pos = {x=3,y=5}}
+        ,{state = Right, pos = {x=4,y=3}}
+        ,{state = Down , pos = {x=4,y=3}}
+        ,{state = Up   , pos = {x=6,y=4}}
+        ,{state = Right, pos = {x=6,y=4}}
+        ,{state = Up   , pos = {x=5,y=6}}
+        ,{state = Left , pos = {x=5,y=6}}
+    ]
+    ,paints = [
+         {pos = {x=1,y=4},color=Color.blue}
+        ,{pos = {x=2,y=4},color=Color.blue}
+        ,{pos = {x=4,y=1},color=Color.red}
+        ,{pos = {x=4,y=2},color=Color.red}
+        ,{pos = {x=6,y=4},color=Color.lightYellow}
+        ,{pos = {x=7,y=4},color=Color.lightYellow}
+    ]
+    ,id = 2
+    ,exit = Pos 4 8
+    ,colorseq = [Color.purple,Color.green,Color.orange]
+    ,player = init (Pos 4 4) Message.Down
     ,stypes=[]
     }
 
