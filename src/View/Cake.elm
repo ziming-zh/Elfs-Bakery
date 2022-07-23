@@ -1,4 +1,4 @@
-module View.Cake exposing (Caketype(..), renderCake,renderRecipeDeco,renderProgressDeco)
+module View.Cake exposing (Caketype(..), renderCake,renderRecipeDeco,renderProgressDeco,renderTaskDeco,renderDeco)
 
 import Color exposing (..)
 import Html exposing (Html)
@@ -9,6 +9,8 @@ import Model exposing (Model)
 type Caketype
     = Progress
     | Recipe
+    | Task
+    | Collection
 
 
 
@@ -28,11 +30,17 @@ renderProgressDeco : Int -> Stype -> List (Html msg)
 renderProgressDeco total stype =
         case stype.state of
             Message.SExit i -> 
-                [renderith total 1487 785 5.6 Cream i  (selectDeco stype)]
+                [renderith total 1486 777 5.6 Cream i  (selectDeco stype)]
             _ -> []
 renderRecipeDeco: Int -> Stype ->Html msg
 renderRecipeDeco total stype =
-    renderith total 1487 424 2.8 Cream stype.target  (selectDeco stype)
+    renderith total 1486 420 2.8 Cream stype.target  (selectDeco stype)
+renderTaskDeco : Int -> Stype ->Html msg
+renderTaskDeco total stype =
+    renderith total 999 672 5.6 Cream stype.target  (selectDeco stype)
+renderDeco : Int -> Int ->Int ->Stype ->Html msg
+renderDeco total x y stype =
+    renderith total x y 2.8 Cream stype.target  (selectDeco stype)
 renderCake : List Color -> Int -> Int -> Float -> Int -> Caketype -> List (Html msg)
 renderCake colors x y scale total caketype =
     let
@@ -50,48 +58,52 @@ renderCake colors x y scale total caketype =
 renderCandle : Int -> Int -> Int -> Float -> Caketype -> List (Html msg)
 renderCandle now total x scale caketype =
     let
-        y =
+        yo =
+            if scale == (1.2 / 2) * (0.8 ^ toFloat total) then
+                        if total == 1 then
+                            327
+
+                        else if total == 2 then
+                            307
+
+                        else if total == 3 then
+                            307
+
+                        else if total == 4 then
+                            304
+
+                        else if total == 5 then
+                            302
+
+                        else if total ==6 then
+                            312
+                        else
+                            302
+            else
+                        if total == 1 then
+                            601
+
+                        else if total == 2 then
+                            570
+
+                        else if total == 3 then
+                            577
+
+                        else if total == 4 then
+                            567
+
+                        else if total == 5 then
+                            562
+                        else if total ==6 then
+                            575
+                        else
+                            562
+        y = 
             case caketype of
-                Recipe ->
-                    if total == 1 then
-                        327
-
-                    else if total == 2 then
-                        307
-
-                    else if total == 3 then
-                        307
-
-                    else if total == 4 then
-                        304
-
-                    else if total == 5 then
-                        302
-
-                    else if total ==6 then
-                        312
-                    else
-                        302
-
-                Progress ->
-                    if total == 1 then
-                        601
-
-                    else if total == 2 then
-                        570
-
-                    else if total == 3 then
-                        577
-
-                    else if total == 4 then
-                        567
-
-                    else if total == 5 then
-                        562
-                    else if total ==6 then
-                        575
-                    else
-                        562
+                Recipe -> yo
+                Progress -> yo
+                Task -> (yo-110)
+                Collection -> yo-21
     in
     if now == total then
         [ Html.img

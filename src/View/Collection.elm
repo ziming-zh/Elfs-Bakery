@@ -5,7 +5,9 @@ import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html, div)
 import View.Basic exposing(renderButtonColor,renderButtonRotate)
 import Svg.Attributes exposing (mode)
-
+import View.Cake exposing(renderCake,renderDeco)
+import FontAwesome.Brands exposing (yelp)
+import FontAwesome.Solid exposing (yen_sign)
 check : List Bool -> Int -> Bool
 check list k =
     case List.head (List.drop (k-1) list) of
@@ -34,23 +36,24 @@ pageSingleRank cleared k =
             , HtmlAttr.style "top" (String.fromFloat y ++ "px")
             ][]
 
-pageSingleHat : List Bool -> Int -> Html Msg
-pageSingleHat cleared k =
-    if not (check cleared k) then div [][]
+pageSingleHat : List Bool -> Model -> Int -> List (Html Msg)
+pageSingleHat cleared model k =
+    if not (check cleared k) then [div [][]]
     else
     let
         list = [250,433.3,616.6,800,260,485,665]
         listx = List.map (\xx -> xx-20) list
-        listy = [320,320,320,320,500,500,480]
+        listy = [370,370,370,370,550,550,550]
         (x,y) = (get listx k,get listy k)
+        levels =
+                List.drop (k-1)  model.levels
+        (colors,stypes) = 
+                case List.head levels of
+                    Just lv-> (lv.colorseq,lv.stypes)
+                    Nothing -> ([],[])
+        
     in
-        Html.img
-            [ HtmlAttr.src ("./assets/hat/hat" ++ (String.fromInt k) ++ ".png" )
-            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.5 ++ ")")
-            , HtmlAttr.style "position" "absolute"
-            , HtmlAttr.style "left" (String.fromFloat x ++ "px")
-            , HtmlAttr.style "top" (String.fromFloat y ++ "px")
-            ][]
+        List.concat [renderCake colors (round x) (round y) 1.2 (List.length colors) View.Cake.Collection,List.map (renderDeco (List.length colors) (round (x+47)) (round (y+33)) ) stypes]
 
 pageRank : Model -> Html Msg
 pageRank model =
@@ -70,7 +73,7 @@ pageHat model =
     div 
         [ style "opacity" (String.fromFloat (Basics.min 1 opa))
         ]
-        (List.map (pageSingleHat model.level_cleared) (List.range 1 7))
+        (List.concat (List.map (pageSingleHat model.level_cleared model) (List.range 1 7)))
 
 pageNone : Html Msg
 pageNone =
@@ -105,7 +108,7 @@ renderCollectionPage model =
                 , HtmlAttr.style "top" (String.fromFloat 70 ++ "px")
                 ][]
             ,renderButtonRotate "#FFC000" "Medal" (LoadLevel 1) (1017,373) 1 (200,40) "#FFFFFF"
-            , renderButtonRotate "#FFC000" "Hat" (LoadLevel 2) (1017,620) 1 (200,40) "#FFFFFF"
+            , renderButtonRotate "#FFC000" "Cake" (LoadLevel 2) (1017,620) 1 (200,40) "#FFFFFF"
             , renderButtonColor "#4472C4" "<" (Load HomePage) (-60,0) 1 (50,50) "#FFFFFF"
             , (case model.level_index of
                 0 -> pageNone

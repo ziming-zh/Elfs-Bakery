@@ -104,7 +104,8 @@ update msg model =
         Load page ->
             ( { model | currentPage = page , move_timer = 0 , level_index = 0 
                         , win = (if page == CollectionPage then Lose else model.win ) } , Cmd.none )
-
+        ChoiceInfo i-> 
+            ({ model | level_index = i },Cmd.none)
         _ ->
             ( model, Cmd.none )
 
