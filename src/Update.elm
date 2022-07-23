@@ -72,11 +72,11 @@ update msg model =
                     else
                         ( { model | level_index = model.level_index + 1 , move_timer = 0 } , Cmd.none )
                 HomePage -> 
-                    ( { model | currentPage = ChoicePage } , Cmd.none )
+                    ( { model | currentPage = ChoicePage , level_index = 0 } , Cmd.none )
               --  LevelsPage ->
                 --    ( { model | currentPage = GamePage } , Cmd.none )
                 GamePage -> 
-                    ( { model | currentPage = ChoicePage } , Cmd.none )
+                    ( { model | currentPage = ChoicePage , level_index = 0  } , Cmd.none )
                 _ -> 
                     ( model , Cmd.none )
         Undo ->
