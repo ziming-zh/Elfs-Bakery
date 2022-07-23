@@ -55,7 +55,7 @@ renderCandle : Int -> Int -> Int -> Float -> Caketype -> List (Html msg)
 renderCandle now total x scale caketype =
     let
         yo =
-            if scale == 1.2 then
+            if scale == (1.2 / 2) * (0.8 ^ toFloat total) then
                         if total == 1 then
                             327
 
