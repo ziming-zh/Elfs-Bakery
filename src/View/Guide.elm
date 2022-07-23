@@ -51,6 +51,18 @@ page4 model =
     div
         [
         ]
+        [ renderTxt (1,100) 35  "#000000"  "Add chocolate on your cake!" (Basics.min opa 1)
+        , renderButton "Go!" LoadNextLevel (300,200) (Basics.min (model.move_timer/1000-1) 1) (50,50) "#FFFFFF"
+        ]
+
+page5 : Model -> Html Msg
+page5 model = 
+    let
+        opa = (model.move_timer/1000)
+    in
+    div
+        [
+        ]
         [ renderTxt (60,100) 35  "#000000"  "You are a new backery now!" (Basics.min opa 1)
         , renderTxt (-20,200) 35  "#000000"  "Try to make as much cakes as possible~" (Basics.min (opa-1) 1)
         , renderButton "<" (Load HomePage) (250,300) (Basics.min (opa-2) 1) (50,50) "#FFFFFF"
@@ -82,5 +94,6 @@ renderGuidePage model =
             2 -> page2 model
             4 -> page3 model
             6 -> page4 model
+            8 -> page5 model
             _ -> page1 model
         ]

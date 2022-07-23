@@ -1,74 +1,109 @@
-module View.Cake exposing (Caketype(..), renderCake)
+module View.Cake exposing (Caketype(..), renderCake,renderRecipeDeco,renderProgressDeco,renderTaskDeco,renderDeco)
 
 import Color exposing (..)
 import Html exposing (Html)
 import Html.Attributes as HtmlAttr exposing (..)
-
+import Message exposing (SpecialType(..), Stype)
+import Model exposing (Model)
 
 type Caketype
     = Progress
     | Recipe
+    | Task
+    | Collection
 
 
 
 --c=[300,]
 
 
+selectDeco : Stype -> Html.Attribute msg
+selectDeco stype =
+    case stype.content of
+        Chocolate ->
+            HtmlAttr.src "./assets/chocolate.png"
+
+        Vanilla ->
+            HtmlAttr.src "./assets/vanilla.png"
+
+renderProgressDeco : Int -> Stype -> List (Html msg)
+renderProgressDeco total stype =
+        case stype.state of
+            Message.SExit i -> 
+                [renderith total 1486 777 5.6 Cream i  (selectDeco stype)]
+            _ -> []
+renderRecipeDeco: Int -> Stype ->Html msg
+renderRecipeDeco total stype =
+    renderith total 1486 420 2.8 Cream stype.target  (selectDeco stype)
+renderTaskDeco : Int -> Stype ->Html msg
+renderTaskDeco total stype =
+    renderith total 999 672 5.6 Cream stype.target  (selectDeco stype)
+renderDeco : Int -> Int ->Int ->Stype ->Html msg
+renderDeco total x y stype =
+    renderith total x y 2.8 Cream stype.target  (selectDeco stype)
 renderCake : List Color -> Int -> Int -> Float -> Int -> Caketype -> List (Html msg)
 renderCake colors x y scale total caketype =
     let
         indexed =
             List.indexedMap Tuple.pair colors
+        index=List.range 0 (List.length colors)
     in
     if total == 0 then
         []
 
     else
-        List.append (List.map (renderith total x y scale) indexed) (renderCandle (List.length colors) total x ((scale / 2) * (0.8 ^ toFloat total)) caketype)
+        List.append (List.map2 (renderith total x y scale Cake) index (List.map selectColor colors)) (renderCandle (List.length colors) total x ((scale / 2) * (0.8 ^ toFloat total)) caketype)
 
 
 renderCandle : Int -> Int -> Int -> Float -> Caketype -> List (Html msg)
 renderCandle now total x scale caketype =
     let
-        y =
+        yo =
+            if scale == (1.2 / 2) * (0.8 ^ toFloat total) then
+                        if total == 1 then
+                            327
+
+                        else if total == 2 then
+                            307
+
+                        else if total == 3 then
+                            307
+
+                        else if total == 4 then
+                            304
+
+                        else if total == 5 then
+                            302
+
+                        else if total ==6 then
+                            312
+                        else
+                            302
+            else
+                        if total == 1 then
+                            601
+
+                        else if total == 2 then
+                            570
+
+                        else if total == 3 then
+                            577
+
+                        else if total == 4 then
+                            567
+
+                        else if total == 5 then
+                            562
+                        else if total ==6 then
+                            575
+                        else
+                            562
+        y = 
             case caketype of
-                Recipe ->
-                    if total == 1 then
-                        327
-
-                    else if total == 2 then
-                        307
-
-                    else if total == 3 then
-                        307
-
-                    else if total == 4 then
-                        304
-
-                    else if total == 4 then
-                        302
-
-                    else
-                        302
-
-                Progress ->
-                    if total == 1 then
-                        601
-
-                    else if total == 2 then
-                        570
-
-                    else if total == 3 then
-                        577
-
-                    else if total == 4 then
-                        567
-
-                    else if total == 4 then
-                        562
-
-                    else
-                        562
+                Recipe -> yo
+                Progress -> yo
+                Task -> (yo-110)
+                Collection -> yo-21
     in
     if now == total then
         [ Html.img
@@ -84,9 +119,9 @@ renderCandle now total x scale caketype =
     else
         []
 
-
-renderith : Int -> Int -> Int -> Float -> ( Int, Color ) -> Html msg
-renderith total x y scale ( i, color ) =
+type Ithtype =Cream|Cake
+renderith : Int -> Int -> Int -> Float -> Ithtype-> Int  -> Html.Attribute msg -> Html msg
+renderith total x y scale itemtype i item =
     let
         para =
             case total of
@@ -111,14 +146,25 @@ renderith total x y scale ( i, color ) =
                 _ ->
                     0.1
     in
-    Html.img
-        [ selectColor color
-        , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat (scale * para * (0.8 ^ toFloat i)) ++ ")")
-        , HtmlAttr.style "position" "absolute"
-        , HtmlAttr.style "left" (String.fromInt x ++ "px")
-        , HtmlAttr.style "top" (String.fromFloat (toFloat y - (80.0 * scale * para * ((1 - 0.8 ^ toFloat i) / 0.2 + 1))) ++ "px")
-        ]
-        []
+    case itemtype of 
+        Cake ->
+            Html.img
+            [ item
+            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat (scale * para * (0.8 ^ toFloat i)) ++ ")")
+            , HtmlAttr.style "position" "absolute"
+            , HtmlAttr.style "left" (String.fromInt x ++ "px")
+            , HtmlAttr.style "top" (String.fromFloat (toFloat y - (80.0 * scale * para * ((1 - 0.8 ^ toFloat i) / 0.2 + 1))) ++ "px")
+            ]
+            []
+        Cream ->
+            Html.img
+            [ item
+            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat (scale * para * (0.8 ^ toFloat i)) ++ ")")
+            , HtmlAttr.style "position" "absolute"
+            , HtmlAttr.style "left" (String.fromInt x ++ "px")
+            , HtmlAttr.style "top" (String.fromFloat (toFloat y - (80.0 * scale/2.8*1.2 * para * ((1 - 0.8 ^ toFloat i) / 0.2 + 1))) ++ "px")
+            ]
+            []
 
 
 selectColor : Color -> Html.Attribute msg

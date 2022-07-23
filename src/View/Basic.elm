@@ -11,6 +11,7 @@ import Html exposing (..)
 import Html.Attributes as HtmlAttr exposing (..)
 import Html.Events exposing (onClick)
 import Message exposing (Msg(..))
+import Html.Events exposing (onMouseOver)
 
 setLength : Float
 setLength = 50.0
@@ -91,6 +92,45 @@ renderButtonColor colorback txt msg (x,y) opa (w,h) color =
         , style "top" (String.fromInt y ++ "px")
         , style "position" "absolute"
         , style "opacity" (String.fromFloat opa)
+        , onClick msg
+        ]
+        [ text txt ]
+renderChoiceButton: String -> String -> Msg -> Msg->(Int,Int) -> Float -> (Int,Int) -> String -> Html Msg
+renderChoiceButton colorback txt clickMsg mouseMsg (x,y) opa (w,h) color =
+    button
+      [   style "background" colorback
+        , style "border" "0"
+        , style "color" color
+        , style "font-family" "Helvetica, Arial, sans-serif"
+        , style "font-size" "18px"
+        , style "line-height" "45px"
+        , style "width" (String.fromInt w ++ "px")
+        , style "height" (String.fromInt h ++ "px")
+        , style "left" (String.fromInt x ++ "px")
+        , style "top" (String.fromInt y ++ "px")
+        , style "position" "absolute"
+        , style "opacity" (String.fromFloat opa)
+        , onClick clickMsg
+        , onMouseOver mouseMsg
+        ]
+        [ text txt ]
+renderButtonRotate : String -> String -> Msg -> (Int,Int) -> Float -> (Int,Int) -> String -> Html Msg
+renderButtonRotate colorback txt msg (x,y) opa (w,h) color =
+    button
+      [   style "background" colorback
+        , style "border" "0"
+        , style "color" color
+        , style "font-family" "Helvetica, Arial, sans-serif"
+        , style "font-size" "18px"
+        , style "line-height" "45px"
+        , style "width" (String.fromInt w ++ "px")
+        , style "height" (String.fromInt h ++ "px")
+        , style "left" (String.fromInt x ++ "px")
+        , style "top" (String.fromInt y ++ "px")
+        , style "position" "absolute"
+        , style "opacity" (String.fromFloat opa)
+        , style "transform-origin" "0 0"
+        , style "transform" "rotate(270deg)"
         , onClick msg
         ]
         [ text txt ]

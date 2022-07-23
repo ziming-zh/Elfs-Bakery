@@ -39,6 +39,7 @@ type Page
     | LevelsPage
     | ChoicePage
     | GuidePage
+    | CollectionPage
 
 
 type Msg
@@ -58,6 +59,7 @@ type Msg
     | RandomLevel Int
     | Retry
     | None
+    | ChoiceInfo Int
 
 
 key : Int -> Msg
@@ -77,3 +79,14 @@ key keycode =
 
         _ ->
             ArrowPressed Stop
+
+
+type SpecialType
+    = Chocolate
+    | Vanilla
+type alias Stype =
+    { content : SpecialType, state : Sstate, pos : Pos,target: Int }
+type Sstate
+    = Moving
+    | Still Int
+    | SExit Int

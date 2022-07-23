@@ -1,16 +1,14 @@
 module Grid exposing (..)
 
 import Array exposing (Array)
-import Color exposing (Color)
+import Color exposing (..)
+import Html exposing (a)
 import Html.Attributes exposing (rows)
 import Levels exposing (Level)
-import Message exposing (Direction(..), Paint, Pos)
+import Message exposing (Direction(..), Paint, Pos,SpecialType(..),Stype,Sstate(..))
 import String exposing (lines)
 import Valve exposing (VState(..), Valve)
 import Wall exposing (Wall, Wall_col, Wall_row, getWall)
-import Html exposing (a)
-import Color exposing (..)
-
 
 type IsOpen
     = Open
@@ -25,28 +23,48 @@ type alias GState =
     , right : IsOpen
     }
 
-isOpen2String: Pos -> Direction -> Grids -> String
+
+isOpen2String : Pos -> Direction -> Grids -> String
 isOpen2String pos dir grids =
     let
-            
         dirstring =
-            case dir of 
-                Message.Up ->" Up "
-                Message.Down -> " Down "
-                Message.Left -> " Left "
-                Message.Right -> " Right "
-                _ -> " None "
-        isopen=getGstate pos grids dir
+            case dir of
+                Message.Up ->
+                    " Up "
+
+                Message.Down ->
+                    " Down "
+
+                Message.Left ->
+                    " Left "
+
+                Message.Right ->
+                    " Right "
+
+                _ ->
+                    " None "
+
+        isopen =
+            getGstate pos grids dir
+
         isopenstring =
             case isopen of
-                Close -> " close "
-                FakeClose -> " fake "
-                Open -> " Open "
+                Close ->
+                    " close "
+
+                FakeClose ->
+                    " fake "
+
+                Open ->
+                    " Open "
     in
-        dirstring++isopenstring
+    dirstring ++ isopenstring
+
+
 getbugState : Pos -> Grids -> String
 getbugState pos grids =
-    "\n"++"x: "++String.fromInt pos.x++"y: "++String.fromInt pos.y ++ isOpen2String pos Message.Up grids ++ isOpen2String pos Message.Down grids ++ isOpen2String pos Message.Left grids ++ isOpen2String pos Message.Right grids
+    "\n" ++ "x: " ++ String.fromInt pos.x ++ "y: " ++ String.fromInt pos.y ++ isOpen2String pos Message.Up grids ++ isOpen2String pos Message.Down grids ++ isOpen2String pos Message.Left grids ++ isOpen2String pos Message.Right grids
+
 
 getGstate : Pos -> Grids -> Direction -> IsOpen
 getGstate pos grids dir =
@@ -122,12 +140,67 @@ type alias Grid =
     , gstate : GState
     , distance : Maybe Int
     , renewed : Bool
-    , specialtype : Maybe SpecialType
+    , stype : Maybe Stype
     }
 
-type SpecialType
-    = Chocolate
-    | Vanilla
+
+
+
+
+
+updateSpecialType : Grids ->Stype ->  Stype
+updateSpecialType grids stype  =
+    let
+        x =
+            stype.pos.x
+
+        y =
+            stype.pos.y
+    in
+    case getGrid x y grids of
+        Nothing ->
+            stype
+
+        Just grid ->
+            case grid.gridtype of
+                Paint a ->
+                    case stype.state of 
+                        SExit i -> stype
+                        _ ->    
+                            { stype | state = Moving }
+
+                _ ->
+                    stype
+
+
+
+sendStype2Grid : Stype -> Grids -> Grids
+sendStype2Grid stype grids =
+    let
+        posx =
+            stype.pos.x
+
+        posy =
+            stype.pos.y
+
+        gridline =
+            case Array.get posx grids of
+                Nothing ->
+                    Array.fromList []
+
+                Just gl ->
+                    gl
+    in
+    case Array.get posy gridline of
+        Nothing ->
+            grids
+
+        Just grid ->
+            Array.set posx (Array.set posy { grid | stype = Just stype } gridline) grids
+
+
+
+
 
 
 type alias Grids =
@@ -136,7 +209,7 @@ type alias Grids =
 
 initGrid : Int -> Int -> Grid
 initGrid x y =
-    { pos = { x = x, y = y }, gridtype = Vacant, gstate = { up = Open, down = Open, left = Open, right = Open }, distance = Just 0, renewed = True, specialtype = Nothing }
+    { pos = { x = x, y = y }, gridtype = Vacant, gstate = { up = Open, down = Open, left = Open, right = Open }, distance = Just 0, renewed = True, stype = Nothing }
 
 
 ban : IsOpen -> Direction -> Grid -> Grid
@@ -154,7 +227,7 @@ ban isopen dir grid =
                     { gstate | up = setGstate gstate.up isopen }
 
                 Message.Left ->
-                    { gstate | left = setGstate gstate.left isopen  }
+                    { gstate | left = setGstate gstate.left isopen }
 
                 Message.Right ->
                     { gstate | right = setGstate gstate.right isopen }
@@ -164,11 +237,17 @@ ban isopen dir grid =
     in
     { grid | gstate = newstate }
 
+
 setGstate : IsOpen -> IsOpen -> IsOpen
-setGstate isopen change=
+setGstate isopen change =
     case isopen of
-        Close -> isopen
-        _ -> change
+        Close ->
+            isopen
+
+        _ ->
+            change
+
+
 getGrid : Int -> Int -> Grids -> Maybe Grid
 getGrid x y grids =
     let
@@ -211,12 +290,15 @@ refreshRowGrids isopen x y grids =
             grids
                 |> setGrid (x - 1) y (ban isopen Message.Down ub)
                 |> setGrid x y (ban isopen Message.Up db)
+
         ( Nothing, Just db ) ->
             grids
                 |> setGrid x y (ban isopen Message.Up db)
-        ( Just ub, Nothing) ->
+
+        ( Just ub, Nothing ) ->
             grids
                 |> setGrid (x - 1) y (ban isopen Message.Down ub)
+
         _ ->
             grids
 
@@ -259,12 +341,15 @@ refreshColumnGrids isopen y x grids =
             grids
                 |> setGrid x (y - 1) (ban isopen Message.Right lb)
                 |> setGrid x y (ban isopen Message.Left rb)
+
         ( Nothing, Just rb ) ->
             grids
                 |> setGrid x y (ban isopen Message.Left rb)
+
         ( Just lb, Nothing ) ->
             grids
                 |> setGrid x (y - 1) (ban isopen Message.Right lb)
+
         _ ->
             grids
 
@@ -331,6 +416,7 @@ drawWallIndex wallline =
                 case x of
                     ( False, _ ) ->
                         False
+
                     _ ->
                         True
     in
@@ -395,6 +481,7 @@ loadValve valve grids =
         Valve.Down ->
             refreshColumnGrids FakeClose posy posx grids
 
+
 sendPainttoGrids : Paint -> Grids -> Grids
 sendPainttoGrids paint grids =
     let
@@ -419,142 +506,293 @@ sendPainttoGrids paint grids =
         Just grid ->
             Array.set posx (Array.set posy { grid | gridtype = Paint paint } gridline) grids
 
+
 judgeOk : Grids -> Int -> Int -> Bool
 judgeOk grids x y =
     case getGrid x y grids of
-        Just g -> 
+        Just g ->
             case g.gridtype of
                 Paint _ ->
                     False
-                _ -> True
-        _ -> False
-        
-judge1Ok : Grids -> Int -> Int -> (Color,Color) -> Bool
-judge1Ok grids x y (color1,color2) =
-    let 
+
+                _ ->
+                    True
+
+        _ ->
+            False
+
+
+judge1Ok : Grids -> Int -> Int -> ( Color, Color ) -> Bool
+judge1Ok grids x y ( color1, color2 ) =
+    let
         grid =
             getGrid x y grids
     in
-        case grid of
-            Just singlegrid ->
-                case singlegrid.gridtype of
-                    Paint a ->
-                        a.color == color1 || a.color == color2
-                    _ -> False
-            Nothing -> False
+    case grid of
+        Just singlegrid ->
+            case singlegrid.gridtype of
+                Paint a ->
+                    a.color == color1 || a.color == color2
+
+                _ ->
+                    False
+
+        Nothing ->
+            False
+
 
 getColor : Grids -> Int -> Int -> Color
 getColor grids x y =
-    let 
+    let
         grid =
             getGrid x y grids
     in
-        case grid of
-            Just singlegrid ->
-                case singlegrid.gridtype of
-                    Paint a ->
-                        a.color 
-                    _ -> white
-            Nothing -> white
-            
+    case grid of
+        Just singlegrid ->
+            case singlegrid.gridtype of
+                Paint a ->
+                    a.color
+
+                _ ->
+                    white
+
+        Nothing ->
+            white
+
+
 mergeColor : Color -> Color -> Color
 mergeColor a b =
-    if a == b then a
-    else if a == white || b == white then white
-    else if (a,b) == (red,lightYellow) then orange
-    else if (a,b) == (lightYellow,red) then orange
-    else if (a,b) == (red,blue) then purple
-    else if (a,b) == (blue,red) then purple
-    else if (a,b) == (blue,lightYellow) then green
-    else if (a,b) == (lightYellow,blue) then green
+    if a == b then
+        a
 
-    else if (a,b) == (blue,purple) then purple
-    else if (a,b) == (purple,blue) then purple
-    else if (a,b) == (blue,green) then green
-    else if (a,b) == (green,blue) then green
-    else if (a,b) == (blue,orange) then white
-    else if (a,b) == (orange,blue) then white
+    else if a == white || b == white then
+        white
 
-    else if (a,b) == (red,purple) then purple
-    else if (a,b) == (purple,red) then purple
-    else if (a,b) == (red,orange) then orange
-    else if (a,b) == (orange,red) then orange
-    else if (a,b) == (red,green) then white
-    else if (a,b) == (green,red) then white
+    else if ( a, b ) == ( red, lightYellow ) then
+        orange
 
-    else if (a,b) == (lightYellow,orange) then orange
-    else if (a,b) == (orange,lightYellow) then orange
-    else if (a,b) == (lightYellow,green) then green
-    else if (a,b) == (green,lightYellow) then green
-    else if (a,b) == (lightYellow,purple) then white
-    else if (a,b) == (purple,lightYellow) then white
+    else if ( a, b ) == ( lightYellow, red ) then
+        orange
 
-    else white
+    else if ( a, b ) == ( red, blue ) then
+        purple
+
+    else if ( a, b ) == ( blue, red ) then
+        purple
+
+    else if ( a, b ) == ( blue, lightYellow ) then
+        green
+
+    else if ( a, b ) == ( lightYellow, blue ) then
+        green
+
+    else if ( a, b ) == ( blue, purple ) then
+        purple
+
+    else if ( a, b ) == ( purple, blue ) then
+        purple
+
+    else if ( a, b ) == ( blue, green ) then
+        green
+
+    else if ( a, b ) == ( green, blue ) then
+        green
+
+    else if ( a, b ) == ( blue, orange ) then
+        white
+
+    else if ( a, b ) == ( orange, blue ) then
+        white
+
+    else if ( a, b ) == ( red, purple ) then
+        purple
+
+    else if ( a, b ) == ( purple, red ) then
+        purple
+
+    else if ( a, b ) == ( red, orange ) then
+        orange
+
+    else if ( a, b ) == ( orange, red ) then
+        orange
+
+    else if ( a, b ) == ( red, green ) then
+        white
+
+    else if ( a, b ) == ( green, red ) then
+        white
+
+    else if ( a, b ) == ( lightYellow, orange ) then
+        orange
+
+    else if ( a, b ) == ( orange, lightYellow ) then
+        orange
+
+    else if ( a, b ) == ( lightYellow, green ) then
+        green
+
+    else if ( a, b ) == ( green, lightYellow ) then
+        green
+
+    else if ( a, b ) == ( lightYellow, purple ) then
+        white
+
+    else if ( a, b ) == ( purple, lightYellow ) then
+        white
+
+    else
+        white
+
 
 nodefault : Maybe Grid -> Grid
-nodefault grid = 
+nodefault grid =
     case grid of
-        Just a -> a
-        Nothing -> initGrid 0 0
+        Just a ->
+            a
 
-getPaint : (Int,Int) -> Array Paint -> Paint
-getPaint (lx,ly) paints =
+        Nothing ->
+            initGrid 0 0
+
+
+getPaint : ( Int, Int ) -> Array Paint -> Paint
+getPaint ( lx, ly ) paints =
     let
-        listpaints = Array.toList paints 
-        list = List.filter (\xx -> xx.pos == Pos lx ly) listpaints
-    in
-        case List.head list of 
-            Just a -> a
-            _ -> {pos = Pos -1 -1,color=Color.lightYellow}
+        listpaints =
+            Array.toList paints
 
-changeSingleColor : (Int,Int) -> Color -> Array Paint -> Array Paint
-changeSingleColor (lx,ly) ncolor paints = 
-    Array.map 
+        list =
+            List.filter (\xx -> xx.pos == Pos lx ly) listpaints
+    in
+    case List.head list of
+        Just a ->
+            a
+
+        _ ->
+            { pos = Pos -1 -1, color = Color.lightYellow }
+
+
+changeSingleColor : ( Int, Int ) -> Color -> Array Paint -> Array Paint
+changeSingleColor ( lx, ly ) ncolor paints =
+    Array.map
         (\x ->
-            if x.pos /= (Pos lx ly) then  x
-            else 
-                {pos = x.pos,color = ncolor}
-        ) paints
+            if x.pos /= Pos lx ly then
+                x
 
-changeColor : Grids -> Color -> (Color,Color) -> (Int,Int) -> (Int,Int) -> Array Paint -> Array Paint
-changeColor grids color (lcolor1,lcolor2) (lx,ly) (dx,dy) paints =
+            else
+                { pos = x.pos, color = ncolor }
+        )
+        paints
+
+
+changeColor : Grids -> Color -> ( Color, Color ) -> ( Int, Int ) -> ( Int, Int ) -> Array Paint -> Array Paint
+changeColor grids color ( lcolor1, lcolor2 ) ( lx, ly ) ( dx, dy ) paints =
     let
-        (nx,ny) = (lx+dx,ly+dy)
-        foldFunction = 
-            changeColor grids color (lcolor1,lcolor2) (nx,ny)
-        npaints = 
-            (changeSingleColor (nx,ny) color paints)
-        downOk = judge1Ok grids (nx+1) ny (lcolor1,lcolor2)
-        leftOk = judge1Ok grids nx (ny-1) (lcolor1,lcolor2)
-        rightOk =  judge1Ok grids nx (ny+1) (lcolor1,lcolor2)
-        upOk =  judge1Ok grids (nx-1) ny (lcolor1,lcolor2)   
-        list = 
+        ( nx, ny ) =
+            ( lx + dx, ly + dy )
+
+        foldFunction =
+            changeColor grids color ( lcolor1, lcolor2 ) ( nx, ny )
+
+        npaints =
+            changeSingleColor ( nx, ny ) color paints
+
+        downOk =
+            judge1Ok grids (nx + 1) ny ( lcolor1, lcolor2 )
+
+        leftOk =
+            judge1Ok grids nx (ny - 1) ( lcolor1, lcolor2 )
+
+        rightOk =
+            judge1Ok grids nx (ny + 1) ( lcolor1, lcolor2 )
+
+        upOk =
+            judge1Ok grids (nx - 1) ny ( lcolor1, lcolor2 )
+
+        list =
             List.concat
-            [
-            if (dx,dy) /= (-1,0) && getGstate (Pos nx ny) grids Message.Down == Open && downOk then
-                [( 1, 0 )]
-            else []
-            ,
-            if (dx,dy) /= (0,-1) && getGstate (Pos nx ny) grids Message.Right == Open && rightOk then
-                 [( 0, 1 )]
-            else []
-            ,
-            if (dx,dy) /= (0,1) && getGstate (Pos nx ny) grids Message.Left == Open && leftOk then
-                [( 0, -1 )]
-            else []
-            ,
-            if (dx,dy) /= (1,0) && getGstate (Pos nx ny) grids Message.Up == Open && upOk then
-               [( -1, 0 )]
-            else []
-            ]
+                [ if ( dx, dy ) /= ( -1, 0 ) && getGstate (Pos nx ny) grids Message.Down == Open && downOk then
+                    [ ( 1, 0 ) ]
+
+                  else
+                    []
+                , if ( dx, dy ) /= ( 0, -1 ) && getGstate (Pos nx ny) grids Message.Right == Open && rightOk then
+                    [ ( 0, 1 ) ]
+
+                  else
+                    []
+                , if ( dx, dy ) /= ( 0, 1 ) && getGstate (Pos nx ny) grids Message.Left == Open && leftOk then
+                    [ ( 0, -1 ) ]
+
+                  else
+                    []
+                , if ( dx, dy ) /= ( 1, 0 ) && getGstate (Pos nx ny) grids Message.Up == Open && upOk then
+                    [ ( -1, 0 ) ]
+
+                  else
+                    []
+                ]
     in
-        List.foldl foldFunction npaints list
-movePaint :  Grids -> Int -> Array Paint -> Array Paint
+    List.foldl foldFunction npaints list
+
+
+checkDirections : Grids -> Pos -> ( Int, Int )
+checkDirections grids pos =
+    let
+        x=pos.x
+        y=pos.y
+        downOk =
+            judgeOk grids (x + 1) y
+
+        leftOk =
+            judgeOk grids x (y - 1)
+
+        rightOk =
+            judgeOk grids x (y + 1)
+
+        upOk =
+            judgeOk grids (x - 1) y
+
+        distance =
+            getDistance pos grids
+    in
+    if distance == (getDistance { x = x + 1, y = y } grids + 1) && getGstate pos grids Message.Down == Open && downOk then
+        ( 1, 0 )
+
+    else if distance == (getDistance { x = x, y = y + 1 } grids + 1) && getGstate pos grids Message.Right == Open && rightOk then
+        ( 0, 1 )
+
+    else if distance == (getDistance { x = x, y = y - 1 } grids + 1) && getGstate pos grids Message.Left == Open && leftOk then
+        ( 0, -1 )
+
+    else if distance == (getDistance { x = x - 1, y = y } grids + 1) && getGstate pos grids Message.Up == Open && upOk then
+        ( -1, 0 )
+
+    else
+        ( 0, 0 )
+
+moveSpecialType : Grids -> Stype -> Stype 
+moveSpecialType grids stype =
+    let
+        pos=stype.pos
+        ( dx, dy ) =
+            checkDirections grids pos
+        x=stype.pos.x
+        y=stype.pos.y
+    in
+        case stype.state of
+            Moving -> 
+                {stype|pos={x=x+dx,y=y+dy}}
+            _ -> 
+                stype
+movePaint : Grids -> Int -> Array Paint -> Array Paint
 movePaint grids i paints =
     let
-    
-        defaultPaint= {pos = {x=-1,y=-1},color=Color.lightYellow}
-        paint = Maybe.withDefault defaultPaint (Array.get i paints)
+        defaultPaint =
+            { pos = { x = -1, y = -1 }, color = Color.lightYellow }
+
+        paint =
+            Maybe.withDefault defaultPaint (Array.get i paints)
+
         x =
             paint.pos.x
 
@@ -563,48 +801,45 @@ movePaint grids i paints =
 
         grid =
             getGrid x y grids
-        downOk = judgeOk grids (x+1) y
-        leftOk = judgeOk grids x (y-1)
-        rightOk =  judgeOk grids x (y+1)
-        upOk =  judgeOk grids (x-1) y 
-        distance =
-            getDistance paint.pos grids
 
         ( dx, dy ) =
-            if distance == (getDistance { x = x + 1, y = y } grids + 1) && getGstate paint.pos grids Message.Down == Open && downOk then
-                ( 1, 0 )
-
-            else if distance == (getDistance { x = x, y = y + 1 } grids + 1) && getGstate paint.pos grids Message.Right == Open && rightOk then
-                ( 0, 1 )
-
-            else if distance == (getDistance { x = x, y = y - 1 } grids + 1)  && getGstate paint.pos grids Message.Left == Open && leftOk then
-                ( 0, -1 )
-
-            else if distance == (getDistance { x = x - 1, y = y } grids + 1)  && getGstate paint.pos grids Message.Up == Open && upOk then
-                ( -1, 0 )
-
-            else
-                ( 0, 0 )
+            checkDirections grids paint.pos
+        distance =
+            getDistance paint.pos grids
     in
-    if (dx,dy) /= (0,0) then
-        Array.set i { paint | pos = { x = x + dx, y = y + dy } } paints 
-    else 
+    if ( dx, dy ) /= ( 0, 0 ) then
+        Array.set i { paint | pos = { x = x + dx, y = y + dy } } paints
+
+    else
         let
-            (ndx,ndy) =  
+            ( ndx, ndy ) =
                 if distance == (getDistance { x = x + 1, y = y } grids + 1) && getGstate paint.pos grids Message.Down == Open then
-                    (1,0)
+                    ( 1, 0 )
+
                 else if distance == (getDistance { x = x, y = y + 1 } grids + 1) && getGstate paint.pos grids Message.Right == Open then
-                    (0,1)
-                else if distance == (getDistance { x = x, y = y - 1 } grids + 1)  && getGstate paint.pos grids Message.Left == Open then
-                    (0,-1)
-                else if distance == (getDistance { x = x - 1, y = y } grids + 1)  && getGstate paint.pos grids Message.Up == Open then
-                    (-1,0)
-                else (0,0) 
-            lcolor1 = getColor grids x y
-            lcolor2 = getColor grids (x+ndx) (y+ndy)
-            ncolor = mergeColor lcolor1 lcolor2
+                    ( 0, 1 )
+
+                else if distance == (getDistance { x = x, y = y - 1 } grids + 1) && getGstate paint.pos grids Message.Left == Open then
+                    ( 0, -1 )
+
+                else if distance == (getDistance { x = x - 1, y = y } grids + 1) && getGstate paint.pos grids Message.Up == Open then
+                    ( -1, 0 )
+
+                else
+                    ( 0, 0 )
+
+            lcolor1 =
+                getColor grids x y
+
+            lcolor2 =
+                getColor grids (x + ndx) (y + ndy)
+
+            ncolor =
+                mergeColor lcolor1 lcolor2
         in
-            if (ndx,ndy) /= (0,0) && lcolor1 /= lcolor2 then
-                changeColor grids ncolor (lcolor1,lcolor2) (x,y) (ndx,ndy) paints
-                    |> changeColor grids ncolor (lcolor1,lcolor2) (x+ndx,y+ndy) (-ndx,-ndy)
-            else paints
+        if ( ndx, ndy ) /= ( 0, 0 ) && lcolor1 /= lcolor2 then
+            changeColor grids ncolor ( lcolor1, lcolor2 ) ( x, y ) ( ndx, ndy ) paints
+                |> changeColor grids ncolor ( lcolor1, lcolor2 ) ( x + ndx, y + ndy ) ( -ndx, -ndy )
+
+        else
+            paints

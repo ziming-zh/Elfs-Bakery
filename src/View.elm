@@ -9,6 +9,7 @@ import View.Choice exposing(renderChoicePage)
 import View.Guide exposing(renderGuidePage)
 import Html.Attributes as HtmlAttr exposing (..)
 import Message exposing (Page(..))
+import View.Collection exposing (renderCollectionPage)
 
 view : Model -> Html Msg
 view model =
@@ -33,6 +34,7 @@ view model =
             if Basics.modBy 2 model.level_index == 0 then
                 renderGuidePage model
             else renderLevelPage model
+        CollectionPage -> renderCollectionPage model
         _ -> 
             div
                 [ ]
