@@ -1,4 +1,4 @@
-module View.Cake exposing (Caketype(..), renderCake,renderRecipeDeco,renderProgressDeco)
+module View.Cake exposing (Caketype(..), renderCake,renderRecipeDeco,renderProgressDeco,renderTaskDeco)
 
 import Color exposing (..)
 import Html exposing (Html)
@@ -34,6 +34,9 @@ renderProgressDeco total stype =
 renderRecipeDeco: Int -> Stype ->Html msg
 renderRecipeDeco total stype =
     renderith total 1487 424 2.8 Cream stype.target  (selectDeco stype)
+renderTaskDeco : Int -> Stype ->Html msg
+renderTaskDeco total stype =
+    renderith total 1000 675 5.6 Cream stype.target  (selectDeco stype)
 renderCake : List Color -> Int -> Int -> Float -> Int -> Caketype -> List (Html msg)
 renderCake colors x y scale total caketype =
     let

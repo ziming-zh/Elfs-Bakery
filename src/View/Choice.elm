@@ -6,7 +6,7 @@ import Html exposing (Html, div)
 import View.Basic exposing (renderButton,renderButtonColor)
 import View.Basic exposing (renderChoiceButton)
 import View.Hat exposing (hat)
-import View.Cake exposing (renderCake)
+import View.Cake exposing (renderCake,renderTaskDeco)
 import View.Cake exposing (Caketype(..))
 import View.Basic exposing (renderTxt)
 
@@ -79,10 +79,10 @@ renderGameInfo model =
         let 
             levels =
                 List.drop (i-1)  model.levels
-            colors = 
+            (colors,stypes) = 
                 case List.head levels of
-                    Just lv-> lv.colorseq
-                    Nothing -> []
+                    Just lv-> (lv.colorseq,lv.stypes)
+                    Nothing -> ([],[])
             description =
                 case List.head (List.drop (i-1)  descriptions) of 
                     Just des
@@ -95,6 +95,7 @@ renderGameInfo model =
             List.concat 
             [[renderHat i]
             , (renderCake colors 950 640 2.4 (List.length colors) View.Cake.Task)
-            , [renderTxt (900,230) sizei  "#000000" description  (1)]]
+            , [renderTxt (900,230) sizei  "#000000" description  (1)]
+            , List.map (renderTaskDeco (List.length colors)) stypes]
     else 
         []
