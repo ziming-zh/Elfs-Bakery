@@ -1,4 +1,4 @@
-module View.Cake exposing (Caketype(..), renderCake,renderRecipeDeco,renderProgressDeco,renderTaskDeco)
+module View.Cake exposing (Caketype(..), renderCake,renderRecipeDeco,renderProgressDeco,renderTaskDeco,renderDeco)
 
 import Color exposing (..)
 import Html exposing (Html)
@@ -10,6 +10,7 @@ type Caketype
     = Progress
     | Recipe
     | Task
+    | Collection
 
 
 
@@ -37,6 +38,9 @@ renderRecipeDeco total stype =
 renderTaskDeco : Int -> Stype ->Html msg
 renderTaskDeco total stype =
     renderith total 999 672 5.6 Cream stype.target  (selectDeco stype)
+renderDeco : Int -> Int ->Int ->Stype ->Html msg
+renderDeco total x y stype =
+    renderith total x y 2.8 Cream stype.target  (selectDeco stype)
 renderCake : List Color -> Int -> Int -> Float -> Int -> Caketype -> List (Html msg)
 renderCake colors x y scale total caketype =
     let
@@ -99,6 +103,7 @@ renderCandle now total x scale caketype =
                 Recipe -> yo
                 Progress -> yo
                 Task -> (yo-110)
+                Collection -> yo-21
     in
     if now == total then
         [ Html.img
