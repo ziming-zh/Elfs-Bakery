@@ -3,7 +3,7 @@ import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html,div)
 import Message exposing (Msg(..),Page(..))
 import Model exposing (Model)
-import View.Basic exposing (renderTxt,renderButton)
+import View.Basic exposing (renderTxt,renderButtonColor)
 
 renderGamePage : Model -> Html Msg
 renderGamePage model = 
@@ -37,9 +37,9 @@ renderGamePage model =
             , HtmlAttr.style "top" (String.fromFloat 0 ++ "px")
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
             ][]
-        , renderButton "Next" LoadNextLevel (680,486) 1 (196,52) "#FFFFFF"
-        , renderTxt 400 318 68 "#FFFFFF" (String.fromInt model.level_index)
-        , renderButton "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"
+        , renderButtonColor "#4472C4" "Next" LoadNextLevel (680,486) 1 (196,52) "#FFFFFF"
+        , renderTxt (400,318) 68 "#FFFFFF" (String.fromInt model.level_index) 1
+        , renderButtonColor "#4472C4" "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"
        -- , renderButton "Seting" Message.None 976 655 "#FFFFFF"
         ]
        

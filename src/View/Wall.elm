@@ -2,24 +2,29 @@ module View.Wall exposing (..)
 import View.Basic exposing (rectRender,setLength,setWidth)
 import Wall exposing (Wall)
 import Canvas exposing (Renderable)
-import Color exposing (Color)
+import Color exposing (Color,rgb)
 import List exposing (indexedMap)
+import Color exposing (rgb255)
+import Html exposing (dd)
 
 
+defaultWallColor : Color
+defaultWallColor = rgb255 219 149 99
 
 allignRow : Int -> Int -> Bool -> Renderable
 allignRow idy idx exists =
     if exists == True then
-        rectRender ((toFloat idx)*setLength) ((toFloat idy)*setLength) setLength setWidth Color.black
+        rectRender ((toFloat idx)*setLength) ((toFloat idy)*setLength) setLength setWidth defaultWallColor
     else 
-        rectRender 0 0 0 0 Color.black
+        rectRender 0 0 0 0 defaultWallColor
 
 allignCol : Int -> Int -> Bool -> Renderable
 allignCol idy idx exists =
     if exists == True then
-        rectRender ((toFloat idy)*setLength) ((toFloat idx)*setLength) setWidth setLength Color.black
+        rectRender ((toFloat idy)*setLength) ((toFloat idx)*setLength) setWidth setLength defaultWallColor
     else 
-        rectRender 0 0 0 0 Color.black
+        rectRender 0 0 0 0 defaultWallColor
+
 
 drawWall : Wall -> List Renderable
 drawWall wall =

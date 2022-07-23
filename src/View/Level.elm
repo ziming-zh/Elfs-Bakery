@@ -7,16 +7,18 @@ import View.Wall exposing (drawWall)
 import View.Valve exposing (renderValves)
 import Grid exposing (Grids)
 import Html.Attributes as HtmlAttr exposing (..)
-import Html exposing (Html,div,text)
+import Html exposing (Html,div)
 import Message exposing (Msg(..),Page(..))
 import Model exposing (Model,GaState(..))
-import View.Basic exposing (renderTxt,renderButton)
+import View.Basic exposing (renderButtonColor)
 import Player exposing (Player)
 import View.Player exposing (renderPlayer)
 import Canvas exposing (Renderable,toHtml)
 import Array
 import List
 import View.Cake exposing (renderCake,Caketype(..))
+import View.Cake exposing (renderRecipeDeco,renderProgressDeco)
+
 renderLevel : Wall -> List Valve -> Grids -> Player -> List Renderable
 renderLevel wall valves grids player =
     (renderGrids grids) ++
@@ -37,14 +39,12 @@ renderLevelPage model =
 
             else
                 (w / 1800)
-        level = List.head model.levels
         arraylist = Array.map ( \xx -> Array.toList xx ) model.updatedGrids
         list = List.concat (Array.toList arraylist)
-        dis = List.map (\xx ->
-            case xx.distance of 
-                Just a -> a
-                Nothing -> 1000 
-            ) list
+        scalex = toFloat (50*(Tuple.first model.mapSize)+5)
+        scaley = toFloat (50*(Tuple.second model.mapSize)+5)
+        scale = Basics.max (Tuple.first model.mapSize) (Tuple.second model.mapSize)
+        rate = Basics.min (1218/scalex) (790/scaley)
     in
     div
         [ HtmlAttr.style "width" (String.fromFloat 1800 ++ "px")
@@ -66,31 +66,31 @@ renderLevelPage model =
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
             ][]
             , renderGstate model
-        
-        --, renderButton "Next" Message.None (1380,866) (320,87) "#FFFFFF"
-        
-       -- , renderButton "Guide" Message.None 978 545 "#FFFFFF"
-       -- , renderButton "Seting" Message.None 976 655 "#FFFFFF"
         ]
         , renderCake model.color_seq 1439 390 1.2 (List.length model.color_seq) Recipe
         , renderCake model.mcolor_seq 1439 750 2.4 (List.length model.color_seq) Progress
-        , [ toHtml (405 ,310)
-            [ HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 2.6 ++ ")")
+        , List.map (renderRecipeDeco (List.length model.color_seq)) model.stypes
+        , List.concat (List.map (renderProgressDeco (List.length model.color_seq)) model.stypes)
+        , [ toHtml ( round scalex , round scaley)
+            [ HtmlAttr.style "transform-origin" "50 50"
+            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat rate ++ ")")
             , HtmlAttr.style "position" "absolute"
-            , HtmlAttr.style "left" (String.fromFloat 400 ++ "px")
-            , HtmlAttr.style "top" (String.fromFloat 420 ++ "px")]
+            , HtmlAttr.style "left" (String.fromFloat (639-(scalex)/2) ++ "px")
+            , HtmlAttr.style "top" (String.fromFloat (565-(scaley)/2) ++ "px")]
             (renderLevel model.wall model.valves (model.updatedGrids) model.player)
-        ], List.map (\xx -> text ((String.fromInt xx)++" ")) dis
-        , [renderButton "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"]
-        ])
+        ]
+        , [renderButtonColor "#4472C4" "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"]
+        , View.Grid.renderStypes model.mapSize model.updatedGrids]
+       -- , RENDER 
+        )
         
 
 renderGstate : Model -> Html Msg
 renderGstate model =
     case model.win of
         Model.Playing ->
-            renderButton "Undo" Undo (1380,866) 1 (320,87) "#FFFFFF"
+            renderButtonColor "#4472C4" "Undo" Undo (1380,866) 1 (320,87) "#FFFFFF"
         Model.Lose ->
-            renderButton "Retry" (LoadLevel model.level_index)  (1380,866) 1 (320,87) "#FFFFFF"
+            renderButtonColor "#4472C4" "Retry" (LoadLevel model.level_index)  (1380,866) 1 (320,87) "#FFFFFF"
         Model.Win ->
-            renderButton "Next Level" (Load ChoicePage) (1380,866) 1 (320,87) "#FFFFFF"
+            renderButtonColor "#4472C4" "Next Level" (if model.currentPage == GuidePage then LoadNextLevel else (Load ChoicePage)) (1380,866) 1 (320,87) "#FFFFFF"

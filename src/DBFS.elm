@@ -7,6 +7,8 @@ import Html.Attributes exposing (list)
 import Set exposing (Set)
 import Svg.Attributes exposing (y)
 
+import Model exposing(Model)
+
 
 
 -- all the grids, can update others
@@ -33,7 +35,7 @@ setBool : (Int,Int) -> Grids -> Grids
 setBool (x,y) grids = 
     let
         grid = get grids x y
-        ngrid = Grid grid.pos grid.gridtype grid.gstate grid.distance True
+        ngrid = Grid grid.pos grid.gridtype grid.gstate grid.distance True grid.stype
     in
         Array.set x ( Array.set y ngrid (getrow x grids) ) grids
 
@@ -104,40 +106,35 @@ checkSurround grids n m tp grid =
 
         nnnqueue =
             List.map (
-                \xx ->
-                case xx.distance of
-                    Just a -> Grid xx.pos xx.gridtype xx.gstate (Just a) True
-                    Nothing -> Grid xx.pos xx.gridtype xx.gstate (Just distance) True
-            ) nqueue
+                \xx -> Grid xx.pos xx.gridtype xx.gstate (Just distance) True xx.stype
+             ) nqueue
     in
     nnnqueue
 
 
 update :Grids -> Array Grid -> (Grids,Array Grid)
 update grids queue =
-  --  if Array.length queue > 0 then
     if Array.length queue > 0 then
         let
-            m =
-                Array.length (getrow 0 grids)
             grid =
                 gett 0 queue
-
             x =
                 grid.pos.x
 
             y =
                 grid.pos.y
 
-            ngrids =
-                if getBool (x,y) grids then 
-                    grids
+            lgrid = get grids x y
+
+            (ngrids,elem) =
+                if lgrid.renewed || ( lgrid.distance /= Nothing && lgrid.distance /= grid.distance ) then 
+                    (grids,[])
                 else
-                    Array.set x (Array.set y grid (getrow x grids)) grids
+                    (Array.set x (Array.set y grid (getrow x grids)) grids,[grid])
             (agrids,aqueue) = 
                 update ngrids (Array.slice 1 (Array.length queue) queue)
         in
-            (agrids, Array.fromList( List.concat [ [grid] , Array.toList aqueue ] ) )
+            (agrids, Array.fromList( List.concat [ elem , Array.toList aqueue ] ) )
 
     else
         (grids, Array.fromList [] )
@@ -188,10 +185,10 @@ bfs exit grids =
                     Array.map
                         (\y ->
                             if y.pos == nexit.pos then
-                                Grid y.pos y.gridtype y.gstate (Just 0) True
+                                Grid y.pos y.gridtype y.gstate (Just 0) True y.stype
 
                             else
-                                Grid y.pos y.gridtype y.gstate Nothing False
+                                Grid y.pos y.gridtype y.gstate Nothing False y.stype
                         )
                         x
                 ) grids
@@ -203,10 +200,10 @@ bfs exit grids =
                     Array.map
                         (\y ->
                             if y.pos == nexit.pos then
-                                Grid y.pos y.gridtype y.gstate y.distance True
+                                Grid y.pos y.gridtype y.gstate y.distance True y.stype
 
                             else
-                                Grid y.pos y.gridtype y.gstate y.distance False
+                                Grid y.pos y.gridtype y.gstate y.distance False y.stype
                         )
                         x
                 ) n2grids

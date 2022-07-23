@@ -18,6 +18,8 @@ import Player exposing (State(..))
 import Message exposing (Page(..))
 import Message exposing (Pos)
 import Html exposing (a)
+import Task
+import Grid exposing (updateSpecialType)
 --import Valve exposing(push,isValve)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -32,6 +34,8 @@ update msg model =
                     |> checkEnd
                 , Cmd.none
                 )
+            else if model.currentPage == GuidePage || model.currentPage == CollectionPage then
+                ( { model | move_timer = model.move_timer + elapsed } , Cmd.none )
             else (model,Cmd.none)
 
         ArrowPressed dir ->
@@ -68,42 +72,120 @@ update msg model =
                     else
                         ( { model | level_index = model.level_index + 1 , move_timer = 0 } , Cmd.none )
                 HomePage -> 
-                    ( { model | currentPage = ChoicePage } , Cmd.none )
+                    ( { model | currentPage = ChoicePage , level_index = 0 } , Cmd.none )
               --  LevelsPage ->
                 --    ( { model | currentPage = GamePage } , Cmd.none )
                 GamePage -> 
-                    ( { model | currentPage = ChoicePage } , Cmd.none )
+                    ( { model | currentPage = ChoicePage , level_index = 0  } , Cmd.none )
                 _ -> 
                     ( model , Cmd.none )
         Undo ->
                 case List.head model.history of
                     Nothing -> (model,Cmd.none)
-                    Just (paints,valves,player) -> 
+                    Just h -> 
                         let
-                            nmodel = {model|valves=valves,player={player|state=Player.Stopped},paints=paints}
+                            hplayer=h.player
+                            nmodel = {model|valves=h.valves,player={hplayer|state=Player.Stopped},paints=h.paints,stypes=h.stypes}
                         in
                         ({nmodel|updatedGrids=(updateGridsfromModel nmodel model.grids)|> bfs model.exit,history =List.drop 1 model.history},Cmd.none)
 
 
         LoadLevel k ->
-            getModel k model
+            case model.currentPage of
+                CollectionPage -> ( { model | level_index = k , move_timer = 0 } , Cmd.none )
+                GuidePage -> 
+                    let
+                        (nmodel,nmsg) = getModel (round ((toFloat (model.level_index+1))/2)) model 
+                    in  
+                        ( { nmodel | currentPage = GuidePage , level_index = model.level_index } , nmsg )
+                _ ->
+                    getModel k model
 
         Load page ->
-            ( { model | currentPage = page , move_timer = 0 , level_index = 0 } , Cmd.none )
-
+            ( { model | currentPage = page , move_timer = 0 , level_index = 0 
+                        , win = (if page == CollectionPage then Lose else model.win ) } , Cmd.none )
+        ChoiceInfo i-> 
+            ({ model | level_index = i },Cmd.none)
         _ ->
             ( model, Cmd.none )
 
 checkEnd : Model -> (Model)
 checkEnd model =
-    if model.mcolor_seq==model.color_seq then
-        {model|win = Model.Win}
-    else if compareList model.mcolor_seq model.color_seq then
-        model
-    else
-        {model|win= Model.Lose}
+    let 
+        k = model.level_index
+        list = model.level_cleared
+    in
+        if model.mcolor_seq==model.color_seq &&checkEqualStypes model then
+            {model|win = Model.Win,level_cleared = List.concat[List.take (k-1) list,[True],List.drop k list]}
+        else if compareList model.mcolor_seq model.color_seq && checkGameStypes model then
+            model
+        else
+            {model|win= Model.Lose}
 
-        
+checkGameStype : Int -> Message.Stype -> Bool
+checkGameStype now stype =
+    case stype.state of
+        Message.SExit i ->
+            if i /= stype.target then
+                False
+            else 
+                True
+        _ ->
+            if stype.target>=now then
+                True
+            else
+                False
+checkGameStypes : Model -> Bool
+checkGameStypes model =
+    let
+        now = List.length model.mcolor_seq
+        stypes=model.stypes
+    in
+        List.all isTrue (List.map (checkGameStype now) stypes)
+isTrue : Bool -> Bool
+isTrue bool =
+    bool
+checkEqualStypes : Model -> Bool
+checkEqualStypes model =
+    let
+        now = List.length model.color_seq
+        stypes=model.stypes
+    in
+        List.all isTrue (List.map checkEqualStype  stypes)
+checkEqualStype : Message.Stype -> Bool
+checkEqualStype stype =
+    case stype.state of
+        Message.SExit i ->
+            if stype.target == i then
+                True
+            else 
+                False
+        _ -> False
+
+
+checkSpecialExit : Model -> Message.Stype -> Message.Stype 
+checkSpecialExit model stype =
+    let
+        exit=model.exit.pos
+        now =List.length model.mcolor_seq
+        nstype=
+            if exit == stype.pos then
+                case stype.state of 
+                    Message.Moving ->
+                        {stype|state=Message.SExit (now-1)}
+                    _ -> stype
+            else
+                stype
+        in 
+            nstype
+checkSpecialExits : Model -> Model
+checkSpecialExits model = 
+    let 
+        stypes=model.stypes
+    
+        nstypes=List.map (checkSpecialExit model) model.stypes
+    in 
+        {model|stypes=nstypes}
 compareList : List a -> List a -> Bool
 compareList a b =
     let 
@@ -129,7 +211,7 @@ move model =
             if valves == model.valves then
                 model
             else
-                {model|history =(model.paints,model.valves,model.player) ::model.history}
+                {model|history ={paints=model.paints,valves=model.valves,player=model.player,stypes=model.stypes} ::model.history}
         newmodel={ n_modelhis | player = { player | state = Stopped }, valves = valves }
         newgrids=loadValves newmodel.grids newmodel.valves
         nmodel={newmodel|updatedGrids=newgrids}
@@ -159,7 +241,20 @@ movePaintsRecur (model,paints) grids  i =
             let
                 exitpaint=Tuple.first (List.partition (\x -> (posequal x.pos model.exit.pos)) paints)
                 normalpaint = Tuple.second (List.partition (\x -> (posequal x.pos model.exit.pos)) paints)
-                mcolorseq = model.mcolor_seq ++ List.map (\x -> x.color) exitpaint
+                lastpaint = List.head ( List.drop ((List.length model.mcolor_seq)-1) model.mcolor_seq )
+                thispaint = 
+                    case List.head exitpaint of
+                        Just a -> a
+                        Nothing ->  { pos = Pos 0 0 , color = Color.red }
+                mcolorseq = 
+                    case lastpaint of
+                        Just a ->
+                            if a == thispaint.color then
+                                model.mcolor_seq
+                            else 
+                                model.mcolor_seq ++ List.map (\x -> x.color) exitpaint
+                        Nothing -> 
+                            model.mcolor_seq ++ List.map (\x -> x.color) exitpaint
             in
                 ({model|mcolor_seq = mcolorseq}, List.sortBy (\x -> getDistance x.pos grids) normalpaint)
         
@@ -174,7 +269,8 @@ movePaints (model,paints) grids  =
 
 timedForward : Float -> Model -> Model
 timedForward elapsed model =
-    if model.currentPage == GuidePage && ( Basics.modBy 2 model.level_index == 0 ) then model
+    if ( model.currentPage == GuidePage && ( Basics.modBy 2 model.level_index == 0 ) )
+      || model.currentPage == CollectionPage then model
         else
     if model.move_timer > stepTime then
         let
@@ -182,10 +278,18 @@ timedForward elapsed model =
                 move model
             movedPaint =
                     let 
+                        ngrids=(newModel.updatedGrids |> bfs model.exit)
+                        nstypes=List.map (Grid.updateSpecialType ngrids) model.stypes
                         (nmodel,npaints) = movePaints (newModel, newModel.paints) (newModel.updatedGrids |> bfs model.exit)
-                        newnewmodel={nmodel|paints=npaints}
+                        newnewmodel={nmodel|paints=npaints,stypes = List.map (Grid.moveSpecialType  ngrids) nstypes}
+                        finalmodel = 
+                            if nmodel.mcolor_seq /= newModel.mcolor_seq then
+                                checkSpecialExits newnewmodel
+                            else 
+                                { newnewmodel | stypes = List.filter ( \x -> ( x.pos /= model.exit.pos || x.state /= Message.Moving ) ) newnewmodel.stypes  }
+                        
                     in
-                        {newnewmodel|updatedGrids = updateGridsfromModel newnewmodel newnewmodel.grids |>bfs model.exit  }
+                        {finalmodel|updatedGrids = updateGridsfromModel finalmodel finalmodel.grids |>bfs model.exit  }
                 
         in
         { movedPaint | move_timer = 0 }

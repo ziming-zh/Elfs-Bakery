@@ -17,6 +17,8 @@ import Player exposing (Player)
 import Task
 import Browser.Dom exposing (getViewport)
 import Grid exposing (drawWallIndex)
+import Grid exposing (sendStype2Grid)
+import Message exposing (Paint,Pos,SpecialType(..),Stype,Sstate(..))
 
 type alias Model =
     Mapset
@@ -25,10 +27,11 @@ type alias Model =
         , levels : List Level
         , guide_levels : List Level
         , level_index : Int
+        , level_cleared : List Bool
         , valves_move : Int
         , color_seq : List Color.Color
         , mcolor_seq : List Color.Color
-        , history : List (List Paint,List Valve,Player)
+        , history : List History
         , currentPage : Page
         --, lastMoveDirection : MoveDirection  --merge the direction of the player into Type Player
         --  , stringlevel : StringLevel
@@ -39,7 +42,13 @@ type GaState
     = Win
     | Lose
     | Playing
-    
+type alias History =
+    {
+        paints: List Paint,
+        valves: List Valve,
+        player: Player,
+        stypes: List Stype
+    }
 
 type alias Flags =
     { levels : Maybe String }
@@ -51,6 +60,7 @@ type alias Mapset a =
         , wall : Wall
         , valves : List Valve
         , paints : List Paint
+        , stypes : List Stype
         , updatedGrids : Grids
         , grids : Grids
         , dots : List Pos --what is dots
@@ -182,10 +192,14 @@ getModel k model =
             case List.head levels of
                 Just lv-> (lv.exit,lv.colorseq)
                 Nothing -> (Pos -1 -1,[])       
-        initplayer = 
+        (initplayer,stypes) = 
             case List.head levels of
-                Just lv-> lv.player
-                Nothing -> Player.init (Pos 0 0) Message.Up
+                Just lv-> (lv.player,lv.stypes)
+                Nothing -> (Player.init (Pos 0 0) Message.Up,[])
+        mapsize = 
+            case List.head levels of
+                Just lv-> (lv.width,lv.height)
+                Nothing -> (0,0)
     in
     ( { player = initplayer
       , wall = wall
@@ -193,8 +207,9 @@ getModel k model =
       , paints = paints
       , grids = initialgrids
       , updatedGrids = initialgrids
+      , stypes = stypes
       , dots = []
-      , mapSize = (0,0)
+      , mapSize = mapsize
       , win = Playing
       , levels = model.levels -- important here
       , guide_levels = model.guide_levels
@@ -208,6 +223,7 @@ getModel k model =
       , exit = initGrid exit.x exit.y -- to be imported from the level later
       , color_seq = colorseq
       , mcolor_seq = []
+      , level_cleared = model.level_cleared
       }
     , Cmd.batch
         [ --Random.generate RandomLevel (Random.int 0 39),
@@ -232,32 +248,39 @@ initModel =
             case List.head levels of
                 Just lv-> (lv.exit,lv.colorseq)
                 Nothing -> (Pos -1 -1,[])     
-        initplayer = 
+        (initplayer,stypes) = 
             case List.head levels of
-                Just lv-> lv.player
-                Nothing -> Player.init (Pos 0 0) Message.Up
+                Just lv-> (lv.player,lv.stypes)
+                Nothing -> (Player.init (Pos 0 0) Message.Up,[])
+
+        mapsize = 
+            case List.head levels of
+                Just lv-> (lv.width,lv.height)
+                Nothing -> (0,0)
     in
     ( { player = initplayer
       , wall = wall
       , valves = valves
       , paints = paints
       , grids = initialgrids
+      , stypes= []
+      , mapSize = mapsize
       , updatedGrids = initialgrids
       , dots = []
-      , mapSize = (0,0)
       , win = Playing
       , levels = levels -- important here
       , guide_levels = Levels.initGuide
       , move_timer = 0.0
       , level_index = 0
       , valves_move = 0
-      , history = [(paints,valves,initplayer)]
+      , history = [{paints=paints,valves=valves,player=initplayer,stypes=stypes}]
       , currentPage = HomePage
       , windowsize = ( 800, 800 )
       , randomindex = 0
       , exit = initGrid exit.x exit.y -- to be imported from the level later
       , color_seq = colorseq
       , mcolor_seq = []
+      , level_cleared = List.repeat 7 False
       }
     , Cmd.batch
         [ Random.generate RandomLevel (Random.int 0 39)
@@ -272,6 +295,8 @@ updateGridsfromModel model initialgrids=
     let
         paints = model.paints
         valves = model.valves
-    in
-        List.foldl sendPainttoGrids (loadValves initialgrids valves) paints
+        stypes =model.stypes
+        ngrids=List.foldl sendPainttoGrids (loadValves initialgrids valves) paints
+    in 
+        List.foldl sendStype2Grid ngrids stypes
         -- initialgrids
