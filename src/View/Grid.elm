@@ -44,9 +44,13 @@ drawGrid mx grid =
     rectRender posx posy setLength setLength color
 
 
-drawStype : Int -> Int -> Grid -> List (Html msg)
-drawStype level_index scale grid =
-
+drawStype : (Int,Int) -> Grid -> List (Html msg)
+drawStype (w,h) grid =
+    let
+        scalex = toFloat (50*w+5)
+        scaley = toFloat (50*h+5)
+        rate = Basics.min (1218/scalex) (790/scaley)
+    in
     case grid.stype of
         Just a ->
             case a.state of
@@ -61,26 +65,31 @@ drawStype level_index scale grid =
 
                                 Vanilla ->
                                     HtmlAttr.src "./assets/vanilla_grid.png"
-                        (initx,inity) =
-                            if level_index==2 then
-                                (140,180)
-                            else 
-                                (0,0)
+                        (initx,inity) =(639-21.5+((toFloat grid.pos.y)*setLength-(scalex)/2+2)*rate,565-24.5+((toFloat grid.pos.x)*setLength-(scaley)/2-3)*rate)
+                        --(initx,inity) =(639-21.5+((toFloat 0)*setLength-(scalex)/2)*rate,565-24.5+((toFloat 0)*setLength-(scaley)/2)*rate)
+                           -- if level_index==1 then
+                           --     (40,167)
+                           -- else 
+                           --     (81,126)
 
                     in
                     [ Html.img
                         [ pic
-                        , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat (22.0/(toFloat scale*2.1)) ++ ")")
+                        , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat (0.55*rate) ++ ")")
                         , HtmlAttr.style "position" "absolute"
-                        , HtmlAttr.style "left" (String.fromFloat (initx+(toFloat grid.pos.y) * setLength/(toFloat scale)/3.1*64) ++ "px")
-                        , HtmlAttr.style "top" (String.fromFloat (inity+(toFloat grid.pos.x) * setLength/(toFloat scale)/3.1*64) ++ "px")
+                       -- , HtmlAttr.style "left" (String.fromFloat (initx-21.5) ++ "px")
+                      --  , HtmlAttr.style "top" (String.fromFloat (inity-24.5) ++ "px")
+                        , HtmlAttr.style "left" (String.fromFloat (initx+25*(rate-1)) ++ "px")
+                        , HtmlAttr.style "top" (String.fromFloat (inity+25*(rate-1)) ++ "px")
+                     --   , HtmlAttr.style "left" (String.fromFloat (initx+(toFloat grid.pos.y) * setLength/(toFloat scale)) ++ "px")
+                      --  , HtmlAttr.style "top" (String.fromFloat (inity+(toFloat grid.pos.x) * setLength/(toFloat scale)) ++ "px")
                         ]
                         []
                     ]
 
         Nothing ->
             []
-renderStypes :Int -> Int -> Grids -> List (Html msg)
-renderStypes scale level_index grids =
-    List.concat (List.map (\y -> Array.toList (Array.map (\x -> drawStype level_index scale x) y)) (Array.toList grids)
+renderStypes : (Int,Int) -> Grids -> List (Html msg)
+renderStypes (w,h) grids =
+    List.concat (List.map (\y -> Array.toList (Array.map (\x -> drawStype (w,h) x) y)) (Array.toList grids)
         |> List.foldl List.append [])

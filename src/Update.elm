@@ -286,7 +286,7 @@ timedForward elapsed model =
                             if nmodel.mcolor_seq /= newModel.mcolor_seq then
                                 checkSpecialExits newnewmodel
                             else 
-                                { newnewmodel | stypes = List.filter ( \x -> x.pos /= model.exit.pos ) newnewmodel.stypes  }
+                                { newnewmodel | stypes = List.filter ( \x -> ( x.pos /= model.exit.pos || x.state /= Message.Moving ) ) newnewmodel.stypes  }
                         
                     in
                         {finalmodel|updatedGrids = updateGridsfromModel finalmodel finalmodel.grids |>bfs model.exit  }

@@ -43,6 +43,9 @@ renderChoicePage model =
         , renderChoiceButton "#F4B183" "2" (LoadLevel 2) (ChoiceInfo 2) (186,395) 1 (65,65) "#FFFFFF"
         , renderChoiceButton "#F4B183" "3" (LoadLevel 3) (ChoiceInfo 3) (349,395) 1 (65,65) "#FFFFFF"
         , renderChoiceButton "#F4B183" "4" (LoadLevel 4) (ChoiceInfo 4) (512,395) 1 (65,65) "#FFFFFF"
+        , renderChoiceButton "#F4B183" "5" (LoadLevel 5) (ChoiceInfo 5) (23,527) 1 (65,65) "#FFFFFF"
+        , renderChoiceButton "#F4B183" "6" (LoadLevel 6) (ChoiceInfo 6) (186,527) 1 (65,65) "#FFFFFF"
+        , renderChoiceButton "#F4B183" "7" (LoadLevel 7) (ChoiceInfo 7) (349,527) 1 (65,65) "#FFFFFF"
         , renderButtonColor "#4472C4" "<" (Load HomePage) (-60,0) 1 (50,50) "#FFFFFF"
         
         
