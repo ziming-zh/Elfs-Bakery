@@ -29,14 +29,14 @@ renderProgressDeco : Int -> Stype -> List (Html msg)
 renderProgressDeco total stype =
         case stype.state of
             Message.SExit i -> 
-                [renderith total 1487 785 5.6 Cream i  (selectDeco stype)]
+                [renderith total 1486 777 5.6 Cream i  (selectDeco stype)]
             _ -> []
 renderRecipeDeco: Int -> Stype ->Html msg
 renderRecipeDeco total stype =
-    renderith total 1487 424 2.8 Cream stype.target  (selectDeco stype)
+    renderith total 1486 420 2.8 Cream stype.target  (selectDeco stype)
 renderTaskDeco : Int -> Stype ->Html msg
 renderTaskDeco total stype =
-    renderith total 1000 675 5.6 Cream stype.target  (selectDeco stype)
+    renderith total 999 672 5.6 Cream stype.target  (selectDeco stype)
 renderCake : List Color -> Int -> Int -> Float -> Int -> Caketype -> List (Html msg)
 renderCake colors x y scale total caketype =
     let
