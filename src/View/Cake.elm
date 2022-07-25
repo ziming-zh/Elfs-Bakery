@@ -10,7 +10,7 @@ type Caketype
     = Progress
     | Recipe
     | Task
-    | Collection
+    | Collection Int
 
 
 
@@ -44,8 +44,6 @@ renderDeco total x y stype =
 renderCake : List Color -> Int -> Int -> Float -> Int -> Caketype -> List Stype -> List (Html msg)
 renderCake colors x y scale total caketype stypes=
     let
-        indexed =
-            List.indexedMap Tuple.pair colors
         index=List.range 0 (List.length colors)
     in
     if total == 0 then
@@ -104,7 +102,10 @@ renderCandle now total x scale caketype =
                 Recipe -> yo
                 Progress -> yo
                 Task -> (yo-110)
-                Collection -> yo-21
+                Collection i-> 
+                    if i<=4 then (yo-21)
+                    else (yo+156)
+
     in
     if now == total then
         [ Html.img
@@ -151,7 +152,7 @@ renderithCake total x y scale stypes caketype i item =
                         [renderRecipeDeco total stype]
                     Task ->
                         [renderTaskDeco total stype]
-                    Collection ->
+                    Collection _->
                         [renderDeco total (x+47) (y+33)  stype]
     in 
         List.concat [[(renderith total x y scale Cake i item)],deco]

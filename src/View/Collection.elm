@@ -53,7 +53,7 @@ pageSingleHat cleared model k =
                     Nothing -> ([],[])
         
     in
-        renderCake colors (round x) (round y) 1.2 (List.length colors) View.Cake.Collection stypes
+        renderCake colors (round x) (round y) 1.2 (List.length colors) (View.Cake.Collection k) stypes
 
 pageRank : Model -> Html Msg
 pageRank model =
