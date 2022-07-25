@@ -6,7 +6,7 @@ import Html exposing (Html, div)
 import View.Basic exposing (renderButton,renderButtonColor)
 import View.Basic exposing (renderChoiceButton)
 import View.Hat exposing (hat)
-import View.Cake exposing (renderCake,renderTaskDeco)
+import View.Cake exposing (renderCake)
 import View.Cake exposing (Caketype(..))
 import View.Basic exposing (renderTxt)
 
@@ -97,8 +97,7 @@ renderGameInfo model =
         in
             List.concat 
             [[renderHat i]
-            , (renderCake colors 950 640 2.4 (List.length colors) View.Cake.Task)
-            , [renderTxt (900,230) sizei  "#000000" description  (1)]
-            , List.map (renderTaskDeco (List.length colors)) stypes]
+            , (renderCake colors 950 640 2.4 (List.length colors) View.Cake.Task stypes)
+            , [renderTxt (900,230) sizei  "#000000" description  (1)]]
     else 
         []
