@@ -10,6 +10,7 @@ import View.Guide exposing(renderGuidePage)
 import Html.Attributes as HtmlAttr exposing (..)
 import Message exposing (Page(..))
 import View.Collection exposing (renderCollectionPage)
+import View.Bgm exposing (..)
 
 view : Model -> Html Msg
 view model =
@@ -23,27 +24,28 @@ view model =
 
             else
                 Basics.min 1 (w / 1200)
-    in
+        withoutbgm=
 
-    case model.currentPage of 
-        ChoicePage -> renderChoicePage model
-        HomePage -> renderHome model
-        LevelsPage -> renderLevelPage model
-        GamePage -> renderGamePage model
-        GuidePage ->
-            if Basics.modBy 2 model.level_index == 0 then
-                renderGuidePage model
-            else renderLevelPage model
-        CollectionPage -> renderCollectionPage model
-        _ -> 
-            div
-                [ ]
-                [ 
-                    -- toHtml (800 ,600)
-                    -- []
-                    -- (renderLevel model.wall [] (Array.fromList [Array.fromList []]))
-                ]
-
+            case model.currentPage of 
+                ChoicePage -> renderChoicePage model
+                HomePage -> renderHome model
+                LevelsPage -> renderLevelPage model
+                GamePage -> renderGamePage model
+                GuidePage ->
+                    if Basics.modBy 2 model.level_index == 0 then
+                        renderGuidePage model
+                    else renderLevelPage model
+                CollectionPage -> renderCollectionPage model
+                _ -> 
+                    div
+                        [ ]
+                        [
+                            -- toHtml (800 ,600)
+                            -- []
+                            -- (renderLevel model.wall [] (Array.fromList [Array.fromList []]))
+                        ]
+        in
+        div[][withoutbgm,gameBGM]
 -- view : Model -> Html msg
 -- view  model =
 --     let
