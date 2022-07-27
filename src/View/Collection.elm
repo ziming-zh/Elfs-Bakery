@@ -5,7 +5,7 @@ import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html, div)
 import View.Basic exposing(renderButtonColor,renderButtonRotate)
 import Svg.Attributes exposing (mode)
-import View.Cake exposing(renderCake,renderDeco)
+import View.Cake exposing(renderCake)
 import FontAwesome.Brands exposing (yelp)
 import FontAwesome.Solid exposing (yen_sign)
 check : List Bool -> Int -> Bool
@@ -53,7 +53,7 @@ pageSingleHat cleared model k =
                     Nothing -> ([],[])
         
     in
-        List.concat [renderCake colors (round x) (round y) 1.2 (List.length colors) View.Cake.Collection,List.map (renderDeco (List.length colors) (round (x+47)) (round (y+33)) ) stypes]
+        renderCake colors (round x) (round y) 1.2 (List.length colors) (View.Cake.Collection k) stypes
 
 pageRank : Model -> Html Msg
 pageRank model =

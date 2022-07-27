@@ -17,7 +17,6 @@ import Canvas exposing (Renderable,toHtml)
 import Array
 import List
 import View.Cake exposing (renderCake,Caketype(..))
-import View.Cake exposing (renderRecipeDeco,renderProgressDeco)
 
 renderLevel : Wall -> List Valve -> Grids -> Player -> List Renderable
 renderLevel wall valves grids player =
@@ -67,10 +66,8 @@ renderLevelPage model =
             ][]
             , renderGstate model
         ]
-        , renderCake model.color_seq 1439 390 1.2 (List.length model.color_seq) Recipe
-        , renderCake model.mcolor_seq 1439 750 2.4 (List.length model.color_seq) Progress
-        , List.map (renderRecipeDeco (List.length model.color_seq)) model.stypes
-        , List.concat (List.map (renderProgressDeco (List.length model.color_seq)) model.stypes)
+        , renderCake model.color_seq 1439 390 1.2 (List.length model.color_seq) Recipe model.stypes
+        , renderCake model.mcolor_seq 1439 750 2.4 (List.length model.color_seq) Progress model.stypes
         , [ toHtml ( round scalex , round scaley)
             [ HtmlAttr.style "transform-origin" "50 50"
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat rate ++ ")")

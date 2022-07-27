@@ -1,4 +1,4 @@
-module View.Cake exposing (Caketype(..), renderCake,renderRecipeDeco,renderProgressDeco,renderTaskDeco,renderDeco)
+module View.Cake exposing (Caketype(..), renderCake)
 
 import Color exposing (..)
 import Html exposing (Html)
@@ -10,7 +10,7 @@ type Caketype
     = Progress
     | Recipe
     | Task
-    | Collection
+    | Collection Int
 
 
 
@@ -41,18 +41,17 @@ renderTaskDeco total stype =
 renderDeco : Int -> Int ->Int ->Stype ->Html msg
 renderDeco total x y stype =
     renderith total x y 2.8 Cream stype.target  (selectDeco stype)
-renderCake : List Color -> Int -> Int -> Float -> Int -> Caketype -> List (Html msg)
-renderCake colors x y scale total caketype =
+renderCake : List Color -> Int -> Int -> Float -> Int -> Caketype -> List Stype -> List (Html msg)
+renderCake colors x y scale total caketype stypes=
     let
-        indexed =
-            List.indexedMap Tuple.pair colors
         index=List.range 0 (List.length colors)
     in
     if total == 0 then
         []
 
     else
-        List.append (List.map2 (renderith total x y scale Cake) index (List.map selectColor colors)) (renderCandle (List.length colors) total x ((scale / 2) * (0.8 ^ toFloat total)) caketype)
+        List.append (List.concat (List.map2 (renderithCake total x y scale stypes caketype) index (List.map selectColor colors))) 
+        (renderCandle (List.length colors) total x ((scale / 2) * (0.8 ^ toFloat total)) caketype)
 
 
 renderCandle : Int -> Int -> Int -> Float -> Caketype -> List (Html msg)
@@ -103,7 +102,10 @@ renderCandle now total x scale caketype =
                 Recipe -> yo
                 Progress -> yo
                 Task -> (yo-110)
-                Collection -> yo-21
+                Collection i-> 
+                    if i<=4 then (yo-21)
+                    else (yo+156)
+
     in
     if now == total then
         [ Html.img
@@ -118,7 +120,42 @@ renderCandle now total x scale caketype =
 
     else
         []
-
+sameLayer : Caketype ->Int -> Stype -> Bool
+sameLayer caketype now stype =
+    let
+        layer =
+            case caketype of
+                        Progress ->
+                            case stype.state of 
+                                Message.SExit i ->
+                                    i
+                                _ -> -1
+                        _ -> stype.target
+    in
+        now==layer
+isi: Int -> Int -> Bool
+isi i a =
+    i==a
+renderithCake : Int -> Int -> Int -> Float -> List Stype->Caketype-> Int  -> Html.Attribute msg ->List (Html msg)
+renderithCake total x y scale stypes caketype i item =
+    let
+        layer=List.filter (sameLayer caketype i) stypes
+        
+        deco =
+            case List.head layer of
+                Nothing -> []
+                Just stype ->
+                    case caketype of
+                    Progress ->
+                        (renderProgressDeco total stype)
+                    Recipe -> 
+                        [renderRecipeDeco total stype]
+                    Task ->
+                        [renderTaskDeco total stype]
+                    Collection _->
+                        [renderDeco total (x+47) (y+33)  stype]
+    in 
+        List.concat [[(renderith total x y scale Cake i item)],deco]
 type Ithtype =Cream|Cake
 renderith : Int -> Int -> Int -> Float -> Ithtype-> Int  -> Html.Attribute msg -> Html msg
 renderith total x y scale itemtype i item =
