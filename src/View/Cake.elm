@@ -1,11 +1,12 @@
-module View.Cake exposing (Caketype(..), renderCake)
+module View.Cake exposing (Caketype(..), renderCake,renderRecipe)
 
 import Color exposing (..)
 import Html exposing (Html)
 import Html.Attributes as HtmlAttr exposing (..)
 import Message exposing (SpecialType(..), Stype)
 import Model exposing (Model)
-
+import View.Basic exposing (rectRender)
+import Canvas exposing (Renderable)
 type Caketype
     = Progress
     | Recipe
@@ -15,8 +16,15 @@ type Caketype
 
 
 --c=[300,]
-
-
+renderRecipe : List Color -> List Renderable 
+renderRecipe colors = 
+    let
+        index=List.range 0 (List.length colors)
+    in
+        List.map2 (renderRect 0 40 40) index colors
+renderRect : Float -> Float -> Float -> Int -> Color.Color -> Renderable
+renderRect y dx dy x color=
+    rectRender (50*toFloat x) y dx dy color
 selectDeco : Stype -> Html.Attribute msg
 selectDeco stype =
     case stype.content of
