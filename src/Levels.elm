@@ -20,7 +20,7 @@ type alias Level =
     }
 
 getInitialLevels : List Level
-getInitialLevels = [initLevel1,initLevel2,initLevel5,initLevel6,initLevel7]
+getInitialLevels = [initLevel1,initLevel2,initLevel3,initLevel4,initLevel5,initLevel6,initLevel7]
 
 initGuide : List Level
 initGuide = [guideLevel1,guideLevel2,guideLevel3,guideLevel4]
@@ -174,122 +174,72 @@ guideLevel1 =
     ,stypes=[]
     }
 
-
-initLevel5 : Level
-initLevel5 = 
-    { width = 8
-    , height = 6
+initLevel7 : Level
+initLevel7 = 
+    { width = 13
+    , height = 13
     , wall = 
     {
         row =  mapInt2Bool
-        [[1,1,1,0,1,1,1,1]
-        ,[0,0,0,1,1,0,1,0]
-        ,[1,0,0,0,1,0,1,0]
-        ,[0,0,1,0,1,0,1,0]
-        ,[0,1,1,0,1,0,1,0]
-        ,[0,1,0,0,0,0,1,0]
-        ,[1,1,1,1,1,1,0,1]]
+        [[1,1,1,1,1,1,1,1,1,1,1,1,1]
+        ,[0,1,1,0,1,1,1,1,1,1,1,1,1]
+        ,[0,0,1,1,0,1,1,1,1,1,1,0,0]
+        ,[0,0,0,1,1,1,1,1,1,1,0,1,0]
+        ,[0,0,0,0,1,1,0,1,1,0,1,0,0]
+        ,[0,0,1,0,0,1,1,1,0,1,0,0,0]
+        ,[0,0,0,0,0,0,0,1,1,0,0,0,0]
+        ,[0,1,0,1,0,0,1,0,0,0,0,0,0]
+        ,[1,0,1,0,0,1,0,1,0,0,0,0,0]
+        ,[0,0,0,0,1,1,1,1,1,0,0,0,0]
+        ,[0,0,0,1,1,1,1,1,1,1,0,0,0]
+        ,[0,0,1,1,1,1,1,1,1,1,1,0,0]
+        ,[0,1,1,1,1,1,1,1,1,1,1,0,0]
+        ,[1,1,1,1,1,1,1,1,1,1,1,1,1]]
         , col = mapInt2Bool
-        [[1,1,1,1,1,1]
-        ,[0,1,0,0,1,0]
-        ,[1,0,1,1,1,0]
-        ,[1,0,0,1,1,1]
-        ,[1,1,0,0,0,0]
-        ,[0,1,0,0,0,0]
-        ,[1,1,0,0,0,1]
-        ,[0,1,0,1,1,1]
-        ,[1,1,1,1,1,1]]
+        [[1,1,1,1,1,1,1,1,1,1,1,1,1]
+        ,[0,1,1,1,1,1,1,0,1,1,1,1,0]
+        ,[0,0,1,1,1,1,1,0,1,1,1,0,0]
+        ,[0,0,0,1,1,0,1,1,1,1,0,0,0]
+        ,[0,0,0,0,1,1,1,1,1,0,0,0,0]
+        ,[0,0,0,0,0,1,1,1,0,0,0,0,0]
+        ,[0,0,0,0,0,0,1,0,0,0,0,0,0]
+        ,[0,0,0,0,0,0,0,1,1,0,0,0,0]
+        ,[0,0,0,1,1,0,1,0,0,0,0,0,0]
+        ,[0,0,0,0,0,1,1,1,0,0,0,0,0]
+        ,[0,0,0,0,1,0,1,1,1,1,0,0,0]
+        ,[0,0,1,1,1,0,1,1,1,1,1,0,0]
+        ,[1,1,0,1,1,1,1,1,1,1,1,1,0]
+        ,[1,1,1,1,1,1,1,1,1,1,1,1,1]]
     }
     ,valves = [
-         {state = Left, pos = {y=3,x=1}}
-        ,{state = Left, pos = {y=3,x=2}}
-        ,{state = Down, pos = {y=3,x=2}}
-        ,{state = Up, pos = {y=4,x=3}}
-        ,{state = Left, pos = {y=4,x=3}}
-        ,{state = Up, pos = {y=6,x=4}}
-        ,{state = Down, pos = {y=6,x=4}}
-        ,{state = Down, pos = {y=5,x=4}}
-        ,{state = Down, pos = {y=4,x=4}}
-        ,{state = Down, pos = {y=1,x=3}}
-        ,{state = Left, pos = {y=1,x=3}}
-        ,{state = Down, pos = {y=7,x=0}}
-        ,{state = Down, pos = {y=5,x=0}}
+         {state = Left , pos = {y=1,x=1}},{state = Up   , pos = {y=1,x=1}},{state = Down , pos = {y=1,x=1}},{state = Right, pos = {y=1,x=1}}
+        ,{state = Left , pos = {y=12,x=12}},{state = Down   , pos = {y=12,x=12}}--,{state = Down , pos = {y=12,x=12}},{state = Right, pos = {y=12,x=12}}
+        ,{state = Left , pos = {y=1,x=12}},{state = Down   , pos = {y=1,x=12}}--,{state = Down , pos = {y=1,x=12}},{state = Right, pos = {y=1,x=12}}
+      --  ,{state = Left , pos = {y=12,x=1}},{state = Up   , pos = {y=12,x=1}},{state = Down , pos = {y=12,x=1}},{state = Right, pos = {y=12,x=1}}
+        ,{state = Up , pos = {x=8,y=2}}--,{state = Right, pos = {x=8,y=2}},{state = Up   , pos = {x=8,y=2}}
+        ,{state = Down , pos = {x=1,y=4}},{state = Left , pos = {x=1,y=4}}
+        --,{state = Right , pos = {x=11,y=6}},{state = Down , pos = {x=11,y=6}},{state = Up , pos = {x=11,y=6}}--,{state = Left, pos = {x=11,y=6}}
+        --,{state = Right , pos = {x=10,y=6}},{state = Down , pos = {x=10,y=6}},{state = Up , pos = {x=10,y=6}}--,{state = Left, pos = {x=10,y=6}}
+        --,{state = Right , pos = {x=9,y=6}},{state = Down , pos = {x=9,y=6}},{state = Up , pos = {x=9,y=6}}--,{state = Left , pos = {x=9,y=6}}
+        ,{state = Right , pos = {x=7,y=6}},{state = Down , pos = {x=7,y=6}},{state = Up , pos = {x=7,y=6}},{state = Left , pos = {x=7,y=6}}
+        ,{state = Up , pos = {x=8,y=8}},{state = Right , pos = {x=8,y=8}}--,{state = Left , pos = {x=8,y=6}}        
+        ,{state = Left , pos = {x=4,y=7}},{state = Up , pos = {x=4,y=7}}
+        ,{state = Up , pos = {x=4,y=10}}
+        ,{state = Left , pos = {x=2,y=5}}
+        ,{state = Left , pos = {x=5,y=2}}
     ]
     ,paints = [
-         {pos = {x=2,y=2},color=Color.lightYellow}
-        ,{pos = {x=3,y=0},color=Color.blue}
-        ,{pos = {x=4,y=0},color=Color.blue}
-        ,{pos = {x=5,y=0},color=Color.blue}
+         {pos = {x=7,y=1},color=Color.lightYellow}
         ,{pos = {x=5,y=1},color=Color.blue}
-        ,{pos = {x=5,y=2},color=Color.blue}
-        ,{pos = {x=4,y=2},color=Color.blue}
-        ,{pos = {x=0,y=2},color=Color.red}
-        ,{pos = {x=0,y=4},color=Color.red}
-        ,{pos = {x=0,y=6},color=Color.red}
-        ,{pos = {x=4,y=6},color=Color.red}
+        ,{pos = {x=6,y=1},color=Color.blue}
+        ,{pos = {y=0,x=11},color=Color.red}
+        ,{pos = {y=0,x=10},color=Color.red}
     ]
-    ,id = 5
-    ,exit = Pos 5 7
-    ,stypes = [{pos ={x=2,y=4},state=Still 1,content=Vanilla,target=1}]
-    ,colorseq = [Color.purple, Color.orange,Color.red]
-
-    ,player = init (Pos 5 5) Message.Up
-    }
-
-
-initLevel6 : Level
-initLevel6 = 
-    { width = 8
-    , height = 6
-    , wall = 
-    {
-        row =  mapInt2Bool
-        [[1,1,1,0,1,1,1,1]
-        ,[0,0,0,1,1,0,1,0]
-        ,[1,0,0,0,1,0,1,0]
-        ,[0,0,1,0,1,0,1,0]
-        ,[0,1,1,0,1,0,1,0]
-        ,[0,1,0,0,0,0,1,0]
-        ,[1,1,1,1,1,1,0,1]]
-        , col = mapInt2Bool
-        [[1,1,1,1,1,1]
-        ,[0,1,0,0,1,0]
-        ,[1,0,1,1,1,0]
-        ,[1,0,0,1,1,1]
-        ,[1,1,0,0,0,0]
-        ,[0,1,0,0,0,0]
-        ,[1,1,0,0,0,1]
-        ,[0,1,0,1,1,1]
-        ,[1,1,1,1,1,1]]
-    }
-    ,valves = [
-         {state = Left, pos = {y=3,x=1}}
-        ,{state = Left, pos = {y=3,x=2}}
-        ,{state = Down, pos = {y=3,x=2}}
-        ,{state = Up, pos = {y=4,x=3}}
-        ,{state = Left, pos = {y=4,x=3}}
-        ,{state = Up, pos = {y=6,x=4}}
-        ,{state = Down, pos = {y=6,x=4}}
-        ,{state = Down, pos = {y=5,x=4}}
-        ,{state = Down, pos = {y=4,x=4}}
-        ,{state = Down, pos = {y=1,x=3}}
-        ,{state = Left, pos = {y=1,x=3}}
-        ,{state = Down, pos = {y=7,x=0}}
-        
-    ]
-    ,paints = [
-         {pos = {x=2,y=7},color=Color.lightYellow}
-        ,{pos = {x=2,y=2},color=Color.lightYellow}
-        ,{pos = {x=0,y=2},color=Color.red}
-        ,{pos = {x=0,y=4},color=Color.red}
-        ,{pos = {x=0,y=6},color=Color.red}
-        ,{pos = {x=4,y=6},color=Color.red}
-    ]
-    ,id = 6
-    ,exit = Pos 5 7
-    ,colorseq = [Color.lightYellow, Color.red,Color.red]
-    ,player = init (Pos 5 5) Message.Up
-    ,stypes=[]
+    ,id = 7
+    ,exit = Pos 6 6
+    ,stypes = [{pos ={x=7,y=6},state=Still 1,content=Vanilla,target=0}]
+    ,colorseq = [Color.lightYellow, Color.purple]
+    ,player = init (Pos 5 0) Message.Up
     }
 
 initLevel1 : Level
@@ -396,8 +346,183 @@ initLevel2 =
     ,stypes=[]
     }
 
-initLevel7 : Level
-initLevel7 = 
+initLevel5 : Level
+initLevel5 = 
+    { width = 11
+    , height = 7
+    , wall = 
+    {
+        row =  mapInt2Bool
+        [[0,0,1,1,1,1,1,1,1,1,0]
+        ,[1,0,0,1,1,1,1,1,0,0,0]
+        ,[0,0,0,0,1,0,1,1,0,0,0]
+        ,[0,1,0,0,0,0,0,1,1,0,1]
+        ,[0,1,1,0,0,1,1,1,0,0,1]
+        ,[1,0,0,0,0,1,0,1,1,0,0]
+        ,[0,0,0,0,1,1,1,1,0,0,0]
+        ,[0,0,0,1,1,1,1,1,1,1,0]]
+        , col = mapInt2Bool
+        [[0,1,1,1,1,0,0]
+        ,[0,1,1,0,1,0,0]
+        ,[1,1,1,0,0,0,0]
+        ,[0,1,1,0,1,1,1]
+        ,[0,0,1,1,1,1,0]
+        ,[0,0,0,0,0,0,0]
+        ,[0,0,1,1,0,1,0]
+        ,[0,0,0,0,0,0,0]
+        ,[0,1,0,0,0,0,0]
+        ,[0,1,1,0,1,1,0]
+        ,[1,1,1,0,1,1,1]
+        ,[0,0,0,1,0,0,0]]
+    }
+    ,valves = [
+         {pos = {x=2,y=10},state = Up},{pos = {x=2,y=10},state = Down},{pos = {x=2,y=10},state = Left},{pos = {x=2,y=10},state = Right}
+        ,{pos = {x=5,y=10},state = Up},{pos = {x=5,y=10},state = Down},{pos = {x=5,y=10},state = Left},{pos = {x=5,y=10},state = Right}
+        ,{pos = {x=3,y=1},state = Left}
+        ,{pos = {x=4,y=0},state = Right}
+        ,{pos = {x=3,y=3},state = Left}
+        ,{pos = {x=3,y=3},state = Down}
+        ,{pos = {x=4,y=8},state = Up}
+        ,{pos = {x=4,y=8},state = Right}
+        ,{pos = {x=5,y=5},state = Left}
+    ]
+    ,paints = [
+         {pos = {x=1,y=0},color=Color.lightYellow}
+        ,{pos = {x=2,y=0},color=Color.lightYellow}
+        ,{pos = {x=5,y=4},color=Color.blue}
+        ,{pos = {x=4,y=0},color=Color.red}
+    ]
+    ,id = 5
+    ,exit = Pos 3 10
+    ,stypes = [
+         {pos ={x=1,y=9},state=Still 1,content=Vanilla,target=2}
+        ,{pos ={x=5,y=9},state=Still 1,content=Chocolate,target=1}
+        ,{pos ={x=5,y=5},state=Still 1,content=Chocolate,target=100}
+    ]
+    ,colorseq = [Color.green,Color.red,Color.lightYellow]
+
+    ,player = init (Pos 3 1) Message.Right
+    }
+
+initLevel4 : Level
+initLevel4 = 
+    { width = 8
+    , height = 6
+    , wall = 
+    {
+        row =  mapInt2Bool
+        [[1,1,1,0,1,1,1,1]
+        ,[0,0,0,1,1,0,1,0]
+        ,[1,0,0,0,1,0,1,0]
+        ,[0,0,1,0,1,0,1,0]
+        ,[0,1,1,0,1,0,1,0]
+        ,[0,1,0,0,0,0,1,0]
+        ,[1,1,1,1,1,1,0,1]]
+        , col = mapInt2Bool
+        [[1,1,1,1,1,1]
+        ,[0,1,0,0,1,0]
+        ,[1,0,1,1,1,0]
+        ,[1,0,0,1,1,1]
+        ,[1,1,0,0,0,0]
+        ,[0,1,0,0,0,0]
+        ,[1,1,0,0,0,1]
+        ,[0,1,0,1,1,1]
+        ,[1,1,1,1,1,1]]
+    }
+    ,valves = [
+         {state = Left, pos = {y=3,x=1}}
+        ,{state = Left, pos = {y=3,x=2}}
+        ,{state = Down, pos = {y=3,x=2}}
+        ,{state = Up, pos = {y=4,x=3}}
+        ,{state = Left, pos = {y=4,x=3}}
+        ,{state = Up, pos = {y=6,x=4}}
+        ,{state = Down, pos = {y=6,x=4}}
+        ,{state = Down, pos = {y=5,x=4}}
+        ,{state = Down, pos = {y=4,x=4}}
+        ,{state = Down, pos = {y=1,x=3}}
+        ,{state = Left, pos = {y=1,x=3}}
+        ,{state = Down, pos = {y=7,x=0}}
+        ,{state = Down, pos = {y=5,x=0}}
+    ]
+    ,paints = [
+         {pos = {x=2,y=2},color=Color.lightYellow}
+        ,{pos = {x=3,y=0},color=Color.blue}
+        ,{pos = {x=4,y=0},color=Color.blue}
+        ,{pos = {x=5,y=0},color=Color.blue}
+        ,{pos = {x=5,y=1},color=Color.blue}
+        ,{pos = {x=5,y=2},color=Color.blue}
+        ,{pos = {x=4,y=2},color=Color.blue}
+        ,{pos = {x=0,y=2},color=Color.red}
+        ,{pos = {x=0,y=4},color=Color.red}
+        ,{pos = {x=0,y=6},color=Color.red}
+        ,{pos = {x=4,y=6},color=Color.red}
+    ]
+    ,id = 4
+    ,exit = Pos 5 7
+    ,stypes = [{pos ={x=2,y=4},state=Still 1,content=Vanilla,target=2}]
+    ,colorseq = [Color.purple, Color.orange,Color.red]
+
+    ,player = init (Pos 5 5) Message.Up
+    }
+
+
+initLevel3 : Level
+initLevel3 = 
+    { width = 8
+    , height = 6
+    , wall = 
+    {
+        row =  mapInt2Bool
+        [[1,1,1,0,1,1,1,1]
+        ,[0,0,0,1,1,0,1,0]
+        ,[1,0,0,0,1,0,1,0]
+        ,[0,0,1,0,1,0,1,0]
+        ,[0,1,1,0,1,0,1,0]
+        ,[0,1,0,0,0,0,1,0]
+        ,[1,1,1,1,1,1,0,1]]
+        , col = mapInt2Bool
+        [[1,1,1,1,1,1]
+        ,[0,1,0,0,1,0]
+        ,[1,0,1,1,1,0]
+        ,[1,0,0,1,1,1]
+        ,[1,1,0,0,0,0]
+        ,[0,1,0,0,0,0]
+        ,[1,1,0,0,0,1]
+        ,[0,1,0,1,1,1]
+        ,[1,1,1,1,1,1]]
+    }
+    ,valves = [
+         {state = Left, pos = {y=3,x=1}}
+        ,{state = Left, pos = {y=3,x=2}}
+        ,{state = Down, pos = {y=3,x=2}}
+        ,{state = Up, pos = {y=4,x=3}}
+        ,{state = Left, pos = {y=4,x=3}}
+        ,{state = Up, pos = {y=6,x=4}}
+        ,{state = Down, pos = {y=6,x=4}}
+        ,{state = Down, pos = {y=5,x=4}}
+        ,{state = Down, pos = {y=4,x=4}}
+        ,{state = Down, pos = {y=1,x=3}}
+        ,{state = Left, pos = {y=1,x=3}}
+        ,{state = Down, pos = {y=7,x=0}}
+        
+    ]
+    ,paints = [
+         {pos = {x=2,y=7},color=Color.lightYellow}
+        ,{pos = {x=2,y=2},color=Color.lightYellow}
+        ,{pos = {x=0,y=2},color=Color.red}
+        ,{pos = {x=0,y=4},color=Color.red}
+        ,{pos = {x=0,y=6},color=Color.red}
+        ,{pos = {x=4,y=6},color=Color.red}
+    ]
+    ,id = 3
+    ,exit = Pos 5 7
+    ,colorseq = [Color.lightYellow, Color.red,Color.red]
+    ,player = init (Pos 5 5) Message.Up
+    ,stypes=[]
+    }
+
+initLevel6 : Level
+initLevel6 = 
     { width = 16
     , height = 14
     , wall = 
@@ -495,7 +620,7 @@ initLevel7 =
         ,{pos = {x=4,y=2},color=Color.red}
         ,{pos = {x=4,y=3},color=Color.red}
     ]
-    ,id = 7
+    ,id = 6
     ,exit = Pos 3 12
     ,colorseq = [Color.lightYellow, Color.purple,Color.green,Color.lightYellow, Color.purple,Color.green]
     ,player = init (Pos 0 11) Message.Down
