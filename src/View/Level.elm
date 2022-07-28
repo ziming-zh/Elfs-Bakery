@@ -86,7 +86,8 @@ renderLevelPage model =
         ]
         , renderRecipeStypes model.stypes
         , [renderButtonColor "#4472C4" "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"]
-        , View.Grid.renderStypes model.mapSize model.updatedGrids]
+        , View.Grid.renderStypes model.mapSize model.updatedGrids
+        , View.Grid.renderExit model.mapSize model.exit model.level_index]
        -- , RENDER 
         )
         
