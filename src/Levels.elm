@@ -398,7 +398,6 @@ initLevel5 =
     ,stypes = [
          {pos ={x=1,y=9},state=Still 1,content=Vanilla,target=2}
         ,{pos ={x=5,y=9},state=Still 1,content=Chocolate,target=1}
-        ,{pos ={x=5,y=5},state=Still 1,content=Chocolate,target=100}
     ]
     ,colorseq = [Color.green,Color.red,Color.lightYellow]
 
