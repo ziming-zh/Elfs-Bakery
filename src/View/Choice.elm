@@ -56,13 +56,21 @@ renderChoicePage model =
 
 
 description1 : String
-description1 ="Little Elf is a beginner. After reading the recipes,\n he decides to try an easy cake at first. \nElf's favourite fruit is mango, straberry and cherry. \nPlease help him to make this cake!"
-description3 : String
-description3 ="After years of success, Little Elf's store enjoys a good reputation. Here comes the good news! The Gusteau Chef warmly invites to Little Elf to participate in a competition. The Elf won't miss this golden chance. He decides to make the masterpiece of his father -- the supreme rosy champagne milk cake with vanilla topping."
+description1 ="Now that you have mastered the skills of merging and creating colors, take advantage of them and help Little Elf make colorful cakes!"
 description2 : String
-description2 ="After months of practice, Little Elf masters some techniques to make cakes, so he reopens the bakery. The first customer is a little girl who loves chocolates and she orders a mango cake with chocolate topping."
+description2 ="Cream is a precious resource! We have to make full use of them and avoid wastes! "
+description4 : String
+description4 ="Although the map could be the same, the different positions of toppings and cake types make endless of possibilities."
+description3 : String
+description3 ="The toppings of vanilla and chocolate sprinkling on the cake makes it more appealing! But remember: it always stays still until the cream flows along!"
+description5 : String
+description5 ="After finishing past levels, you have mastered the rules of flowing: The creams always rush towards the exit! Make use of this characteristic to pass this level!"
+description6 : String
+description6 ="This is an comprehensive level which invites you to practice combining all the skills you have learned!"
+description7 : String
+description7 ="Now you have mastered all the skills! The Little Elf is also facing the final challenge to become the Cake Master! Help him get the Gusteau Chef Award!"
 descriptions : List String
-descriptions =[description1,description2,description3]
+descriptions =[description1,description2,description3,description4,description5,description6,description7]
 renderHat: Int -> Html Msg
 renderHat i =
     Html.img
@@ -91,9 +99,7 @@ renderGameInfo model =
                     Just des
                         -> des
                     Nothing -> ""
-            sizei = 
-                if i ==3 then 15
-                    else 18
+            sizei = 18
         in
             List.concat 
             [[renderHat i]
