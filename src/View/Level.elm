@@ -69,6 +69,13 @@ renderLevelPage model =
             ][]
             , renderGstate model
         ]
+        ,[ toHtml ( round scalex , round scaley)
+            [ HtmlAttr.style "transform-origin" "50 50"
+            , HtmlAttr.style "position" "absolute"
+            , HtmlAttr.style "left" (String.fromFloat 1472 ++ "px")
+            , HtmlAttr.style "top" (String.fromFloat 277 ++ "px")]
+            (renderRecipe model.color_seq)
+        ]
         , renderCake model.color_seq 1439 390 1.2 (List.length model.color_seq) Recipe model.stypes
         , renderCake model.mcolor_seq 1439 750 2.4 (List.length model.color_seq) Progress model.stypes
         , [ toHtml ( round scalex , round scaley)
@@ -79,13 +86,8 @@ renderLevelPage model =
             , HtmlAttr.style "top" (String.fromFloat (565-(scaley)/2) ++ "px")]
             ((renderLevel model.wall model.valves (model.updatedGrids) model.player))
         ]
-        ,[ toHtml ( round scalex , round scaley)
-            [ HtmlAttr.style "transform-origin" "50 50"
-            , HtmlAttr.style "position" "absolute"
-            , HtmlAttr.style "left" (String.fromFloat 1472 ++ "px")
-            , HtmlAttr.style "top" (String.fromFloat 277 ++ "px")]
-            (renderRecipe model.color_seq)
-        ]
+        
+        
         , renderRecipeStypes model.stypes
         , [renderButtonColor "#4472C4" "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"]
         , View.Grid.renderStypes model.mapSize model.updatedGrids
