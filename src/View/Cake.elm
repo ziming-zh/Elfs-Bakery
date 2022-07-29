@@ -1,4 +1,4 @@
-module View.Cake exposing (Caketype(..), renderCake,renderRecipe)
+module View.Cake exposing (Caketype(..), renderCake,renderRecipe,renderRecipeStypes)
 
 import Color exposing (..)
 import Html exposing (Html)
@@ -16,6 +16,28 @@ type Caketype
 
 
 --c=[300,]
+renderRecipeStypes : List Stype -> List (Html msg)
+renderRecipeStypes stypes =
+    List.map renderRecipeStype stypes
+renderRecipeStype : Stype -> Html msg
+renderRecipeStype stype =
+    let
+        x = 1444 + stype.target*50
+        y = 245.5
+        item = 
+            case stype.content of
+                Chocolate -> HtmlAttr.src "./assets/chocolate_grid.png"
+                Vanilla -> HtmlAttr.src "./assets/vanilla_grid.png"
+    in
+        Html.img
+            [ item
+            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 0.55 ++ ")")
+            , HtmlAttr.style "position" "absolute"
+            , HtmlAttr.style "left" (String.fromInt (x ) ++ "px")
+            , HtmlAttr.style "top" (String.fromFloat ( y) ++ "px")
+            ]
+            []
+        
 renderRecipe : List Color -> List Renderable 
 renderRecipe colors = 
     let
