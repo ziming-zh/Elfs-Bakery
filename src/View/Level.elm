@@ -17,6 +17,7 @@ import Canvas exposing (Renderable,toHtml)
 import Array
 import List
 import View.Cake exposing (renderCake,Caketype(..))
+import View.Cake exposing (renderRecipe,renderRecipeStypes)
 
 renderLevel : Wall -> List Valve -> Grids -> Player -> List Renderable
 renderLevel wall valves grids player =
@@ -74,10 +75,19 @@ renderLevelPage model =
             , HtmlAttr.style "position" "absolute"
             , HtmlAttr.style "left" (String.fromFloat (639-(scalex)/2) ++ "px")
             , HtmlAttr.style "top" (String.fromFloat (565-(scaley)/2) ++ "px")]
-            (renderLevel model.wall model.valves (model.updatedGrids) model.player)
+            ((renderLevel model.wall model.valves (model.updatedGrids) model.player))
         ]
+        ,[ toHtml ( round scalex , round scaley)
+            [ HtmlAttr.style "transform-origin" "50 50"
+            , HtmlAttr.style "position" "absolute"
+            , HtmlAttr.style "left" (String.fromFloat 1472 ++ "px")
+            , HtmlAttr.style "top" (String.fromFloat 277 ++ "px")]
+            (renderRecipe model.color_seq)
+        ]
+        , renderRecipeStypes model.stypes
         , [renderButtonColor "#4472C4" "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"]
-        , View.Grid.renderStypes model.mapSize model.updatedGrids]
+        , View.Grid.renderStypes model.mapSize model.updatedGrids
+        , View.Grid.renderExit model.mapSize model.exit model.level_index]
        -- , RENDER 
         )
         
