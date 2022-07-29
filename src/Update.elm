@@ -242,10 +242,10 @@ movePaintsRecur (model,paints) grids  i =
                 exitpaint=Tuple.first (List.partition (\x -> (posequal x.pos model.exit.pos)) paints)
                 normalpaint = Tuple.second (List.partition (\x -> (posequal x.pos model.exit.pos)) paints)
                 lastpaint = List.head ( List.drop ((List.length model.mcolor_seq)-1) model.mcolor_seq )
-                thispaint = 
+                (thispaint,history) = 
                     case List.head exitpaint of
-                        Just a -> a
-                        Nothing ->  { pos = Pos 0 0 , color = Color.red }
+                        Just a -> (a,[])
+                        Nothing ->  ({ pos = Pos 0 0 , color = Color.red },model.history)
                 mcolorseq = 
                     case lastpaint of
                         Just a ->
@@ -256,7 +256,7 @@ movePaintsRecur (model,paints) grids  i =
                         Nothing -> 
                             model.mcolor_seq ++ List.map (\x -> x.color) exitpaint
             in
-                ({model|mcolor_seq = mcolorseq}, List.sortBy (\x -> getDistance x.pos grids) normalpaint)
+                ({model|mcolor_seq = mcolorseq,history=history}, List.sortBy (\x -> getDistance x.pos grids) normalpaint)
         
 movePaints : (Model, List Paint) -> Grids ->(Model, List Paint)
 movePaints (model,paints) grids  =
