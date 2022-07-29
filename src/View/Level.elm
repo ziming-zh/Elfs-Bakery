@@ -103,7 +103,7 @@ renderExit (w,h) grid i model=
         rate = Basics.min (1218/scalex) (790/scaley)
         pic = 
             case model.currentPage of
-                GamePage ->
+                LevelsPage ->
                     View.Hat.hat i
                 _ -> View.Hat.hat 1
         (initx,inity) = 
