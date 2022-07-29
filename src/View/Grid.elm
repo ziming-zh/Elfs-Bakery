@@ -100,13 +100,18 @@ renderExit (w,h) grid i =
         scaley = toFloat (50*h+5)
         rate = Basics.min (1218/scalex) (790/scaley)
         pic = hat i
-        (initx,inity) = (639-45+((toFloat grid.pos.y)*setLength-(scalex)/2+5)*rate,565-24.5+((toFloat grid.pos.x)*setLength-(scaley)/2-3+2)*rate)
+        (initx,inity) = 
+            if i<=5 then
+                (639-45+((toFloat grid.pos.y)*setLength-(scalex)/2+5)*rate+25*(rate-1),565-24.5+((toFloat grid.pos.x)*setLength-(scaley)/2-3+2)*rate+25*(rate-1))
                         --(initx,inity) =(639-21.5+((toFloat 0)*setLength-(scalex)/2)*rate,565-24.5+((toFloat 0)*setLength-(scaley)/2)*rate)
                            -- if level_index==1 then
                            --     (40,167)
                            -- else 
                            --     (81,126)
-
+            else if i==6 then
+                (586,513)
+            else
+                (787,305)
                     in
                     [ Html.img
                         [ pic
@@ -114,8 +119,8 @@ renderExit (w,h) grid i =
                         , HtmlAttr.style "position" "absolute"
                        -- , HtmlAttr.style "left" (String.fromFloat (initx-21.5) ++ "px")
                       --  , HtmlAttr.style "top" (String.fromFloat (inity-24.5) ++ "px")
-                        , HtmlAttr.style "left" (String.fromFloat (initx+25*(rate-1)) ++ "px")
-                        , HtmlAttr.style "top" (String.fromFloat (inity+25*(rate-1)) ++ "px")
+                        , HtmlAttr.style "left" (String.fromFloat (initx) ++ "px")
+                        , HtmlAttr.style "top" (String.fromFloat (inity) ++ "px")
                      --   , HtmlAttr.style "left" (String.fromFloat (initx+(toFloat grid.pos.y) * setLength/(toFloat scale)) ++ "px")
                       --  , HtmlAttr.style "top" (String.fromFloat (inity+(toFloat grid.pos.x) * setLength/(toFloat scale)) ++ "px")
                         ]

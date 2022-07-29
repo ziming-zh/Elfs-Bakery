@@ -59,10 +59,10 @@ description1 : String
 description1 ="Now that you have mastered the skills of merging and creating colors, take advantage of them and help Little Elf make colorful cakes!"
 description2 : String
 description2 ="Cream is a precious resource! We have to make full use of them and avoid wastes! "
-description3 : String
-description3 ="After months of practice, Little Elf masters some techniques to make cakes, so he reopens the bakery. The first customer is a little girl who loves chocolates and she orders a mango cake with chocolate topping."
 description4 : String
-description4 ="The toppings of vanilla and chocolate sprinkling on the cake makes it more appealing! But remember: it always stays still until the cream flows along!"
+description4 ="Although the map could be the same, the different positions of toppings and cake types make endless of possibilities."
+description3 : String
+description3 ="The toppings of vanilla and chocolate sprinkling on the cake makes it more appealing! But remember: it always stays still until the cream flows along!"
 description5 : String
 description5 ="After finishing past levels, you have mastered the rules of flowing: The creams always rush towards the exit! Make use of this characteristic to pass this level!"
 description6 : String
