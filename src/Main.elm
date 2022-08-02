@@ -1,5 +1,6 @@
 module Main exposing (main)
-
+{-| main function
+-}
 import Browser
 
 --import Levels exposing (Level, ViewLevel)
@@ -23,20 +24,3 @@ init _ =
     Model.initModel
 
 
-
-{-
-   ( model_init , Task.perform GetViewport getViewport )
-
-   Browser.element
-       { init =
-           \value ->
-               ( value
-                   |> Decode.decodeValue Model.decode
-                   |> Result.withDefault Model.initial
-               , Task.perform GetViewport getViewport
-               )
-       , update = Update.update
-       , view = View.view
-       , subscriptions = subscriptions
-       }
--}

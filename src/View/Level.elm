@@ -1,4 +1,7 @@
 module View.Level exposing (renderLevelPage)
+{-| render different levels
+-}
+
 import Canvas exposing (Renderable)
 import View.Grid exposing (renderGrids)
 import Valve exposing (Valve)
@@ -13,7 +16,7 @@ import Model exposing (Model)
 import View.Basic exposing(setLength)
 import View.Basic exposing (renderButtonColor)
 import Player exposing (Player)
-import View.Player exposing (renderPlayer)
+import View.Pacman exposing (fromPlayertoFanShape)
 import Canvas exposing (Renderable,toHtml)
 import Array
 import View.Hat
@@ -26,9 +29,10 @@ renderLevel wall valves grids player =
     (renderGrids grids) ++
     (drawWall wall) ++
     (renderValves valves) ++
-    [renderPlayer player]
+    [fromPlayertoFanShape player]
 
-
+{-| render different levels
+-}
 renderLevelPage : Model -> Html Msg
 renderLevelPage model = 
     let

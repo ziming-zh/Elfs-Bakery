@@ -3,17 +3,17 @@ module Update exposing (update)
 -}
 import Array
 import Message exposing (Msg(..), stepTime,Direction)
-import Model exposing (Model,updateGridsfromModel,getModel)
+import Model exposing (Model,getModel)
 import Wall exposing (Wall)
 import Player exposing (State(..),Player)
 import Valve exposing (pushDown,pushLeft,pushUp,pushRight,Valve)
-import Grid exposing (getGstate,sendPainttoGrids,getGrid)
+import Grid exposing (getGstate,sendPainttoGrids,getGrid,sendStype2Grid,loadValve)
 import Grid exposing (IsOpen)
 import Grid exposing (IsOpen(..),Grids,movePaint)
 import DBFS exposing (bfs)
 import Message exposing (Paint)
 import Color
-import Model exposing (loadValves,getModel,GaState(..))
+import Model exposing (getModel,GaState(..))
 import Grid exposing (getDistance)
 import Player exposing (State(..))
 import Message exposing (Page(..))
@@ -335,3 +335,15 @@ pushValve player valves =
                             valves
     in
     newvalves
+loadValves : Grids -> List Valve -> Grids
+loadValves grids valves =
+    List.foldl loadValve grids valves
+updateGridsfromModel : Model -> Grids -> Grids
+updateGridsfromModel model initialgrids= 
+    let
+        paints = model.paints
+        valves = model.valves
+        stypes =model.stypes
+        ngrids=List.foldl sendPainttoGrids (loadValves initialgrids valves) paints
+    in 
+        List.foldl sendStype2Grid ngrids stypes

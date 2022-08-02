@@ -78,7 +78,9 @@ renderButton txt msg (x,y) opa (w,h) color =
         , onClick msg
         ]
         [ text txt ]
-
+{-| This function draws a colored button on the screen according to the 
+        position (x,y), msg(message), opa(opacity), color, txt(content) and colorback(background color).
+-}
 renderButtonColor : String -> String -> Msg -> (Int,Int) -> Float -> (Int,Int) -> String -> Html Msg
 renderButtonColor colorback txt msg (x,y) opa (w,h) color =
     button
@@ -97,6 +99,9 @@ renderButtonColor colorback txt msg (x,y) opa (w,h) color =
         , onClick msg
         ]
         [ text txt ]
+         
+{-| This function renders a colored button on the screen which has 2 Msgs: click message and mouseover message.
+-}
 renderChoiceButton: String -> String -> Msg -> Msg->(Int,Int) -> Float -> (Int,Int) -> String -> Html Msg
 renderChoiceButton colorback txt clickMsg mouseMsg (x,y) opa (w,h) color =
     button
@@ -116,6 +121,10 @@ renderChoiceButton colorback txt clickMsg mouseMsg (x,y) opa (w,h) color =
         , onMouseOver mouseMsg
         ]
         [ text txt ]
+
+{-| This function draws a colored rotated button on the screen according to the 
+        position (x,y), msg(message), opa(opacity), color, txt(content) and colorback(background color).
+-}
 renderButtonRotate : String -> String -> Msg -> (Int,Int) -> Float -> (Int,Int) -> String -> Html Msg
 renderButtonRotate colorback txt msg (x,y) opa (w,h) color =
     button

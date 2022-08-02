@@ -11,7 +11,8 @@ import View.Hat exposing (hat)
 import View.Cake exposing (renderCake)
 import View.Cake exposing (Caketype(..))
 import View.Basic exposing (renderTxt)
-
+{-| render the choice page
+-}
 renderChoicePage : Model -> Html Msg
 renderChoicePage model =
     let

@@ -1,11 +1,15 @@
 module View.Cake exposing (Caketype(..), renderCake,renderRecipe,renderRecipeStypes)
-
+{-| This library draws different parts of the cake.
+-}
 import Color exposing (..)
 import Html exposing (Html)
 import Html.Attributes as HtmlAttr exposing (..)
 import Message exposing (SpecialType(..), Stype)
 import View.Basic exposing (rectRender)
 import Canvas exposing (Renderable)
+
+{-| where the cake appears
+-}
 type Caketype
     = Progress
     | Recipe
@@ -13,8 +17,8 @@ type Caketype
     | Collection Int
 
 
-
---c=[300,]
+{-| This function draws toppings on the color sequence.
+-}
 renderRecipeStypes : List Stype -> List (Html msg)
 renderRecipeStypes stypes =
     List.map renderRecipeStype stypes
@@ -36,7 +40,8 @@ renderRecipeStype stype =
             , HtmlAttr.style "top" (String.fromFloat ( y) ++ "px")
             ]
             []
-        
+{-| This function draws a sequence of color in the recipe section.
+-}
 renderRecipe : List Color -> List Renderable 
 renderRecipe colors = 
     let
@@ -70,6 +75,8 @@ renderTaskDeco total stype =
 renderDeco : Int -> Int ->Int ->Stype ->Html msg
 renderDeco total x y stype =
     renderith total x y 2.8 Cream stype.target  (selectDeco stype)
+{-| This function draws the cake with its toppings
+-}
 renderCake : List Color -> Int -> Int -> Float -> Int -> Caketype -> List Stype -> List (Html msg)
 renderCake colors x y scale total caketype stypes=
     let

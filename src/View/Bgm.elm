@@ -1,7 +1,11 @@
 module View.Bgm exposing (gameBGM)
+{-| This library contains the bgm
+-}
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html)
 import Message exposing (Msg)
+{-| render the bgm of the game
+-}
 gameBGM : Html Msg
 gameBGM  = 
         Html.audio

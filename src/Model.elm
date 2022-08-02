@@ -1,5 +1,6 @@
-module Model exposing (Model,getModel,initModel,updateGridsfromModel,loadValves,GaState(..))
-
+module Model exposing (Model,getModel,initModel,GaState(..))
+{-| This library defines the Model
+-}
 import Array exposing (Array)
 import Color exposing (Color)
 
@@ -11,12 +12,11 @@ import Valve exposing (Valve)
 import Wall exposing (Wall)
 import Valve exposing (VState(..))
 import Grid exposing (Grids)
-import Grid exposing (initGridsfromLevel,sendPainttoGrids,loadValve,Grid)
+import Grid exposing (initGridsfromLevel,Grid)
 import Grid exposing (initGrid)
 import Player exposing (Player)
 import Task
 import Browser.Dom exposing (getViewport)
-import Grid exposing (sendStype2Grid)
 import Message exposing (Paint,Pos,SpecialType(..),Stype,Sstate(..))
 
 type alias Model =
@@ -27,7 +27,6 @@ type alias Model =
         , guide_levels : List Level
         , level_index : Int
         , level_cleared : List Bool
-        , valves_move : Int
         , color_seq : List Color.Color
         , mcolor_seq : List Color.Color
         , history : List History
@@ -47,10 +46,6 @@ type alias History =
         stypes: List Stype
     }
 
-type alias Flags =
-    { levels : Maybe String }
-
-
 type alias Mapset a =
     { a
         | player : Player
@@ -65,20 +60,6 @@ type alias Mapset a =
         , exit :Grid
     }
 
-
-type alias GameState =
-    { gamestate : CurState
-    , laststate : CurState
-
-    {- undo to the previous scenario -}
-    }
-
-
-type alias CurState =
-    { player : Player
-    , valves : List Valve
-    , paints : List Paint
-    }
 
 
 
@@ -122,7 +103,6 @@ getModel k model =
       , guide_levels = model.guide_levels
       , move_timer = 0.0
       , level_index = k
-      , valves_move = 0
       , history = []
       , currentPage = LevelsPage
       , windowsize = ( 800, 800 )
@@ -179,7 +159,6 @@ initModel =
       , guide_levels = Levels.initGuide
       , move_timer = 0.0
       , level_index = 0
-      , valves_move = 0
       , history = [{paints=paints,valves=valves,player=initplayer,stypes=stypes}]
       , currentPage = HomePage
       , windowsize = ( 800, 800 )
@@ -194,16 +173,4 @@ initModel =
         , Task.perform GetViewport getViewport
         ]
     )
-loadValves : Grids -> List Valve -> Grids
-loadValves grids valves =
-    List.foldl loadValve grids valves
-updateGridsfromModel : Model -> Grids -> Grids
-updateGridsfromModel model initialgrids= 
-    let
-        paints = model.paints
-        valves = model.valves
-        stypes =model.stypes
-        ngrids=List.foldl sendPainttoGrids (loadValves initialgrids valves) paints
-    in 
-        List.foldl sendStype2Grid ngrids stypes
-        -- initialgrids
+

@@ -1,4 +1,6 @@
 module View.Collection exposing (renderCollectionPage)
+{-| This library renders the collection page based on the progress of the game
+-}
 import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))
 import Html.Attributes as HtmlAttr exposing (..)
@@ -76,6 +78,8 @@ pageNone : Html Msg
 pageNone =
     div [][]
 
+{-| This function renders the collection page based on the progress of the game
+-}
 renderCollectionPage : Model -> Html Msg
 renderCollectionPage model =
     let

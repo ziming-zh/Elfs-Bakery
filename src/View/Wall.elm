@@ -1,4 +1,6 @@
 module View.Wall exposing (drawWall)
+{-| draw the wall
+-}
 import View.Basic exposing (rectRender,setLength,setWidth)
 import Wall exposing (Wall)
 import Canvas exposing (Renderable)
@@ -23,7 +25,8 @@ allignCol idy idx exists =
     else 
         rectRender 0 0 0 0 defaultWallColor
 
-
+{-| draw the wall
+-}
 drawWall : Wall -> List Renderable
 drawWall wall =
     let

@@ -1,11 +1,14 @@
 module View.Valve exposing (renderValves)
+{-| draw valves
+-}
 import Valve exposing (VState(..),Valve)
 import Canvas exposing (Renderable)
 import View.Basic exposing (circleRender,setLength,setWidth)
 import Color exposing (Color)
 import View.Basic exposing (rectRender)
 
-
+{-| draw valves
+-}
 renderValves : List Valve -> List Renderable
 renderValves valves = 
     List.foldl List.append [] (List.map drawValve valves)

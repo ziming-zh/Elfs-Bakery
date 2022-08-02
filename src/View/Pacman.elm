@@ -1,4 +1,6 @@
 module View.Pacman exposing (fromPlayertoFanShape)
+{-| draw the character
+-}
 import Html exposing (..)
 import Player exposing (Player)
 import Color
@@ -9,8 +11,9 @@ import Canvas exposing (..)
 import Canvas.Settings exposing (..)
 import Canvas.Settings.Advanced exposing (..)
 import Canvas.Settings.Line exposing (..)
--- import Canvas.Settings.Text exposing (..)
 
+{-| draw the character
+-}
 fromPlayertoFanShape : Player -> Renderable
 fromPlayertoFanShape player =
   let
