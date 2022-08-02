@@ -21,7 +21,8 @@ import Message exposing (Pos)
 import Html exposing (a)
 import Task
 import Grid exposing (updateSpecialType)
-
+{-| The update function for the model.
+-}
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of

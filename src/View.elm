@@ -6,13 +6,13 @@ import Message exposing (Msg(..))
 import Html exposing (Html, div)
 import View.Level exposing (renderLevelPage)
 import View.Home exposing(renderHome)
-import View.Game exposing(renderGamePage)
 import View.Choice exposing(renderChoicePage)
 import View.Guide exposing(renderGuidePage)
 import Message exposing (Page(..))
 import View.Collection exposing (renderCollectionPage)
 import View.Bgm exposing (..)
-
+{-| This function decides what to view based on the current page
+-}
 view : Model -> Html Msg
 view model =
     let
@@ -31,7 +31,6 @@ view model =
                 ChoicePage -> renderChoicePage model
                 HomePage -> renderHome model
                 LevelsPage -> renderLevelPage model
-                GamePage -> renderGamePage model
                 GuidePage ->
                     if Basics.modBy 2 model.level_index == 0 then
                         renderGuidePage model

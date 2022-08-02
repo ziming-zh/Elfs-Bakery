@@ -11,6 +11,13 @@ import Valve exposing (Valve)
 import Message exposing (Paint,Pos,SpecialType(..),Stype,Sstate(..))
 import Valve exposing (VState(..))
 import Player exposing (Player,init)
+
+{-| Level data type contains all the information about a level. 
+Width and height describes the size of the map. 
+Wall, valves, paints, stypes, and exit are predefined.
+colorseq is the target.
+id is the current level number.
+-}
 type alias Level =
     { width : Int
     , height : Int
@@ -24,9 +31,13 @@ type alias Level =
     , stypes : List Stype
     }
 
+{-| Contain all the levels
+-}
 getInitialLevels : List Level
 getInitialLevels = [initLevel1,initLevel2,initLevel3,initLevel4,initLevel5,initLevel6,initLevel7]
 
+{-| Contain all the guide
+-}
 initGuide : List Level
 initGuide = [guideLevel1,guideLevel2,guideLevel3,guideLevel4]
 

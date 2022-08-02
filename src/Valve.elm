@@ -1,16 +1,19 @@
-module Valve exposing (clockRotate,counterRotate,pushDown,pushRight,pushLeft,pushUp,Valve,VState(..))
-{- Valve is the control gadgets that deals with the flows of the stream
+module Valve exposing (clockRotate,counterRotate,pushDown,pushRight,pushLeft,pushUp,VState(..), Valve)
+{-| Valve is the control gadgets that deals with the flows of the stream
 -}
 import Message exposing (Direction(..), Pos)
 
-
+{-| Valve is the control gadgets that deals with the flows of the stream. 
+pos is the position of the origin and state tells it relative position wrt the origin.
+-}
 type alias Valve =
     { state : VState
     , pos : Pos
     }
 
 
-
+{-| the direction of the valve with respect to it origin.
+-}
 type VState
     = Up
     | Down
@@ -20,7 +23,8 @@ type VState
 
 
 
-
+{-| This function rotates a valve clockwise.
+-}
 clockRotate : Valve -> Valve
 clockRotate valve =
     case valve.state of
@@ -36,7 +40,8 @@ clockRotate valve =
         Left ->
             { valve | state = Up }
 
-
+{-| This function rotates a valve counterclockwise.
+-}
 counterRotate : Valve -> Valve
 counterRotate valve =
     case valve.state of
@@ -52,7 +57,8 @@ counterRotate valve =
         Left ->
             { valve | state = Down }
 
-
+{-| This function pushes a level valve up.
+-}
 pushUp : List Valve -> Pos -> List Valve
 pushUp valves pos =
     let
@@ -85,7 +91,8 @@ pushUp valves pos =
     List.append lu left
         |> List.append ru
 
-
+{-| This function pushes a vertical valve right.
+-}
 pushRight : List Valve -> Pos -> List Valve
 pushRight valves pos =
     let
@@ -118,7 +125,8 @@ pushRight valves pos =
     List.append rd left
         |> List.append ru
 
-
+{-| This function pushes a vertical valve left.
+-}
 pushLeft : List Valve -> Pos -> List Valve
 pushLeft valves pos =
     let
@@ -151,7 +159,8 @@ pushLeft valves pos =
     List.append ld left
         |> List.append lu
 
-
+{-| This function pushes a level valve down.
+-}
 pushDown : List Valve -> Pos -> List Valve
 pushDown valves pos =
     let
