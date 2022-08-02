@@ -8,7 +8,6 @@ import Levels exposing (Level)
 import Message exposing (Direction(..), Paint, Pos,SpecialType(..),Stype,Sstate(..))
 import String exposing (lines)
 import Valve exposing (VState(..), Valve)
-import Wall exposing (Wall, Wall_col, Wall_row, getWall)
 
 type IsOpen
     = Open

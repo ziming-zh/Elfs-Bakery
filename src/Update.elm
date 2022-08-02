@@ -2,7 +2,7 @@ module Update exposing (update,compareList)
 import Array
 import Message exposing (Msg(..), stepTime,Direction)
 import Model exposing (Model,updateGridsfromModel,getModel)
-import Wall exposing (Wall, isWall)
+import Wall exposing (Wall)
 import Player exposing (State(..),Player)
 import Valve exposing (pushDown,pushLeft,pushUp,pushRight,Valve)
 import Grid exposing (getGstate,sendPainttoGrids,getGrid)
