@@ -14,8 +14,7 @@ import Player exposing (Player,init)
 type alias Level =
     { width : Int
     , height : Int
-    , wall : Wall --- revision express the map by characters rather than by types -- shrink spaces
-    --- the settings are all squeezed into the map property
+    , wall : Wall 
     , valves : List Valve
     , paints : List Paint
     , id : Int

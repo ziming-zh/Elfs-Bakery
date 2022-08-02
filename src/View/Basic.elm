@@ -1,4 +1,8 @@
 module View.Basic exposing (..)
+
+{-| This library defines many functions to draw basic things.
+-}
+
 import Canvas exposing (Renderable)
 import Canvas exposing (shapes)
 import Canvas.Settings.Advanced exposing (GlobalCompositeOperationMode(..))
@@ -19,18 +23,27 @@ setWidth : Float
 setWidth = 4.0
 
 
+{-| This function draws a rectangle according to the
+        position (x,y), width, hight and color. 
+-}
 rectRender : Float -> Float -> Float -> Float -> Color.Color -> Renderable
 rectRender x y width height color= 
     shapes
         [ fill color ]
         [ rect ( x, y) width height ]
 
+{-| This function draws a circle according to the 
+        position (x,y), radius and color.
+-}
 circleRender : Float -> Float -> Float -> Color.Color -> Renderable
 circleRender x y radius color =
     shapes
         [ stroke color]
         [ circle ( x, y) radius ]
 
+{-| This function writes txt on the screen according to the 
+        position (x,y), (font)-size, opa(opacity), color, txt(content).
+-}
 transparentTxt : Int -> Int -> Int -> Float -> String -> String -> Html Msg
 transparentTxt x y size opa color txt = 
     div
@@ -44,6 +57,9 @@ transparentTxt x y size opa color txt =
         ]
         [ text txt ]
 
+{-| This function writes txt on the screen according to the 
+        position (x,y), (font)-size, opa(opacity), color, txt(content).
+-}
 renderTxt : (Int,Int) -> Int -> String -> String -> Float -> Html Msg
 renderTxt (x,y) size color txt opa = 
     div
@@ -57,6 +73,9 @@ renderTxt (x,y) size color txt opa =
         ]
         [ text txt ]
 
+{-| This function draws a button on the screen according to the 
+        position (x,y), msg(message), opa(opacity), color, txt(content).
+-}
 renderButton : String -> Msg -> (Int,Int) -> Float -> (Int,Int) -> String -> Html Msg
 renderButton txt msg (x,y) opa (w,h) color =
     button
