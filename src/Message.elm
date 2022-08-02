@@ -19,11 +19,6 @@ type alias Paint =
 
 
 
-grid_size : Int
-grid_size =
-    10
-
-
 type Direction
     = Left
     | Right

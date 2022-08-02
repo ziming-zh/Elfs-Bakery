@@ -1,4 +1,6 @@
-module View.Choice exposing (..)
+module View.Choice exposing (renderChoicePage)
+{-| This library renders the Choice Page.
+-}
 import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))
 import Html.Attributes as HtmlAttr exposing (..)

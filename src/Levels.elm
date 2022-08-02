@@ -1,5 +1,5 @@
 
-module Levels exposing (..)
+module Levels exposing (Level,initGuide,getInitialLevels)
 
 {-| This library defines some variables for levels and draws
 different levels

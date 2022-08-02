@@ -1,4 +1,4 @@
-module Model exposing (..)
+module Model exposing (Model,getModel,initModel,updateGridsfromModel,loadValves,GaState(..))
 
 import Array exposing (Array)
 import Color exposing (Color)

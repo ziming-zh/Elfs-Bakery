@@ -1,6 +1,5 @@
 module Valve exposing (clockRotate,counterRotate,pushDown,pushRight,pushLeft,pushUp,Valve,VState(..))
-{-
-   Valve is the control gadgets that deals with the flows of the stream
+{- Valve is the control gadgets that deals with the flows of the stream
 -}
 import Message exposing (Direction(..), Pos)
 

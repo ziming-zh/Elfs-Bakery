@@ -1,5 +1,5 @@
 module View exposing (view)
-{-|This library combine all the view functions.
+{-| This library combines all the view functions.
 -}
 import Model exposing (Model)
 import Message exposing (Msg(..))

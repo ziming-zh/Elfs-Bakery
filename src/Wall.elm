@@ -1,5 +1,5 @@
 module Wall exposing (Wall)
-{-|This library defines the Wall type.
+{-| This library defines the Wall type.
 -}
 import Message exposing (Direction(..))
 

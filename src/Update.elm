@@ -1,4 +1,6 @@
-module Update exposing (update,compareList)
+module Update exposing (update)
+{-| This library combines all the update functions.
+-}
 import Array
 import Message exposing (Msg(..), stepTime,Direction)
 import Model exposing (Model,updateGridsfromModel,getModel)
