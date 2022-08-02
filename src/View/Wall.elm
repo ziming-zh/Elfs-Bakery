@@ -1,11 +1,9 @@
-module View.Wall exposing (..)
+module View.Wall exposing (drawWall)
 import View.Basic exposing (rectRender,setLength,setWidth)
 import Wall exposing (Wall)
 import Canvas exposing (Renderable)
-import Color exposing (Color,rgb)
-import List exposing (indexedMap)
+import Color exposing (Color)
 import Color exposing (rgb255)
-import Html exposing (dd)
 
 
 defaultWallColor : Color

@@ -1,6 +1,4 @@
-module View.Player exposing (..)
-import Html exposing (Html)
-import Message exposing (Msg)
+module View.Player exposing (renderPlayer)
 import View.Pacman exposing (fromPlayertoFanShape)
 import Player exposing (Player)
 import Canvas exposing (Renderable)

@@ -1,4 +1,4 @@
-module View.Collection exposing (..)
+module View.Collection exposing (renderCollectionPage)
 import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))
 import Html.Attributes as HtmlAttr exposing (..)

@@ -1,4 +1,4 @@
-module View.Grid exposing (..)
+module View.Grid exposing (renderGrids,renderStypes)
 
 import Array
 import Canvas exposing (Renderable)

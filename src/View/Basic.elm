@@ -44,22 +44,6 @@ circleRender x y radius color =
 {-| This function writes txt on the screen according to the 
         position (x,y), (font)-size, opa(opacity), color, txt(content).
 -}
-transparentTxt : Int -> Int -> Int -> Float -> String -> String -> Html Msg
-transparentTxt x y size opa color txt = 
-    div
-        [ style "left" (String.fromInt x ++ "px")
-        , style "top" (String.fromInt y ++ "px")
-        , style "position" "absolute"
-        , style "font-size" (String.fromInt size ++ "px")
-        , style "font-family" "Helvetica, Arial, sans-serif"
-        , style "color" color
-        , style "opacity" (String.fromFloat opa)
-        ]
-        [ text txt ]
-
-{-| This function writes txt on the screen according to the 
-        position (x,y), (font)-size, opa(opacity), color, txt(content).
--}
 renderTxt : (Int,Int) -> Int -> String -> String -> Float -> Html Msg
 renderTxt (x,y) size color txt opa = 
     div
@@ -152,15 +136,3 @@ renderButtonRotate colorback txt msg (x,y) opa (w,h) color =
         , onClick msg
         ]
         [ text txt ]
-
-renderImg : String -> (Float,Float) -> Float -> Html Msg
-renderImg link (x,y) opa = 
-    Html.img
-            [ HtmlAttr.src link
-            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1 ++ ")")
-            , HtmlAttr.style "position" "absolute"
-            , HtmlAttr.style "left" (String.fromFloat x ++ "px")
-            , HtmlAttr.style "top" (String.fromFloat y ++ "px")
-            , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat 1.333 ++ ")")
-            , HtmlAttr.style "opacity" (String.fromFloat opa)
-            ][] 

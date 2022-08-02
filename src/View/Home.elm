@@ -1,4 +1,4 @@
-module View.Home exposing (..)
+module View.Home exposing (renderHome)
 import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))
 import Html.Attributes as HtmlAttr exposing (..)

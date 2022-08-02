@@ -1,4 +1,4 @@
-module View.Game exposing (..)
+module View.Game exposing (renderGamePage)
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html,div)
 import Message exposing (Msg(..),Page(..))

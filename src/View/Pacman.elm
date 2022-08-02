@@ -1,10 +1,5 @@
 module View.Pacman exposing (fromPlayertoFanShape)
-
-import Debug exposing (toString)
-import Html exposing (Html)
-import Message exposing (Msg)
 import Html exposing (..)
-import Html.Attributes as HtmlAttr exposing (..)
 import Player exposing (Player)
 import Color
 import Message exposing (Direction(..))

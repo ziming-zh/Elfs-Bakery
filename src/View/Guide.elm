@@ -1,4 +1,4 @@
-module View.Guide exposing (..)
+module View.Guide exposing (renderGuidePage)
 import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))
 import Html.Attributes as HtmlAttr exposing (..)

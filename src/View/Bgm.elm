@@ -1,4 +1,4 @@
-module View.Bgm exposing (..)
+module View.Bgm exposing (gameBGM)
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html)
 import Message exposing (Msg)

@@ -10,9 +10,6 @@ type alias Valve =
     }
 
 
-type alias Valves =
-    List Valve
-
 
 type VState
     = Up

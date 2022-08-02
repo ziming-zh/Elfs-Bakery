@@ -1,4 +1,4 @@
-module View.Level exposing (..)
+module View.Level exposing (renderLevelPage)
 import Canvas exposing (Renderable)
 import View.Grid exposing (renderGrids)
 import Valve exposing (Valve)
