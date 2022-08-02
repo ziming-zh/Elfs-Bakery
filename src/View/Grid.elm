@@ -6,9 +6,7 @@ import Color
 import Grid exposing (Grid, GridType(..), Grids)
 import Html exposing (Html)
 import Html.Attributes as HtmlAttr exposing (..)
-import String exposing (indexes)
-import View.Basic exposing (rectRender, setLength, setWidth)
-import View.Hat exposing (hat)
+import View.Basic exposing (rectRender, setLength)
 import Message exposing (SpecialType(..),Sstate(..))
 renderGrids : Grids -> List Renderable
 renderGrids grids = 

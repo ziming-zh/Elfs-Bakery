@@ -3,7 +3,6 @@ import Canvas exposing (Renderable)
 import Canvas exposing (shapes)
 import Canvas.Settings.Advanced exposing (GlobalCompositeOperationMode(..))
 import Canvas.Settings exposing (fill,stroke)
-import Canvas.Texture
 import Color
 import Canvas exposing (rect)
 import Canvas exposing (circle)

@@ -16,7 +16,6 @@ import Grid exposing (initGrid)
 import Player exposing (Player)
 import Task
 import Browser.Dom exposing (getViewport)
-import Grid exposing (drawWallIndex)
 import Grid exposing (sendStype2Grid)
 import Message exposing (Paint,Pos,SpecialType(..),Stype,Sstate(..))
 

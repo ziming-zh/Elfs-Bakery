@@ -1,7 +1,6 @@
 module Player exposing (..)
 
 import Message exposing (Direction(..), Pos)
-import String exposing (left)
 
 
 type alias Player =

@@ -13,14 +13,12 @@ import Message exposing (Paint)
 import Color
 import Model exposing (loadValves,getModel,GaState(..))
 import Grid exposing (getDistance)
--- import Grid exposing (clearPaintGrid)
 import Player exposing (State(..))
 import Message exposing (Page(..))
 import Message exposing (Pos)
 import Html exposing (a)
 import Task
 import Grid exposing (updateSpecialType)
---import Valve exposing(push,isValve)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =

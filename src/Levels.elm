@@ -1,5 +1,10 @@
 
 module Levels exposing (..)
+
+{-| This library defines some variables for levels and draws
+different levels
+-}
+
 import Color exposing (..)
 import Wall exposing (Wall)
 import Valve exposing (Valve)

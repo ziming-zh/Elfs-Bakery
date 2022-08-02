@@ -3,7 +3,7 @@ import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html, div)
-import View.Basic exposing (renderButton,renderImg,renderTxt)
+import View.Basic exposing (renderButton,renderTxt)
 
 
 page1 : Model -> Html Msg

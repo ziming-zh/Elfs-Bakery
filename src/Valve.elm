@@ -5,7 +5,6 @@
 
 module Valve exposing (..)
 
-import Char exposing (toCode)
 import Message exposing (Direction(..), Pos)
 
 

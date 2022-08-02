@@ -1,7 +1,7 @@
 module View.Hat exposing (hat)
 
 
-import Html exposing (Html)
+import Html exposing (..)
 import Html.Attributes as HtmlAttr exposing (..)
 
 

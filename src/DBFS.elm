@@ -1,17 +1,16 @@
 module DBFS exposing (bfs,get)
 
+{-|This library use bfs algorithm to calclulate the distance 
+between each grid and the exit grid.
+-}
+
 import Array exposing (Array)
 import Grid exposing (Grid, Grids, IsOpen(..), initGrid)
 import Html exposing (a)
-import Html.Attributes exposing (list)
-import Set exposing (Set)
 import Svg.Attributes exposing (y)
 
-import Model exposing(Model)
 
 
-
--- all the grids, can update others
 
 {-| get xth grid in an array of grid.
     

@@ -4,7 +4,6 @@ import Color exposing (..)
 import Html exposing (Html)
 import Html.Attributes as HtmlAttr exposing (..)
 import Message exposing (SpecialType(..), Stype)
-import Model exposing (Model)
 import View.Basic exposing (rectRender)
 import Canvas exposing (Renderable)
 type Caketype

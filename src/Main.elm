@@ -3,7 +3,7 @@ module Main exposing (main)
 import Browser
 
 --import Levels exposing (Level, ViewLevel)
-import Message exposing (Msg(..), key)
+import Message exposing (Msg(..))
 import Model exposing (..)
 import Subscriptions exposing (subscriptions)
 import Update exposing (update)
