@@ -32,8 +32,6 @@ type alias Model =
         , mcolor_seq : List Color.Color
         , history : List History
         , currentPage : Page
-        --, lastMoveDirection : MoveDirection  --merge the direction of the player into Type Player
-        --  , stringlevel : StringLevel
         , randomindex : Int
         , windowsize : ( Float, Float )
         }
@@ -83,96 +81,6 @@ type alias CurState =
     }
 
 
-{-| load level, new or existing
-set level\_index in each case
--}
-
-{-
-checkAndLoadGameWithLevel : EncodeLevel -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-checkAndLoadGameWithLevel encodedLevel ( model, cmd ) =
-    let
-        isExistingLevel =
-            LevelSeq.isDuplicate encodedLevel model.levels
-    in
-    if isExistingLevel then
-        loadGameWithExistingLevel encodedLevel ( model, cmd )
-
-    else
-        loadGameWithNewLevel encodedLevel ( model, cmd )
-
-
-loadGameWithExistingLevel : EncodeLevel -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-loadGameWithExistingLevel level ( model, cmd ) =
-    let
-        modelWithGame =
-            loadGameWithLevel level model
-
-        levelIndex =
-            LevelSeq.getIndexOf level model.levels
-    in
-    ( { modelWithGame
-        | level_index = levelIndex
-      }
-    , cmd
-    )
-
-
-loadGameWithNewLevel : EncodeLevel -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
-loadGameWithNewLevel level ( model, cmd ) =
-    let
-        modelWithGame =
-            loadGameWithLevel level model
-
-        newLevels =
-            LevelSeq.prependLevel level model.levels
-    in
-    ( { modelWithGame
-        | levels = newLevels
-        , level_index = 0
-      }
-    , Cmd.batch
-        [ cmd
-
-        -- , Storage.storeLevels newLevels
-        ]
-    )
-
-
-
-{- Loading Levels to activate the game
-
-   loadGameWithLevel : Level -> Model -> Model
-   loadGameWithLevel encodedLevel model =
-       let
-           game =
-               decodeLevel encodedLevel
-       in
-           { player = game.player
-           , wall = game.walls
-           , paints = game.paints
-           , valves = game.valves
-           , dots = game.dots
-           , mapSize = game.gameSize
-           , win = False
-           , lastMoveDirection = Up
-           , elapse = 0.0
-           , levels = model.levels
-           , currentLevel = encodedLevel
-           , level_index = model.level_index
-           , valves_move = 0
-           , history = []
-           , currentPage = GamePage
-           , windowsize = model.windowsize
-           , randomindex = model.randomindex
-           }
-
--}
-
-
-loadGameWithLevel : EncodeLevel -> Model -> Model
-loadGameWithLevel encodedLevel model =
-    model
--}
 
 getModel : Int -> Model -> ( Model, Cmd Msg )
 getModel k model =

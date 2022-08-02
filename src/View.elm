@@ -1,4 +1,6 @@
 module View exposing (view)
+{-|This library combine all the view functions.
+-}
 import Model exposing (Model)
 import Message exposing (Msg(..))
 import Html exposing (Html, div)
@@ -7,7 +9,6 @@ import View.Home exposing(renderHome)
 import View.Game exposing(renderGamePage)
 import View.Choice exposing(renderChoicePage)
 import View.Guide exposing(renderGuidePage)
-import Html.Attributes as HtmlAttr exposing (..)
 import Message exposing (Page(..))
 import View.Collection exposing (renderCollectionPage)
 import View.Bgm exposing (..)
@@ -40,24 +41,6 @@ view model =
                     div
                         [ ]
                         [
-                            -- toHtml (800 ,600)
-                            -- []
-                            -- (renderLevel model.wall [] (Array.fromList [Array.fromList []]))
                         ]
         in
         div[][withoutbgm,gameBGM]
--- view : Model -> Html msg
--- view  model =
---     let
---         width = 600
---         height = 300
---     in
---         Canvas.toHtml (width, height)
---             [ style "border" "1px solid black" ]
---             [ shapes [ fill Color.red ] [ rect (0, 0) width height ]
---             , renderSquare
---             ]
-
--- renderSquare =
---   shapes [ fill (Color.rgba 0 0 0 1) ]
---       [ rect (0, 0) 100 50 ]
