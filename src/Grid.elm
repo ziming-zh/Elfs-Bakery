@@ -35,6 +35,8 @@ type alias GState =
 
 
 {-| return the open state of the specific grid on the corresponding direction
+
+    getGstate (1,2) grids Up == Close
 -}
 getGstate : Pos -> Grids -> Direction -> IsOpen
 getGstate pos grids dir =
@@ -73,6 +75,8 @@ getGstate pos grids dir =
     isopen
 
 {-| return the distance of the specific grid in the map
+    
+    getDistance (1,2) grids == 20
 -}
 getDistance : Pos -> Grids -> Int
 getDistance pos grids =
@@ -183,6 +187,8 @@ type alias Grids =
     Array (Array Grid)
 
 {-| initialize a grid
+
+    initGrid 2 3 == newgrid --position is (2,3)
 -}
 initGrid : Int -> Int -> Grid
 initGrid x y =
