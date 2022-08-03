@@ -6,7 +6,8 @@ import Html exposing (a)
 import Levels exposing (Level)
 import Message exposing (Direction(..), Paint, Pos,SpecialType(..),Stype,Sstate(..))
 import Valve exposing (VState(..), Valve)
-
+{-| The state of the valve. Open means no valve and no wall. FakeClose means valve but no wall. Close means wall.
+-}
 type IsOpen
     = Open
     | FakeClose
@@ -22,7 +23,8 @@ type alias GState =
 
 
 
-
+{-| return the open state of the specific grid on the corresponding direction
+-}
 getGstate : Pos -> Grids -> Direction -> IsOpen
 getGstate pos grids dir =
     let
@@ -59,7 +61,8 @@ getGstate pos grids dir =
     in
     isopen
 
-
+{-| return the distance of the specific grid in the map
+-}
 getDistance : Pos -> Grids -> Int
 getDistance pos grids =
     let
@@ -82,18 +85,20 @@ getDistance pos grids =
     in
     distance
 
-
+{-| Different types of grids. Paint means the cream. Exit means it's the exit. Vacant means normal grid with no cream.
+-}
 type GridType a
     = Paint a
     | Exit
     | Vacant
 
-
+{-| Grid data type. pos: the position of the grid. gridtype : the type of the grid. 
+gstate: the open state of the grid. distance: the distance towards the exit. stype: maybe there are toppings
+on the grid 
+-}
 type alias Grid =
     { pos : Pos
     , gridtype : GridType Paint -- set white default for blockes holes
-
-    -- , color : Color -- set white default for blockes holes
     , gstate : GState
     , distance : Maybe Int
     , renewed : Bool
@@ -104,7 +109,8 @@ type alias Grid =
 
 
 
-
+{-| update the toppings based on whether the cream passes by
+-}
 updateSpecialType : Grids ->Stype ->  Stype
 updateSpecialType grids stype  =
     let
@@ -130,7 +136,8 @@ updateSpecialType grids stype  =
                     stype
 
 
-
+{-| add topping on a grid
+-}
 sendStype2Grid : Stype -> Grids -> Grids
 sendStype2Grid stype grids =
     let
@@ -159,11 +166,13 @@ sendStype2Grid stype grids =
 
 
 
-
+{-| 2D map of grids
+-}
 type alias Grids =
     Array (Array Grid)
 
-
+{-| initialize a grid
+-}
 initGrid : Int -> Int -> Grid
 initGrid x y =
     { pos = { x = x, y = y }, gridtype = Vacant, gstate = { up = Open, down = Open, left = Open, right = Open }, distance = Just 0, renewed = True, stype = Nothing }
@@ -204,7 +213,8 @@ setGstate isopen change =
         _ ->
             change
 
-
+{-| get the grid from grids
+-}
 getGrid : Int -> Int -> Grids -> Maybe Grid
 getGrid x y grids =
     let
@@ -288,7 +298,8 @@ refreshColumnGrids isopen y x grids =
             grids
 
 
-
+{-| initialize the grids from current level
+-}
 initGridsfromLevel : Level -> Grids
 initGridsfromLevel level =
     let
@@ -358,7 +369,8 @@ loadWall level grids =
     in
     loadcolumn
 
-
+{-| change the grid open state according to the valves
+-}
 loadValve : Valve -> Grids -> Grids
 loadValve valve grids =
     let
@@ -382,7 +394,8 @@ loadValve valve grids =
         Valve.Down ->
             refreshColumnGrids FakeClose posy posx grids
 
-
+{-| send paint to grids
+-}
 sendPainttoGrids : Paint -> Grids -> Grids
 sendPainttoGrids paint grids =
     let
@@ -670,7 +683,8 @@ checkDirections grids pos =
 
     else
         ( 0, 0 )
-
+{-| move the topping
+-}
 moveSpecialType : Grids -> Stype -> Stype 
 moveSpecialType grids stype =
     let
@@ -685,6 +699,8 @@ moveSpecialType grids stype =
                 {stype|pos={x=x+dx,y=y+dy}}
             _ -> 
                 stype
+{-| move the paint based on the distance
+-}
 movePaint : Grids -> Int -> Array Paint -> Array Paint
 movePaint grids i paints =
     let

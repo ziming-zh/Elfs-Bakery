@@ -36,10 +36,5 @@ view model =
                         renderGuidePage model
                     else renderLevelPage model
                 CollectionPage -> renderCollectionPage model
-                _ -> 
-                    div
-                        [ ]
-                        [
-                        ]
         in
         div[][withoutbgm,gameBGM]

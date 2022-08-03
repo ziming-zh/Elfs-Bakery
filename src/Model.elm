@@ -13,13 +13,17 @@ import Wall exposing (Wall)
 import Valve exposing (VState(..))
 import Grid exposing (Grids)
 import Grid exposing (initGridsfromLevel,Grid)
-import Grid exposing (initGrid)
 import Player exposing (Player)
 import Task
 import Browser.Dom exposing (getViewport)
 import Message exposing (Paint,Pos,SpecialType(..),Stype,Sstate(..))
-import View.Grid exposing (renderStypes)
-
+{-| Model data type includes win: the state of the game, move_timer: a moving timer, 
+levels: store all the levels in the list, guide_levels: store all the guide levels inside the list,
+level_index: the index of the level, level_cleared: record the progress of the game,
+mcolor_seq: current progress of the cake, history: the last game state before the valve is operated on,
+updatedGrids: always updating, grids: the initial grids that only has predefined color, walls and valves,
+level: the current level.
+-}
 type alias Model =
         { win : GaState
         , move_timer : Float
@@ -36,7 +40,8 @@ type alias Model =
         , mapSize : ( Int, Int )
         , level : Level
         }
-
+{-| GaState is the state of the game.
+-}
 type GaState
     = Win
     | Lose
@@ -53,7 +58,8 @@ type alias History =
 
 
 
-
+{-| return the corresponding guide/game level.
+-}
 getModel : Int -> Model -> ( Model, Cmd Msg )
 getModel k model =
     let
@@ -110,7 +116,8 @@ getModel k model =
           Task.perform GetViewport getViewport
         ]
     )
-
+{-| initializew the model
+-}
 initModel : ( Model, Cmd Msg )
 initModel =
     let
