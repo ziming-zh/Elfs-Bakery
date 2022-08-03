@@ -1,15 +1,20 @@
-module View.Grid exposing (..)
+module View.Grid exposing (renderGrids,renderStypes)
+{-| This library renders grids and toppings.
 
+# Function
+@docs renderGrids,renderStypes
+
+-}
 import Array
 import Canvas exposing (Renderable)
 import Color
 import Grid exposing (Grid, GridType(..), Grids)
 import Html exposing (Html)
 import Html.Attributes as HtmlAttr exposing (..)
-import String exposing (indexes)
-import View.Basic exposing (rectRender, setLength, setWidth)
-import View.Hat exposing (hat)
+import View.Basic exposing (rectRender, setLength)
 import Message exposing (SpecialType(..),Sstate(..))
+{-| This function draws grids.
+-}
 renderGrids : Grids -> List Renderable
 renderGrids grids = 
     let
@@ -89,6 +94,8 @@ drawStype (w,h) grid =
 
         Nothing ->
             []
+{-| This function draws toppings on the map.
+-}
 renderStypes : (Int,Int) -> Grids -> List (Html msg)
 renderStypes (w,h) grids =
     List.concat (List.map (\y -> Array.toList (Array.map (\x -> drawStype (w,h) x) y)) (Array.toList grids)

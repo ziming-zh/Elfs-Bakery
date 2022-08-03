@@ -1,13 +1,16 @@
-module View.Collection exposing (..)
+module View.Collection exposing (renderCollectionPage)
+{-| This library renders the collection page based on the progress of the game
+
+# Function
+@docs renderCollectionPage
+
+-}
 import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html, div)
 import View.Basic exposing(renderButtonColor,renderButtonRotate)
-import Svg.Attributes exposing (mode)
 import View.Cake exposing(renderCake)
-import FontAwesome.Brands exposing (yelp)
-import FontAwesome.Solid exposing (yen_sign)
 check : List Bool -> Int -> Bool
 check list k =
     case List.head (List.drop (k-1) list) of
@@ -79,6 +82,8 @@ pageNone : Html Msg
 pageNone =
     div [][]
 
+{-| This function renders the collection page based on the progress of the game
+-}
 renderCollectionPage : Model -> Html Msg
 renderCollectionPage model =
     let

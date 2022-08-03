@@ -1,9 +1,14 @@
 module Main exposing (main)
+{-| main function
 
+# Function
+@docs main
+
+-}
 import Browser
 
 --import Levels exposing (Level, ViewLevel)
-import Message exposing (Msg(..), key)
+import Message exposing (Msg(..))
 import Model exposing (..)
 import Subscriptions exposing (subscriptions)
 import Update exposing (update)
@@ -11,9 +16,9 @@ import View exposing (view)
 
 
 
---Main
-
-
+{-| Main Function
+-}
+main : Program () Model Msg
 main =
     Browser.element { init = init, update = update, view = view, subscriptions = subscriptions }
 
@@ -23,20 +28,3 @@ init _ =
     Model.initModel
 
 
-
-{-
-   ( model_init , Task.perform GetViewport getViewport )
-
-   Browser.element
-       { init =
-           \value ->
-               ( value
-                   |> Decode.decodeValue Model.decode
-                   |> Result.withDefault Model.initial
-               , Task.perform GetViewport getViewport
-               )
-       , update = Update.update
-       , view = View.view
-       , subscriptions = subscriptions
-       }
--}

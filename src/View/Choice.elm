@@ -1,15 +1,22 @@
-module View.Choice exposing (..)
+module View.Choice exposing (renderChoicePage)
+{-| This library renders the Choice Page.
+
+# Function
+@docs renderChoicePage
+
+-}
 import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html, div)
-import View.Basic exposing (renderButton,renderButtonColor)
+import View.Basic exposing (renderButtonColor)
 import View.Basic exposing (renderChoiceButton)
 import View.Hat exposing (hat)
 import View.Cake exposing (renderCake)
 import View.Cake exposing (Caketype(..))
 import View.Basic exposing (renderTxt)
-
+{-| render the choice page
+-}
 renderChoicePage : Model -> Html Msg
 renderChoicePage model =
     let
