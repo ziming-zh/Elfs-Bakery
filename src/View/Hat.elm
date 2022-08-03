@@ -1,7 +1,10 @@
 module View.Hat exposing (hat)
 {-| draw the ith hat
--}
 
+# Function
+@docs hat
+
+-}
 import Html exposing (..)
 import Html.Attributes as HtmlAttr exposing (..)
 

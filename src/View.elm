@@ -1,6 +1,12 @@
 module View exposing (view)
+
 {-| This library combines all the view functions.
+
+# Functions
+@docs view
+
 -}
+
 import Model exposing (Model)
 import Message exposing (Msg(..))
 import Html exposing (Html, div)

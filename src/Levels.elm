@@ -3,6 +3,13 @@ module Levels exposing (Level,initGuide,getInitialLevels)
 
 {-| This library defines some variables for levels and draws
 different levels
+
+# Function
+@docs initGuide,getInitialLevels
+
+# Data Type
+@docs Level
+
 -}
 
 import Color exposing (..)

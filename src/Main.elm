@@ -1,5 +1,9 @@
 module Main exposing (main)
 {-| main function
+
+# Function
+@docs main
+
 -}
 import Browser
 

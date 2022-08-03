@@ -1,5 +1,9 @@
 module Subscriptions exposing (subscriptions)
 {-| This library contains the subscription information
+
+# Functions
+@docs subscriptions
+
 -}
 import Browser.Events exposing (onAnimationFrameDelta, onKeyDown, onResize)
 import Model exposing (Model)

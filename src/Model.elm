@@ -1,5 +1,12 @@
 module Model exposing (Model,getModel,initModel,GaState(..))
 {-| This library defines the Model
+
+# Functions
+@docs getModel,initModel
+
+# Data Type
+@docs GaStat, Model
+
 -}
 import Array exposing (Array)
 import Color exposing (Color)
@@ -9,10 +16,9 @@ import Message exposing (Direction(..), Msg(..), Page(..), Paint, Pos)
 import Player
 import Random
 import Valve exposing (Valve)
-import Wall exposing (Wall)
 import Valve exposing (VState(..))
 import Grid exposing (Grids)
-import Grid exposing (initGridsfromLevel,Grid)
+import Grid exposing (initGridsfromLevel)
 import Player exposing (Player)
 import Task
 import Browser.Dom exposing (getViewport)

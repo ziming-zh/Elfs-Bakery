@@ -1,6 +1,12 @@
-module View.Basic exposing (..)
+module View.Basic exposing (rectRender,circleRender,renderButton,renderButtonColor,renderButtonRotate,renderChoiceButton,renderTxt, setWidth, setLength)
 
 {-| This library defines many functions to draw basic things.
+
+# Functions
+@docs rectRender,circleRender,renderButton,renderButtonColor,renderButtonRotate,renderChoiceButton,renderTxt
+
+# Data Type
+@docs setWidth, setLength
 -}
 
 import Canvas exposing (Renderable)

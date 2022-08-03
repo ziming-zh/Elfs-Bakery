@@ -1,5 +1,9 @@
 module View.Grid exposing (renderGrids,renderStypes)
 {-| This library renders grids and toppings.
+
+# Function
+@docs renderGrids,renderStypes
+
 -}
 import Array
 import Canvas exposing (Renderable)

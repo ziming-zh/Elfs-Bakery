@@ -1,5 +1,9 @@
 module View.Home exposing (renderHome)
 {-| This library renders the Home Page
+
+# Function
+@docs renderHome
+
 -}
 import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))
