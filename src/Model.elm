@@ -5,7 +5,7 @@ module Model exposing (Model,getModel,initModel,GaState(..))
 @docs getModel,initModel
 
 # Data Type
-@docs GaStat, Model
+@docs GaState, Model
 
 -}
 import Array exposing (Array)
