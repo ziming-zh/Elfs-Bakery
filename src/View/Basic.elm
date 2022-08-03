@@ -21,10 +21,12 @@ import Html.Attributes as HtmlAttr exposing (..)
 import Html.Events exposing (onClick)
 import Message exposing (Msg(..))
 import Html.Events exposing (onMouseOver)
-
+{-| length of a grid
+-}
 setLength : Float
 setLength = 50.0
-
+{-| width of the valve and wall
+-}
 setWidth : Float 
 setWidth = 4.0
 
