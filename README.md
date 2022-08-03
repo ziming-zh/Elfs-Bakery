@@ -1,4 +1,4 @@
-[P2]: [ **Elf's Cake Shop** -- !]
+[P2]: [ **Elf's Backery Dream** -- !]
 
 # README
 This file contains relevant information about installation and startup.
