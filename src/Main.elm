@@ -16,7 +16,6 @@ import View exposing (view)
 
 
 
---Main
 {-| Main Function
 -}
 main : Program () Model Msg
