@@ -18,22 +18,25 @@ import Player exposing (Player)
 import Task
 import Browser.Dom exposing (getViewport)
 import Message exposing (Paint,Pos,SpecialType(..),Stype,Sstate(..))
+import View.Grid exposing (renderStypes)
 
 type alias Model =
-    Mapset
         { win : GaState
         , move_timer : Float
         , levels : List Level
         , guide_levels : List Level
         , level_index : Int
         , level_cleared : List Bool
-        , color_seq : List Color.Color
         , mcolor_seq : List Color.Color
         , history : List History
         , currentPage : Page
-        , randomindex : Int
         , windowsize : ( Float, Float )
+        , updatedGrids : Grids
+        , grids : Grids
+        , mapSize : ( Int, Int )
+        , level : Level
         }
+
 type GaState
     = Win
     | Lose
@@ -46,19 +49,7 @@ type alias History =
         stypes: List Stype
     }
 
-type alias Mapset a =
-    { a
-        | player : Player
-        , wall : Wall
-        , valves : List Valve
-        , paints : List Paint
-        , stypes : List Stype
-        , updatedGrids : Grids
-        , grids : Grids
-        , dots : List Pos --what is dots
-        , mapSize : ( Int, Int )
-        , exit :Grid
-    }
+
 
 
 
@@ -72,33 +63,38 @@ getModel k model =
             case List.head levels of
                 Just lv-> initGridsfromLevel lv
                 Nothing -> Array.fromList []
-        (wall,valves,paints) = 
+        (wall,valves,paints) = ({col=[],row=[]},[], [])
+        (exit, colorseq) = (Pos -1 -1,[])       
+        (initplayer,stypes) = (Player.init (Pos 0 0) Message.Up,[])
+        initlevel: Level
+        initlevel = 
+            { player = initplayer
+            , wall = wall
+            , valves = valves
+            , paints = paints
+            , exit = Pos -1 -1
+            , colorseq = colorseq
+            , stypes = stypes
+            , width = 0
+            , height = 0
+            , id = 0
+                    }
+        level=
             case List.head levels of
-                Just lv-> (lv.wall,lv.valves,lv.paints)
-                Nothing ->({col=[],row=[]},[], [])
-        (exit, colorseq) = 
-            case List.head levels of
-                Just lv-> (lv.exit,lv.colorseq)
-                Nothing -> (Pos -1 -1,[])       
-        (initplayer,stypes) = 
-            case List.head levels of
-                Just lv-> (lv.player,lv.stypes)
-                Nothing -> (Player.init (Pos 0 0) Message.Up,[])
+                Just lv-> lv
+                Nothing -> 
+                    initlevel
+                    
         mapsize = 
             case List.head levels of
                 Just lv-> (lv.width,lv.height)
                 Nothing -> (0,0)
     in
-    ( { player = initplayer
-      , wall = wall
-      , valves = valves
-      , paints = paints
-      , grids = initialgrids
+    ( { level=level
       , updatedGrids = initialgrids
-      , stypes = stypes
-      , dots = []
       , mapSize = mapsize
       , win = Playing
+      , grids = initialgrids
       , levels = model.levels -- important here
       , guide_levels = model.guide_levels
       , move_timer = 0.0
@@ -106,9 +102,6 @@ getModel k model =
       , history = []
       , currentPage = LevelsPage
       , windowsize = ( 800, 800 )
-      , randomindex = 0
-      , exit = initGrid exit.x exit.y -- to be imported from the level later
-      , color_seq = colorseq
       , mcolor_seq = []
       , level_cleared = model.level_cleared
       }
@@ -127,33 +120,36 @@ initModel =
             case List.head levels of
                 Just lv-> initGridsfromLevel lv
                 Nothing -> Array.fromList []
-        (wall,valves,paints) = 
+        (wall,valves,paints) = ({col=[],row=[]},[], [])
+        (exit, colorseq) = (Pos -1 -1,[])     
+        (initplayer,stypes) =  (Player.init (Pos 0 0) Message.Up,[])
+        initlevel: Level
+        initlevel = 
+            { player = initplayer
+            , wall = wall
+            , valves = valves
+            , paints = paints
+            , exit = Pos -1 -1
+            , colorseq = colorseq
+            , stypes = stypes
+            , width = 0
+            , height = 0
+            , id = 0
+                    }
+        level=
             case List.head levels of
-                Just lv-> (lv.wall,lv.valves,lv.paints)
-                Nothing ->({col=[],row=[]},[], [])
-        (exit, colorseq) = 
-            case List.head levels of
-                Just lv-> (lv.exit,lv.colorseq)
-                Nothing -> (Pos -1 -1,[])     
-        (initplayer,stypes) = 
-            case List.head levels of
-                Just lv-> (lv.player,lv.stypes)
-                Nothing -> (Player.init (Pos 0 0) Message.Up,[])
-
+                Just lv-> lv
+                Nothing -> 
+                    initlevel
         mapsize = 
             case List.head levels of
                 Just lv-> (lv.width,lv.height)
                 Nothing -> (0,0)
     in
-    ( { player = initplayer
-      , wall = wall
-      , valves = valves
-      , paints = paints
+    ( { level=level
       , grids = initialgrids
-      , stypes= []
       , mapSize = mapsize
       , updatedGrids = initialgrids
-      , dots = []
       , win = Playing
       , levels = levels -- important here
       , guide_levels = Levels.initGuide
@@ -162,9 +158,6 @@ initModel =
       , history = [{paints=paints,valves=valves,player=initplayer,stypes=stypes}]
       , currentPage = HomePage
       , windowsize = ( 800, 800 )
-      , randomindex = 0
-      , exit = initGrid exit.x exit.y -- to be imported from the level later
-      , color_seq = colorseq
       , mcolor_seq = []
       , level_cleared = List.repeat 7 False
       }
