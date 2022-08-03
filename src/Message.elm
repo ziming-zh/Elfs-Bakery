@@ -8,7 +8,7 @@ module Message exposing (Pos, stepTime, Paint, Direction(..), Page(..), Msg(..),
 @docs Pos, Paint, Direction, Page, Msg, SpecialType, Stype, Sstate
 
 # Value
-@docs steptime
+@docs stepTime
 
 -}
 import Browser.Dom exposing (Viewport)
