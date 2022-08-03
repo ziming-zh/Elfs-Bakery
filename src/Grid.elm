@@ -15,6 +15,7 @@ import Levels exposing (Level)
 import Message exposing (Direction(..), Paint, Pos,SpecialType(..),Stype,Sstate(..))
 import Valve exposing (VState(..), Valve)
 import Dict exposing (merge)
+import ColorMerge
 
 {-| The state of the valve. Open means no valve and no wall. FakeClose means valve but no wall. Close means wall.
 -}
@@ -483,124 +484,7 @@ getColor grids x y =
         Nothing ->
             white
 
-mergeRed : Color -> Color
-mergeRed color =
-    if (color == red) then
-        Color.red
-    else if (color == blue ) then
-        Color.purple
-    else if (color == Color.lightYellow) then
-        orange
-    else if (color == Color.orange ) then
-        Color.orange
-    else if (color == Color.green) then
-        white
-    else if (color == purple ) then
-        Color.purple
-    else 
-        white
-mergeYellow : Color -> Color
-mergeYellow color =
-    if (color == red) then
-        Color.orange
-    else if (color == blue ) then
-        Color.green
-    else if (color == Color.lightYellow) then
-        lightYellow
-    else if (color == Color.orange ) then
-        Color.orange
-    else if (color == Color.green) then
-        green
-    else if (color == purple ) then
-        white
-    else 
-        white
-mergeBlue : Color -> Color
-mergeBlue color =
-    if (color == red) then
-        purple
-    else if (color == blue ) then
-        Color.blue
-    else if (color == Color.lightYellow) then
-        green
-    else if (color == Color.orange ) then
-        white
-    else if (color == Color.green) then
-        green
-    else if (color == purple ) then
-        purple
-    else 
-        white
-mergeOrange : Color -> Color
-mergeOrange color =
-    if (color == red) then
-        Color.orange
-    else if (color == blue ) then
-        Color.white
-    else if (color == Color.lightYellow) then
-        orange
-    else if (color == Color.orange ) then
-        Color.orange
-    else if (color == Color.green) then
-        white
-    else if (color == purple ) then
-        white
-    else 
-        white
-mergePurple : Color -> Color
-mergePurple color =
-    if (color == red) then
-        Color.purple
-    else if (color == blue ) then
-        Color.purple
-    else if (color == Color.lightYellow) then
-        white
-    else if (color == Color.orange ) then
-        white
-    else if (color == Color.green) then
-        white
-    else if (color == purple ) then
-        Color.purple
-    else 
-        white
-mergeGreen : Color -> Color
-mergeGreen color =
-    if (color == red) then
-        white
-    else if (color == blue ) then
-        green
-    else if (color == Color.lightYellow) then
-        green
-    else if (color == Color.orange ) then
-        white
-    else if (color == Color.green) then
-        green
-    else if (color == purple ) then
-        white
-    else 
-        white
 
-mergeColor : Color -> Color -> Color
-mergeColor a b =
-    if a == b then
-        a
-
-    else if a == white || b == white then
-        white
-
-    else if a==red then
-        mergeRed b
-    else if a==blue then
-        mergeBlue b
-    else if a==lightYellow then
-        mergeYellow b
-    else if a==orange then
-        mergeOrange b
-    else if a==green then
-        mergeGreen b
-    else if a==purple then
-        mergePurple b
-    else white
 
 nodefault : Maybe Grid -> Grid
 nodefault grid =
@@ -796,7 +680,7 @@ movePaint grids i paints =
                 getColor grids (x + ndx) (y + ndy)
 
             ncolor =
-                mergeColor lcolor1 lcolor2
+                ColorMerge.mergeColor lcolor1 lcolor2
         in
         if ( ndx, ndy ) /= ( 0, 0 ) && lcolor1 /= lcolor2 then
             changeColor grids ncolor ( lcolor1, lcolor2 ) ( x, y ) ( ndx, ndy ) paints

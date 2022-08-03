@@ -1,4 +1,4 @@
-module Message exposing (..)
+module Message exposing (Pos, stepTime, Paint, Direction(..), Page(..), Msg(..), key, SpecialType(..), Stype, Sstate(..))
 {-| This library defines all the basic parameters and basic datatypes, so everything has to be exposed here.
 
 # Function 
