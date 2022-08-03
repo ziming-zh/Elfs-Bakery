@@ -1,24 +1,19 @@
-{-
-   Valve is the control gadgets that deals with the flows of the stream
+module Valve exposing (clockRotate,counterRotate,pushDown,pushRight,pushLeft,pushUp,VState(..), Valve)
+{-| Valve is the control gadgets that deals with the flows of the stream
 -}
-
-
-module Valve exposing (..)
-
-import Char exposing (toCode)
 import Message exposing (Direction(..), Pos)
 
-
+{-| Valve is the control gadgets that deals with the flows of the stream. 
+pos is the position of the origin and state tells it relative position wrt the origin.
+-}
 type alias Valve =
     { state : VState
     , pos : Pos
     }
 
 
-type alias Valves =
-    List Valve
-
-
+{-| the direction of the valve with respect to it origin.
+-}
 type VState
     = Up
     | Down
@@ -26,48 +21,10 @@ type VState
     | Right
 
 
-initValve : Int -> Int -> VState -> Valve
-initValve x y state =
-    { state = state, pos = { x = x, y = y } }
 
 
-
-{-
-   isValve: {pos:Pos,dir:MoveDirection}->List Valve -> Bool
-   isValve {pos,dir} valves =
-       let
-           x=pos.x
-           y=pos.y
-       in
-
-           case dir of
-               Right ->
-                   List.any (isEqual valves
+{-| This function rotates a valve clockwise.
 -}
-
-
-isEqual : Valve -> Pos -> Bool
-isEqual valve pos =
-    valve.pos == pos
-
-
-
-{-
-      pushValve: {pos:Pos,dir:MoveDirection}->List Valve -> Valve
-      pushValve {pos,dir} valves =
-          case dir of
-              Right ->
-
-
-           pushValve: {pos:Pos,dir:MoveDirection}->List Valve -> Valve
-      pushValve {pos,dir} valves =
-          case dir of
-              Right ->
-
-   push
--}
-
-
 clockRotate : Valve -> Valve
 clockRotate valve =
     case valve.state of
@@ -83,7 +40,8 @@ clockRotate valve =
         Left ->
             { valve | state = Up }
 
-
+{-| This function rotates a valve counterclockwise.
+-}
 counterRotate : Valve -> Valve
 counterRotate valve =
     case valve.state of
@@ -99,7 +57,8 @@ counterRotate valve =
         Left ->
             { valve | state = Down }
 
-
+{-| This function pushes a level valve up.
+-}
 pushUp : List Valve -> Pos -> List Valve
 pushUp valves pos =
     let
@@ -132,7 +91,8 @@ pushUp valves pos =
     List.append lu left
         |> List.append ru
 
-
+{-| This function pushes a vertical valve right.
+-}
 pushRight : List Valve -> Pos -> List Valve
 pushRight valves pos =
     let
@@ -165,7 +125,8 @@ pushRight valves pos =
     List.append rd left
         |> List.append ru
 
-
+{-| This function pushes a vertical valve left.
+-}
 pushLeft : List Valve -> Pos -> List Valve
 pushLeft valves pos =
     let
@@ -198,7 +159,8 @@ pushLeft valves pos =
     List.append ld left
         |> List.append lu
 
-
+{-| This function pushes a level valve down.
+-}
 pushDown : List Valve -> Pos -> List Valve
 pushDown valves pos =
     let

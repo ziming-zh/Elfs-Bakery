@@ -1,4 +1,7 @@
-module View.Level exposing (..)
+module View.Level exposing (renderLevelPage)
+{-| render different levels
+-}
+
 import Canvas exposing (Renderable)
 import View.Grid exposing (renderGrids)
 import Valve exposing (Valve)
@@ -9,11 +12,11 @@ import Grid exposing (Grids,Grid)
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html,div)
 import Message exposing (Msg(..),Page(..))
-import Model exposing (Model,GaState(..))
+import Model exposing (Model)
 import View.Basic exposing(setLength)
 import View.Basic exposing (renderButtonColor)
 import Player exposing (Player)
-import View.Player exposing (renderPlayer)
+import View.Pacman exposing (fromPlayertoFanShape)
 import Canvas exposing (Renderable,toHtml)
 import Array
 import View.Hat
@@ -26,9 +29,10 @@ renderLevel wall valves grids player =
     (renderGrids grids) ++
     (drawWall wall) ++
     (renderValves valves) ++
-    [renderPlayer player]
+    [fromPlayertoFanShape player]
 
-
+{-| render different levels
+-}
 renderLevelPage : Model -> Html Msg
 renderLevelPage model = 
     let
@@ -74,24 +78,24 @@ renderLevelPage model =
             , HtmlAttr.style "position" "absolute"
             , HtmlAttr.style "left" (String.fromFloat 1472 ++ "px")
             , HtmlAttr.style "top" (String.fromFloat 277 ++ "px")]
-            (renderRecipe model.color_seq)
+            (renderRecipe model.level.colorseq)
         ]
-        , renderCake model.color_seq 1439 390 1.2 (List.length model.color_seq) Recipe model.stypes
-        , renderCake model.mcolor_seq 1439 750 2.4 (List.length model.color_seq) Progress model.stypes
+        , renderCake model.level.colorseq 1439 390 1.2 (List.length model.level.colorseq) Recipe model.level.stypes
+        , renderCake model.mcolor_seq 1439 750 2.4 (List.length model.level.colorseq) Progress model.level.stypes
         , [ toHtml ( round scalex , round scaley)
             [ HtmlAttr.style "transform-origin" "50 50"
             , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat rate ++ ")")
             , HtmlAttr.style "position" "absolute"
             , HtmlAttr.style "left" (String.fromFloat (639-(scalex)/2) ++ "px")
             , HtmlAttr.style "top" (String.fromFloat (565-(scaley)/2) ++ "px")]
-            ((renderLevel model.wall model.valves (model.updatedGrids) model.player))
+            ((renderLevel model.level.wall model.level.valves (model.updatedGrids) model.level.player))
         ]
         
         
-        , renderRecipeStypes model.stypes
+        , renderRecipeStypes model.level.stypes
         , [renderButtonColor "#4472C4" "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"]
         , View.Grid.renderStypes model.mapSize model.updatedGrids
-        , renderExit model.mapSize model.exit model.level_index model]
+        , renderExit model.mapSize (Grid.initGrid model.level.exit.x model.level.exit.y) model.level_index model]
        -- , RENDER 
         )
 

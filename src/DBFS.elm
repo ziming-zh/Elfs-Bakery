@@ -1,18 +1,21 @@
 module DBFS exposing (bfs,get)
 
+{-|This library use bfs algorithm to calclulate the distance 
+between each grid and the exit grid.
+-}
+
 import Array exposing (Array)
 import Grid exposing (Grid, Grids, IsOpen(..), initGrid)
 import Html exposing (a)
-import Html.Attributes exposing (list)
-import Set exposing (Set)
 import Svg.Attributes exposing (y)
 
-import Model exposing(Model)
 
 
 
--- all the grids, can update others
-
+{-| get xth grid in an array of grid.
+    
+    gett 2 (fromList [grid1,grid2]) = grid2 
+-}
 
 gett : Int -> Array Grid -> Grid
 gett x grids =
@@ -23,13 +26,20 @@ gett x grids =
         Nothing ->
             initGrid -1 -1
 
+{-| get the (x,y)th grid of Grids and return the grid's
+renewed. (Check whether (x,y) has been visited or not)
+-}
+
 getBool : (Int,Int) -> Grids -> Bool
 getBool (x,y) grids = 
     let
         grid = get grids x y
     in
         grid.renewed
-        
+
+{-| get the (x,y)th grid of Grids and set the renewed of
+the grid to be true. (mark the grid as visited)
+-}        
 
 setBool : (Int,Int) -> Grids -> Grids
 setBool (x,y) grids = 
@@ -38,6 +48,12 @@ setBool (x,y) grids =
         ngrid = Grid grid.pos grid.gridtype grid.gstate grid.distance True grid.stype
     in
         Array.set x ( Array.set y ngrid (getrow x grids) ) grids
+
+{-| get xth row grid as an array of grid
+    
+    getrow 2 [[grid1,grid2,grid3],[grid4,grid5,grid6]]
+        = [grid4,grid5,grid5]
+-}
 
 getrow : Int -> Grids -> Array Grid
 getrow x grids =
@@ -48,13 +64,20 @@ getrow x grids =
         Nothing ->
             Array.fromList [ initGrid -1 -1 ]
 
+{-| get the grid at (x,y) of the grids
 
+    get [[grid1,grid2,grid3],[grid4,grid5,grid6]] 1 2 
+        = grid2
+-}
 get : Grids -> Int -> Int -> Grid
 get grids x y =
     getrow x grids
         |> gett y
 
 
+{-| Input a grid's position, check whether we can walk into adjacent
+grids and return the grids that can be walked directly from the gird.
+-}
 checkSurround : Grids -> Int -> Int -> Bool -> Grid -> List Grid
 checkSurround grids n m tp grid =
     let
@@ -111,7 +134,8 @@ checkSurround grids n m tp grid =
     in
     nnnqueue
 
-
+{-| update the distances of the grids in this layer of bfs algorithm.
+-}
 update :Grids -> Array Grid -> (Grids,Array Grid)
 update grids queue =
     if Array.length queue > 0 then
@@ -140,6 +164,9 @@ update grids queue =
         (grids, Array.fromList [] )
 
 
+{-| bfs algorithm. Direct means can't penetrate the valves.
+queue is the array needed for the algorithm.
+-}
 bfsDirect : Grids -> Array Grid -> Int -> Int -> Grids
 bfsDirect grids queue n m =
     if Array.length queue == 0 then grids
@@ -155,6 +182,9 @@ bfsDirect grids queue n m =
     in
     bfsDirect ngrids nnqueue n m
 
+{-| bfs algorithm. Indirect means can penetrate the valves.
+queue is the array needed for the algorithm.
+-}
 bfsIndirect : Grids -> Array Grid -> Int -> Int -> Grids
 bfsIndirect grids queue n m =
     if Array.length queue == 0 then (grids)
@@ -170,6 +200,9 @@ bfsIndirect grids queue n m =
     in
     bfsIndirect ngrids nnqueue n m
 
+{-| Use the bfs algorithm to get every grid's distance to the exit.
+Input the exit grid and the grids, return the grids with distance updated.
+-}
 bfs :  Grid -> Grids -> Grids
 bfs exit grids =
     let

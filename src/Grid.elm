@@ -1,15 +1,13 @@
-module Grid exposing (..)
+module Grid exposing (GridType(..),getDistance,getGstate,IsOpen(..),Grid,initGridsfromLevel,loadValve,sendPainttoGrids,movePaint,moveSpecialType,updateSpecialType,sendStype2Grid,Grids,getGrid,initGrid)
 
 import Array exposing (Array)
 import Color exposing (..)
 import Html exposing (a)
-import Html.Attributes exposing (rows)
 import Levels exposing (Level)
 import Message exposing (Direction(..), Paint, Pos,SpecialType(..),Stype,Sstate(..))
-import String exposing (lines)
 import Valve exposing (VState(..), Valve)
-import Wall exposing (Wall, Wall_col, Wall_row, getWall)
-
+{-| The state of the valve. Open means no valve and no wall. FakeClose means valve but no wall. Close means wall.
+-}
 type IsOpen
     = Open
     | FakeClose
@@ -24,48 +22,9 @@ type alias GState =
     }
 
 
-isOpen2String : Pos -> Direction -> Grids -> String
-isOpen2String pos dir grids =
-    let
-        dirstring =
-            case dir of
-                Message.Up ->
-                    " Up "
 
-                Message.Down ->
-                    " Down "
-
-                Message.Left ->
-                    " Left "
-
-                Message.Right ->
-                    " Right "
-
-                _ ->
-                    " None "
-
-        isopen =
-            getGstate pos grids dir
-
-        isopenstring =
-            case isopen of
-                Close ->
-                    " close "
-
-                FakeClose ->
-                    " fake "
-
-                Open ->
-                    " Open "
-    in
-    dirstring ++ isopenstring
-
-
-getbugState : Pos -> Grids -> String
-getbugState pos grids =
-    "\n" ++ "x: " ++ String.fromInt pos.x ++ "y: " ++ String.fromInt pos.y ++ isOpen2String pos Message.Up grids ++ isOpen2String pos Message.Down grids ++ isOpen2String pos Message.Left grids ++ isOpen2String pos Message.Right grids
-
-
+{-| return the open state of the specific grid on the corresponding direction
+-}
 getGstate : Pos -> Grids -> Direction -> IsOpen
 getGstate pos grids dir =
     let
@@ -102,7 +61,8 @@ getGstate pos grids dir =
     in
     isopen
 
-
+{-| return the distance of the specific grid in the map
+-}
 getDistance : Pos -> Grids -> Int
 getDistance pos grids =
     let
@@ -125,18 +85,20 @@ getDistance pos grids =
     in
     distance
 
-
+{-| Different types of grids. Paint means the cream. Exit means it's the exit. Vacant means normal grid with no cream.
+-}
 type GridType a
     = Paint a
     | Exit
     | Vacant
 
-
+{-| Grid data type. pos: the position of the grid. gridtype : the type of the grid. 
+gstate: the open state of the grid. distance: the distance towards the exit. stype: maybe there are toppings
+on the grid 
+-}
 type alias Grid =
     { pos : Pos
     , gridtype : GridType Paint -- set white default for blockes holes
-
-    -- , color : Color -- set white default for blockes holes
     , gstate : GState
     , distance : Maybe Int
     , renewed : Bool
@@ -147,7 +109,8 @@ type alias Grid =
 
 
 
-
+{-| update the toppings based on whether the cream passes by
+-}
 updateSpecialType : Grids ->Stype ->  Stype
 updateSpecialType grids stype  =
     let
@@ -173,7 +136,8 @@ updateSpecialType grids stype  =
                     stype
 
 
-
+{-| add topping on a grid
+-}
 sendStype2Grid : Stype -> Grids -> Grids
 sendStype2Grid stype grids =
     let
@@ -202,11 +166,13 @@ sendStype2Grid stype grids =
 
 
 
-
+{-| 2D map of grids
+-}
 type alias Grids =
     Array (Array Grid)
 
-
+{-| initialize a grid
+-}
 initGrid : Int -> Int -> Grid
 initGrid x y =
     { pos = { x = x, y = y }, gridtype = Vacant, gstate = { up = Open, down = Open, left = Open, right = Open }, distance = Just 0, renewed = True, stype = Nothing }
@@ -247,7 +213,8 @@ setGstate isopen change =
         _ ->
             change
 
-
+{-| get the grid from grids
+-}
 getGrid : Int -> Int -> Grids -> Maybe Grid
 getGrid x y grids =
     let
@@ -304,29 +271,6 @@ refreshRowGrids isopen x y grids =
 
 
 
--- let
---     uppergridline = (Array.get (x-1) grids)
---     downgridline = (Array.get x grids)
---     upperblock = case (uppergridline,downgridline) of
---         (Just a,_) -> Array.get y a
---         _ -> Nothing
---     downblock = case (uppergridline,downgridline) of
---         (_, Just b) -> Array.get y b
---         _ -> Nothing
---     newgrid =
---         case (uppergridline, downgridline, downblock) of
---             (Just ugl, Just dgl, Just db) ->
---                 case upperblock of
---                     Nothing ->
---                         Array.set x ( Array.set y (banbottom db) dgl)grids
---                     Just bb ->
---                         Array.set x ( Array.set y (banbottom db) dgl) grids
---                         |>  Array.set (x-1) ( Array.set y (banTop bb) ugl)
---             _ -> grids
--- in
---     newgrid
-
-
 refreshColumnGrids : IsOpen -> Int -> Int -> Grids -> Grids
 refreshColumnGrids isopen y x grids =
     let
@@ -354,27 +298,8 @@ refreshColumnGrids isopen y x grids =
             grids
 
 
-
--- let
---     gridline = case (Array.get x grids) of
---         Nothing -> (Array.fromList [])
---         Just gl -> gl
---     leftblock = Array.get (y-1) gridline
---     rightblock = Array.get (y) gridline
---     newgrid =
---         case (leftblock,rightblock) of
---             (Just a, Just b) ->
---                 Array.set x ( Array.set (y-1) (banRight a) gridline) grids
---                 |>  Array.set x ( Array.set y (banLeft b) gridline)
---             (Just a, Nothing) ->
---                 Array.set x ( Array.set (y-1) (banRight a) gridline) grids
---             (Nothing, Just b) ->
---                 Array.set x ( Array.set y (banLeft b) gridline) grids
---             _ -> grids
--- in
---     newgrid
-
-
+{-| initialize the grids from current level
+-}
 initGridsfromLevel : Level -> Grids
 initGridsfromLevel level =
     let
@@ -385,19 +310,6 @@ initGridsfromLevel level =
         -- |> loadValves level.valves
     in
     initialgrids
-
-
-
--- List.foldl sendPainttoGrids initialgrids paints
--- find out grid
--- List.append
---     (List.foldl List.append [] (List.indexedMap (\a -> List.indexedMap (initGrid a)) row))
---     (List.foldl List.append [] (List.indexedMap (\a -> List.indexedMap (initGrid a)) col))
--- sendPos : Int -> Int -> Bool -> Maybe (Int, Int)
--- sendPos x y iswall =
---     case iswall of
---         True -> Just (x,y)
---         False -> Nothing
 
 
 zip : List a -> List b -> List ( a, b )
@@ -457,7 +369,8 @@ loadWall level grids =
     in
     loadcolumn
 
-
+{-| change the grid open state according to the valves
+-}
 loadValve : Valve -> Grids -> Grids
 loadValve valve grids =
     let
@@ -481,7 +394,8 @@ loadValve valve grids =
         Valve.Down ->
             refreshColumnGrids FakeClose posy posx grids
 
-
+{-| send paint to grids
+-}
 sendPainttoGrids : Paint -> Grids -> Grids
 sendPainttoGrids paint grids =
     let
@@ -769,7 +683,8 @@ checkDirections grids pos =
 
     else
         ( 0, 0 )
-
+{-| move the topping
+-}
 moveSpecialType : Grids -> Stype -> Stype 
 moveSpecialType grids stype =
     let
@@ -784,6 +699,8 @@ moveSpecialType grids stype =
                 {stype|pos={x=x+dx,y=y+dy}}
             _ -> 
                 stype
+{-| move the paint based on the distance
+-}
 movePaint : Grids -> Int -> Array Paint -> Array Paint
 movePaint grids i paints =
     let

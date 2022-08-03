@@ -1,9 +1,12 @@
 module View.Hat exposing (hat)
+{-| draw the ith hat
+-}
 
-
-import Html exposing (Html)
+import Html exposing (..)
 import Html.Attributes as HtmlAttr exposing (..)
 
+{-| draw the ith hat
+-}
 
 hat : Int -> Html.Attribute msg
 hat i =

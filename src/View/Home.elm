@@ -1,4 +1,6 @@
-module View.Home exposing (..)
+module View.Home exposing (renderHome)
+{-| This library renders the Home Page
+-}
 import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))
 import Html.Attributes as HtmlAttr exposing (..)
@@ -7,7 +9,8 @@ import View.Basic exposing (renderButtonColor)
 import Color exposing (Color(..))
 
 
-
+{-| This function renders the Home Page
+-}
 renderHome : Model -> Html Msg
 renderHome model = 
     let

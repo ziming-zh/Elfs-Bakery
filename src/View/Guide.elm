@@ -1,9 +1,11 @@
-module View.Guide exposing (..)
+module View.Guide exposing (renderGuidePage)
+{-| render the guide
+-}
 import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html, div)
-import View.Basic exposing (renderButton,renderImg,renderTxt)
+import View.Basic exposing (renderButton,renderTxt)
 
 
 page1 : Model -> Html Msg
@@ -68,7 +70,8 @@ page5 model =
         , renderTxt (276,400) 35  "#000000"  "Try to make as much cakes as possible~" (Basics.min (opa-1) 1)
         , renderButton "<" (Load HomePage) (560,512) (Basics.min (opa-2) 1) (60,40) "#FFFFFF"
         ]
-
+{-| render the guide
+-}
 renderGuidePage : Model -> Html Msg
 renderGuidePage model =
     let

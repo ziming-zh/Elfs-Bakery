@@ -1,10 +1,7 @@
 module View.Pacman exposing (fromPlayertoFanShape)
-
-import Debug exposing (toString)
-import Html exposing (Html)
-import Message exposing (Msg)
+{-| draw the character
+-}
 import Html exposing (..)
-import Html.Attributes as HtmlAttr exposing (..)
 import Player exposing (Player)
 import Color
 import Message exposing (Direction(..))
@@ -14,8 +11,9 @@ import Canvas exposing (..)
 import Canvas.Settings exposing (..)
 import Canvas.Settings.Advanced exposing (..)
 import Canvas.Settings.Line exposing (..)
--- import Canvas.Settings.Text exposing (..)
 
+{-| draw the character
+-}
 fromPlayertoFanShape : Player -> Renderable
 fromPlayertoFanShape player =
   let

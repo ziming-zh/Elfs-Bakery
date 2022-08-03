@@ -1,11 +1,11 @@
-module View.Wall exposing (..)
+module View.Wall exposing (drawWall)
+{-| draw the wall
+-}
 import View.Basic exposing (rectRender,setLength,setWidth)
 import Wall exposing (Wall)
 import Canvas exposing (Renderable)
-import Color exposing (Color,rgb)
-import List exposing (indexedMap)
+import Color exposing (Color)
 import Color exposing (rgb255)
-import Html exposing (dd)
 
 
 defaultWallColor : Color
@@ -25,7 +25,8 @@ allignCol idy idx exists =
     else 
         rectRender 0 0 0 0 defaultWallColor
 
-
+{-| draw the wall
+-}
 drawWall : Wall -> List Renderable
 drawWall wall =
     let
