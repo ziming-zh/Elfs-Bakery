@@ -1,5 +1,12 @@
 module Player exposing (init,changeDir,move,Player,State(..))
 {-| This library controls the character's movement.
+
+# Functions
+@docs init, changeDir, move
+
+# Data Type
+@docs Player, State
+
 -}
 import Message exposing (Direction(..), Pos)
 

@@ -1,5 +1,15 @@
 module Message exposing (..)
 {-| This library defines all the basic parameters and basic datatypes, so everything has to be exposed here.
+
+# Function 
+@docs key
+
+# Data Type
+@docs Pos, Paint, Direction, Page, Msg, SpecialType, Stype, Sstate
+
+# Value
+@docs steptime
+
 -}
 import Browser.Dom exposing (Viewport)
 import Color exposing (Color)

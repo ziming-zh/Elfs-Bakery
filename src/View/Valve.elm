@@ -1,5 +1,9 @@
 module View.Valve exposing (renderValves)
 {-| draw valves
+
+# Function
+@docs renderValves
+
 -}
 import Valve exposing (VState(..),Valve)
 import Canvas exposing (Renderable)

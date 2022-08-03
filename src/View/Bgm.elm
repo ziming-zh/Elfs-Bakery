@@ -1,5 +1,9 @@
 module View.Bgm exposing (gameBGM)
 {-| This library contains the bgm
+
+# Function
+@docs gameBGM
+
 -}
 import Html.Attributes as HtmlAttr exposing (..)
 import Html exposing (Html)

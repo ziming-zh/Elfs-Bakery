@@ -1,5 +1,10 @@
 module Wall exposing (Wall)
+
 {-| This library defines the Wall type.
+
+# Data Type
+@docs Wall
+
 -}
 import Message exposing (Direction(..))
 

@@ -1,5 +1,9 @@
 module View.Collection exposing (renderCollectionPage)
 {-| This library renders the collection page based on the progress of the game
+
+# Function
+@docs renderCollectionPage
+
 -}
 import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))

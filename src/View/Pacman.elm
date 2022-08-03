@@ -1,5 +1,9 @@
 module View.Pacman exposing (fromPlayertoFanShape)
 {-| draw the character
+
+# Function
+@docs fromPlayertoFanShape
+
 -}
 import Html exposing (..)
 import Player exposing (Player)

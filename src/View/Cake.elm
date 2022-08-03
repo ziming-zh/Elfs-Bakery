@@ -1,5 +1,11 @@
 module View.Cake exposing (Caketype(..), renderCake,renderRecipe,renderRecipeStypes)
 {-| This library draws different parts of the cake.
+
+# Function
+@docs renderCake,renderRecipe,renderRecipeStypes
+
+# Data Type
+@docs Caketype
 -}
 import Color exposing (..)
 import Html exposing (Html)

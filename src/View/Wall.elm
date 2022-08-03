@@ -1,5 +1,9 @@
 module View.Wall exposing (drawWall)
 {-| draw the wall
+
+# Function
+@docs drawWall
+
 -}
 import View.Basic exposing (rectRender,setLength,setWidth)
 import Wall exposing (Wall)

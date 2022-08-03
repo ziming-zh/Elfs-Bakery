@@ -1,5 +1,9 @@
 module View.Guide exposing (renderGuidePage)
 {-| render the guide
+
+# Function
+@docs renderGuidePage
+
 -}
 import Model exposing (Model)
 import Message exposing (Msg(..),Page(..))

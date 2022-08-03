@@ -1,5 +1,9 @@
 module Update exposing (update)
 {-| This library combines all the update functions.
+
+# Functions
+@docs update
+
 -}
 import Array
 import Message exposing (Msg(..), stepTime,Direction)
@@ -7,8 +11,7 @@ import Model exposing (Model,getModel)
 import Wall exposing (Wall)
 import Player exposing (State(..),Player)
 import Valve exposing (pushDown,pushLeft,pushUp,pushRight,Valve)
-import Grid exposing (getGstate,sendPainttoGrids,getGrid,sendStype2Grid,loadValve)
-import Grid exposing (IsOpen)
+import Grid exposing (getGstate,sendPainttoGrids,sendStype2Grid,loadValve)
 import Grid exposing (IsOpen(..),Grids,movePaint)
 import DBFS exposing (bfs)
 import Message exposing (Paint)

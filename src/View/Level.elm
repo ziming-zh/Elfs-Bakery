@@ -1,7 +1,10 @@
 module View.Level exposing (renderLevelPage)
 {-| render different levels
--}
 
+# Function
+@docs renderLevelPage
+
+-}
 import Canvas exposing (Renderable)
 import View.Grid exposing (renderGrids)
 import Valve exposing (Valve)
@@ -61,7 +64,10 @@ renderLevelPage model =
         , HtmlAttr.style "transform-origin" "0 0"
         , HtmlAttr.style "transform" ("scale(" ++ String.fromFloat r ++ ")")
         ]
-        (List.concat
+        (levelHtml scalex scaley rate model)
+levelHtml: Float -> Float -> Float -> Model-> List (Html Msg)
+levelHtml scalex scaley rate model =
+    (List.concat
         [
         [ Html.img
             [ HtmlAttr.src "./assets/gamepage/game_interface.png"
@@ -90,8 +96,6 @@ renderLevelPage model =
             , HtmlAttr.style "top" (String.fromFloat (565-(scaley)/2) ++ "px")]
             ((renderLevel model.level.wall model.level.valves (model.updatedGrids) model.level.player))
         ]
-        
-        
         , renderRecipeStypes model.level.stypes
         , [renderButtonColor "#4472C4" "<" (Load ChoicePage) (-50,0) 1 (50,50) "#FFFFFF"]
         , View.Grid.renderStypes model.mapSize model.updatedGrids

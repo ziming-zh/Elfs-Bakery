@@ -2,6 +2,10 @@ module DBFS exposing (bfs,get)
 
 {-|This library use bfs algorithm to calclulate the distance 
 between each grid and the exit grid.
+
+# Function
+@docs bfs, get
+
 -}
 
 import Array exposing (Array)
