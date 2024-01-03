@@ -36,7 +36,7 @@ Due to the rules and regulation of the SilverFocs incubator, pushing code to thi
 Other ways of contribution, such as reviews and bug reports are welcome.
 
 # Author team 
-	p2team-17
+	UM-SJTU JI SU22 ENGR1000J-3 p2team-17
 Ziming Zhou 521370910142
 
 Chongye Yang 521370910088
