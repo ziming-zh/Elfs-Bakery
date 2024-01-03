@@ -1,6 +1,5 @@
-[P2]: [ **Elf's Backery Dream** -- !]
+# Elf's Backery Dream
 
-# README
 This file contains relevant information about installation and startup.
 
 ## Installation
@@ -23,7 +22,7 @@ Open the compiled index.html with web-browser and enjoy your game.
 
 ## Usage
 
-Use mouse to click the button and Keyboard for rendering commands to the program.
+Use mouse to click the button and Keyboard for rendering commands to the program. Please refer to our [wiki](https://github.com/ziming-zh/Elm-s-Bakery/wiki) page for detailed instructions.
 
 # Contributing
 
