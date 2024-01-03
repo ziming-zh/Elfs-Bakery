@@ -2,6 +2,8 @@
 
 This file contains relevant information about installation and startup.
 
+*To play our games click [here](https://focs.ji.sjtu.edu.cn/silverfocs/demo/2022/p2team17/)!!!*
+
 ![thumbnail](https://github.com/ziming-zh/Elm-s-Bakery/blob/main/doc/thumbnail.jpg)
 
 ## Installation
