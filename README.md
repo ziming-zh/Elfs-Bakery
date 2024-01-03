@@ -2,6 +2,8 @@
 
 This file contains relevant information about installation and startup.
 
+[!thumbnail](https://github.com/ziming-zh/Elm-s-Bakery/blob/main/doc/thumbnail.jpg)
+
 ## Installation
 	Operating System: Windows 11/10/7
 
