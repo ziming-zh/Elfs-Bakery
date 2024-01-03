@@ -2,7 +2,7 @@
 
 This file contains relevant information about installation and startup.
 
-[!thumbnail](https://github.com/ziming-zh/Elm-s-Bakery/blob/main/doc/thumbnail.jpg)
+![thumbnail](https://github.com/ziming-zh/Elm-s-Bakery/blob/main/doc/thumbnail.jpg)
 
 ## Installation
 	Operating System: Windows 11/10/7
@@ -25,6 +25,9 @@ Open the compiled index.html with web-browser and enjoy your game.
 ## Usage
 
 Use mouse to click the button and Keyboard for rendering commands to the program. Please refer to our [wiki](https://github.com/ziming-zh/Elm-s-Bakery/wiki) page for detailed instructions.
+
+## Poster
+See our poster for *Elf's Bakery* [here](https://github.com/ziming-zh/Elm-s-Bakery/blob/main/doc/poster.pdf)
 
 # Contributing
 
