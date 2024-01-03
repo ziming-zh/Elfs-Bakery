@@ -27,7 +27,7 @@ Open the compiled index.html with web-browser and enjoy your game.
 Use mouse to click the button and Keyboard for rendering commands to the program. Please refer to our [wiki](https://github.com/ziming-zh/Elm-s-Bakery/wiki) page for detailed instructions.
 
 ## Poster
-See our poster for *Elf's Bakery* [here](https://github.com/ziming-zh/Elm-s-Bakery/blob/main/doc/poster.pdf)
+See our poster for *Elf's Bakery* [here](https://github.com/ziming-zh/Elm-s-Bakery/blob/main/doc/poster.pdf) (which is made by $\Latex$ Beamer)
 
 # Contributing
 
